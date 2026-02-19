@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import type { RegistryItem, ItemCategory, Profile } from '@/lib/types/database'
-import { CATEGORY_LABELS } from 'A/lib/constants'
+import { CATEGORY_LABELS } from '@/lib/constants'
 import { ItemCard } from '@/components/registry/item-card'
 import { cn } from '@/lib/utils'
 
