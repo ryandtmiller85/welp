@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio'
-import { detectRetailer } from 'A/lib/utils'
+import { detectRetailer } from '@/lib/utils'
 
 export interface ScrapedProduct {
   title: string | null
