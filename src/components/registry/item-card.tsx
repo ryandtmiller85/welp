@@ -1,10 +1,10 @@
 'use client'
 
 import type { RegistryItem } from '@/lib/types/database'
-import { PRIORITY_LABELS, PRIORITY_COLORS } from 'A/lib/constants'
+import { PRIORITY_LABELS, PRIORITY_COLORS } from '@/lib/constants'
 import { formatCents, progressPercent, cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
-import { Button } from 'A/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { ExternalLink, ShoppingCart, Check } from 'lucide-react'
