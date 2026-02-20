@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { CopyButton } from '@/components/ui/copy-button'
+import { ShareRegistry } from './share-registry'
 import { formatCents, progressPercent } from '@/lib/utils'
 import type { Profile, RegistryItem, CashFund } from '@/lib/types/database'
 import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart } from 'lucide-react'
@@ -123,7 +124,6 @@ export default async function DashboardPage() {
   ).length
   const totalFundsRaised = safeFunds.reduce((sum: number, f: any) => sum + (f.raised_cents || 0), 0)
   const isProfileComplete = profile.story_text && profile.display_name
-  const registryUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/${profile.slug}`
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-slate-50 to-slate-100">
@@ -172,28 +172,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Share Registry Section */}
-        <Card>
-          <CardHeader>
-            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
-              <ExternalLink className="w-5 h-5 text-rose-600" />
-              Share Your Registry
-            </h2>
-          </CardHeader>
-          <CardContent>
-            <p className="text-slate-600 mb-4">
-              Share this link with friends and family to let them help you rebuild:
-            </p>
-            <div className="flex gap-2 flex-wrap">
-              <input
-                type="text"
-                value={registryUrl}
-                readOnly
-                className="flex-1 px-4 py-2.5 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 text-sm font-mono min-w-0"
-              />
-              <CopyButton text={registryUrl} />
-            </div>
-          </CardContent>
-        </Card>
+        <ShareRegistry slug={profile.slug} />
 
         {/* Profile Completeness Alerts */}
         <div className="space-y-3">
@@ -364,9 +343,9 @@ export default async function DashboardPage() {
         {totalItems === 0 && (
           <Card className="border-2 border-dashed border-slate-300 bg-slate-50/50">
             <CardContent className="py-12 text-center">
-              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-rose-100 mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-rose-100 mb-4">
                 <Package className="w-8 h-8 text-rose-600" />
-               </div>
+              </div>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">No items yet</h3>
               <p className="text-slate-600 mb-6">
                 Start building your registry by adding items you need or want
