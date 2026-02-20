@@ -11,6 +11,7 @@ import { ItemCard } from '@/components/registry/item-card'
 import { FundCard } from '@/components/registry/fund-card'
 import { RegistrySection } from './registry-section'
 import { EncouragementWall } from '@/components/registry/encouragement-wall'
+import { ShareButton } from './share-button'
 import Link from 'next/link'
 
 // Dynamic metadata for social sharing
@@ -106,14 +107,15 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
             alt="Cover"
             className="w-full h-full object-cover"
           />
-        ) :(
+        ) : (
           <div className="absolute inset-0 opacity-40" />
         )}
         {/* Overlay gradient for text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
       </div>
-      #{/* Main Content */}
-  <nax gap_inset-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {/* Main Content */}
+      <div className="relative -mt-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Header Card */}
         <Card className="mb-12 shadow-lg">
           <CardContent className="pt-8">
@@ -234,30 +236,3 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
   )
 }
 
-// Share Button Component
-function ShareButton({ displayName }: { displayName: string }) {
-  return (
-    <div className="flex-shrink-0">
-      <button
-        onClick={() => {
-          const url = typeof window !== 'undefined' ? window.location.href : ''
-          if (typeof navigator !== 'undefined' && navigator.share) {
-            navigator.share({
-              title: `${displayName}'s Registry`,
-              url,
-            })
-          } else {
-            if (typeof navigator !== 'undefined') {
-              navigator.clipboard.writeText(url)
-            }
-            alert('Link copied to clipboard!')
-          }
-        }}
-        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg hover:from-rose-600 hover:to-pink-600 transition-all duration-200 whitespace-nowrap"
-      >
-        <span>Share</span>
-        <span class="font-bold">🔗</span>
-      </button>
-    </div>
-  )
-}
