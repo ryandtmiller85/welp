@@ -1,0 +1,15 @@
+import { createClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
+
+export async function GET(request: NextRequest) {
+  const requestUrl = new URL(request.url)
+
+  try {
+    const supabase = await createClient()
+    await supabase.auth.signOut()
+  } catch (err) {
+    console.error('Error signing out:', err)
+  }
+
+  return NextResponse.redirect(`${requestUrl.origin}/`)
+}
