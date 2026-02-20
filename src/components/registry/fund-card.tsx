@@ -83,3 +83,4 @@ export function FundCard({ fund, isOwner }: FundCardProps) {
       </CardContent>
     </Card>
   )
+}
