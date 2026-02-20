@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
@@ -7,18 +7,54 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     try {
-      const supabase = await createClient()
-      const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+      const response = NextResponse.redirect(new URL('/dashboard', requestUrl.origin))
 
-      if (exchangeError) {
-        console.error('Auth exchange error:', exchangeError)
-        return NextResponse.redirect(`${requestUrl.origin}/auth/login?error=${encodeURIComponent(exchangeError.message)}`)
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            getAll() {
+              return request.cookies.getAll()
+            },
+            setAll(cookiesToSet) {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                response.cookies.set(name, value, options)
+              )
+            },
+          },
+        }
+      )
+
+      const { error } = await supabase.auth.exchangeCodeForSession(code)
+      if (!error) {
+        // Check for redirect_to param (from Supabase OAuth)
+        const redirectTo = requestUrl.searchParams.get('redirect_to')
+        if (redirectTo) {
+          try {
+            const redirectUrl = new URL(redirectTo)
+            // Create new response with same cookies for the redirect URL
+            const customResponse = NextResponse.redirect(redirectUrl)
+            response.cookies.getAll().forEach(c => {
+              customResponse.cookies.set(c.name, c.value)
+            })
+            return customResponse
+          } catch {
+            // If redirect_to is a relative path
+            const customResponse = NextResponse.redirect(new URL(redirectTo, requestUrl.origin))
+            response.cookies.getAll().forEach(c => {
+              customResponse.cookies.set(c.name, c.value)
+            })
+            return customResponse
+          }
+        }
+        return response
       }
-    } catch (err) {
-      console.error('Unexpected error during auth callback:', err)
-      return NextResponse.redirect(`${requestUrl.origin}/auth/login?error=unexpected`)
+    } catch (error) {
+      console.error('Auth callback error:', error)
     }
   }
 
-  return NextResponse.redirect(`${requestUrl.origin}/dashboard`)
+  // Redirect to login on error
+  return NextResponse.redirect(new URL('/auth/login', requestUrl.origin))
 }
