@@ -1,7 +1,7 @@
 'use client'
 
 import type { CashFund } from '@/lib/types/database'
-import { FUOD_LABELS } from '@/lib/constants'
+import { FUND_LABELS } from '@/lib/constants'
 import { formatCents, progressPercent } from '@/lib/utils'
 import { Card, CardContent } from '@/components/ui/card'
 import { ProgressBar } from '@/components/ui/progress-bar'
@@ -83,4 +83,3 @@ export function FundCard({ fund, isOwner }: FundCardProps) {
       </CardContent>
     </Card>
   )
-}
