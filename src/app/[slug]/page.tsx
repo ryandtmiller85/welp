@@ -12,6 +12,7 @@ import { FundCard } from '@/components/registry/fund-card'
 import { RegistrySection } from './registry-section'
 import { EncouragementWall } from '@/components/registry/encouragement-wall'
 import { ShareButton } from './share-button'
+import { ProxyBanner } from '@/components/proxy/proxy-banner'
 import Link from 'next/link'
 
 // Dynamic metadata for social sharing
@@ -97,6 +98,17 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
   const eventLabel = EVENT_LABELS[profile.event_type]
   const eventEmoji = EVENT_EMOJI[profile.event_type]
 
+  // If proxy and not yet claimed, fetch advocate name
+  let advocateName: string | null = null
+  if (profile.is_proxy && !profile.claimed_by_user_id && profile.created_by_user_id) {
+    const { data: advocateProfile } = await supabase
+      .from('profiles')
+      .select('display_name')
+      .eq('id', profile.created_by_user_id)
+      .single() as any
+    advocateName = advocateProfile?.display_name || 'Someone who cares'
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section with Cover Photo */}
@@ -172,6 +184,16 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
               {/* Share Button */}
               <ShareButton displayName={displayName} />
             </div>
+
+            {/* Proxy Banner */}
+            {profile.is_proxy && !profile.claimed_by_user_id && advocateName && (
+              <div className="mt-6 border-t border-slate-100 pt-6">
+                <ProxyBanner
+                  advocateName={advocateName}
+                  relationship={profile.relationship || 'Friend'}
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
 

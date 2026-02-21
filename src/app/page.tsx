@@ -72,9 +72,10 @@ export default function LandingPage() {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-              <Link href="/browse">
+              <Link href="/create-for">
                 <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                  Browse Registries
+                  <Heart className="w-5 h-5 mr-2" />
+                  Create for Someone Else
                 </Button>
               </Link>
             </div>

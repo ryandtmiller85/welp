@@ -9,7 +9,8 @@ import { CopyButton } from '@/components/ui/copy-button'
 import { ShareRegistry } from './share-registry'
 import { formatCents, progressPercent } from '@/lib/utils'
 import type { Profile, RegistryItem, CashFund, Encouragement } from '@/lib/types/database'
-import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart, MessageCircleHeart } from 'lucide-react'
+import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart, MessageCircleHeart, Users } from 'lucide-react'
+import { ProxyRegistryCard } from '@/components/proxy/proxy-registry-card'
 
 async function getDashboardData() {
   const supabase = await createClient()
@@ -76,6 +77,25 @@ async function getDashboardData() {
     .order('created_at', { ascending: false })
     .limit(20)
 
+  // Get proxy registries this user is managing
+  const { data: proxyRegistries = [] } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('created_by_user_id', user.id)
+    .eq('is_proxy', true)
+    .order('created_at', { ascending: false }) as any
+
+  // Get item counts for proxy registries
+  const proxyWithCounts = await Promise.all(
+    (proxyRegistries || []).map(async (p: any) => {
+      const { count } = await supabase
+        .from('registry_items')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', p.id) as any
+      return { ...p, item_count: count || 0 }
+    })
+  )
+
   return {
     user,
     profile: profile || {
@@ -90,6 +110,7 @@ async function getDashboardData() {
     recentItems,
     funds,
     encouragements,
+    proxyRegistries: proxyWithCounts,
   }
 }
 
@@ -129,7 +150,7 @@ function StatCard({
 }
 
 export default async function DashboardPage() {
-  const { user, profile, allItems, recentItems, funds, encouragements } = await getDashboardData()
+  const { user, profile, allItems, recentItems, funds, encouragements, proxyRegistries } = await getDashboardData()
 
   const items = allItems || []
   const safeFunds = funds || []
@@ -195,6 +216,29 @@ export default async function DashboardPage() {
 
         {/* Share Registry Section */}
         <ShareRegistry slug={profile.slug} />
+
+        {/* Proxy Registries */}
+        {proxyRegistries.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                <Users className="w-5 h-5 text-rose-600" />
+                Registries You&apos;re Managing
+              </h2>
+              <Link href="/create-for">
+                <Button variant="ghost" size="sm">
+                  <Plus className="w-4 h-4 mr-1" />
+                  Create Another
+                </Button>
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {proxyRegistries.map((proxy: any) => (
+                <ProxyRegistryCard key={proxy.id} profile={proxy} />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Profile Completeness Alerts */}
         <div className="space-y-3">

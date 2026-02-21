@@ -59,6 +59,14 @@ export interface Profile {
   privacy_level: PrivacyLevel
   slug: string
   show_days_counter: boolean
+  // Proxy registry fields
+  created_by_user_id: string | null
+  recipient_name: string | null
+  recipient_email: string | null
+  relationship: string | null
+  is_proxy: boolean
+  claimed_by_user_id: string | null
+  claimed_at: string | null
   created_at: string
   updated_at: string
 }
