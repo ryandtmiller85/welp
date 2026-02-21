@@ -46,14 +46,16 @@ export default function ProxyEditProfilePage() {
     async function fetchProfile() {
       try {
         const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser()
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession()
 
-        if (userError || !user) {
+        if (sessionError || !session?.user) {
           router.push('/auth/login')
           return
         }
+
+        const user = session.user
 
         const { data: profile, error } = await supabase
           .from('profiles')
@@ -107,11 +109,13 @@ export default function ProxyEditProfilePage() {
 
     try {
       const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser()
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession()
 
-      if (userError || !user) throw new Error('Not authenticated')
+      if (sessionError || !session?.user) throw new Error('Not authenticated')
+
+      const user = session.user
 
       // Update the proxy profile — we need to set display_name from recipient_name
       const { error } = await supabase

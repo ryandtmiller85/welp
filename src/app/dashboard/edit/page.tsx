@@ -53,14 +53,16 @@ export default function EditProfilePage() {
     async function fetchProfile() {
       try {
         const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser()
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession()
 
-        if (userError || !user) {
+        if (sessionError || !session?.user) {
           router.push('/auth/login')
           return
         }
+
+        const user = session.user
 
         const { data: profile, error } = await supabase
           .from('profiles')
@@ -101,13 +103,15 @@ export default function EditProfilePage() {
 
     try {
       const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser()
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession()
 
-      if (userError || !user) {
+      if (sessionError || !session?.user) {
         throw new Error('Not authenticated')
       }
+
+      const user = session.user
 
       const { error } = await supabase
         .from('profiles')
