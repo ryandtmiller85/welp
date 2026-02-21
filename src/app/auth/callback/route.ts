@@ -8,16 +8,11 @@ export async function GET(request: NextRequest) {
   const origin = requestUrl.origin
 
   if (code) {
-    // Use a 200 response with HTML redirect instead of 307
-    // This ensures the browser fully processes and stores Set-Cookie headers
-    // before navigating to the dashboard
     const redirectUrl = new URL(redirectTo, origin).toString()
-    const html = `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${redirectUrl}"><script>window.location.href="${redirectUrl}";</script></head><body>Redirecting...</body></html>`
 
-    const response = new NextResponse(html, {
-      status: 200,
-      headers: { 'Content-Type': 'text/html' },
-    })
+    // Create a redirect response — cookies set on this response
+    // will be persisted by the browser during the 302 redirect
+    const response = NextResponse.redirect(redirectUrl)
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
