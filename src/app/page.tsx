@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { MerchCarousel } from '@/components/merch/merch-carousel'
 import { CATEGORY_LABELS, CATEGORY_DESCRIPTIONS } from '@/lib/constants'
 import type { ItemCategory } from '@/lib/types/database'
 import {
@@ -209,6 +210,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Merch Carousel */}
+      <MerchCarousel />
 
       {/* CTA */}
       <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-rose-900">
