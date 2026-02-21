@@ -16,11 +16,16 @@ export function Header() {
   const supabase = createClient()
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
+    // Use getSession() instead of getUser() to avoid network calls.
+    // getUser() contacts the Supabase API server, and if the call fails
+    // (network error, token issue), the SDK fires SIGNED_OUT which
+    // deletes all auth cookies from the browser via document.cookie.
+    // getSession() only reads from local cookie state — safe and fast.
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setUser(session?.user ?? null)
     }
-    getUser()
+    checkSession()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
