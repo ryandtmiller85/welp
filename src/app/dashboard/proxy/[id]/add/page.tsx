@@ -6,11 +6,37 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input, Textarea, Select } from '@/components/ui/input'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { CATEGORY_LABELS, PRIORITY_LABELS } from '@/lib/constants'
+import { CuratedProductCard } from '@/components/shop/curated-product-card'
+import { CURATED_ITEMS, type CuratedItem } from '@/lib/curated-items'
+import { CATEGORY_LABELS, CATEGORY_DESCRIPTIONS, PRIORITY_LABELS } from '@/lib/constants'
 import type { ItemCategory, ItemPriority } from '@/lib/types/database'
-import { ArrowLeft } from 'lucide-react'
+import {
+  ArrowLeft,
+  Package,
+  UtensilsCrossed,
+  Bed,
+  Sofa,
+  Coffee,
+  Flame,
+  Sparkles,
+  PawPrint,
+  Link as LinkIcon,
+  PenLine,
+} from 'lucide-react'
 
-const CATEGORIES: { value: ItemCategory; label: string }[] = [
+// Categories that have curated items
+const CATALOG_CATEGORIES: { key: ItemCategory; icon: React.ReactNode }[] = [
+  { key: 'the_basics', icon: <Package className="w-6 h-6" /> },
+  { key: 'kitchen_reset', icon: <UtensilsCrossed className="w-6 h-6" /> },
+  { key: 'bedroom_glowup', icon: <Bed className="w-6 h-6" /> },
+  { key: 'living_solo', icon: <Sofa className="w-6 h-6" /> },
+  { key: 'self_care', icon: <Coffee className="w-6 h-6" /> },
+  { key: 'petty_fund', icon: <Flame className="w-6 h-6" /> },
+  { key: 'treat_yoself', icon: <Sparkles className="w-6 h-6" /> },
+  { key: 'pets', icon: <PawPrint className="w-6 h-6" /> },
+]
+
+const ALL_CATEGORIES: { value: ItemCategory; label: string }[] = [
   { value: 'the_basics', label: CATEGORY_LABELS.the_basics },
   { value: 'kitchen_reset', label: CATEGORY_LABELS.kitchen_reset },
   { value: 'bedroom_glowup', label: CATEGORY_LABELS.bedroom_glowup },
@@ -46,10 +72,20 @@ export default function ProxyAddItemPage() {
   const proxyId = params.id as string
 
   const [recipientName, setRecipientName] = useState('')
-  const [activeTab, setActiveTab] = useState<'url' | 'manual'>('url')
+  const [activeTab, setActiveTab] = useState<'catalog' | 'url' | 'manual'>('catalog')
+  const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(null)
+
+  // Catalog state
+  const [addingIds, setAddingIds] = useState<Set<string>>(new Set())
+  const [addedIds, setAddedIds] = useState<Set<string>>(new Set())
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+
+  // URL scrape state
   const [urlInput, setUrlInput] = useState('')
   const [isScraping, setIsScraping] = useState(false)
   const [scrapedData, setScrapedData] = useState<ScrapedData | null>(null)
+
+  // Form state
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -64,6 +100,7 @@ export default function ProxyAddItemPage() {
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState('')
 
+  // Fetch recipient name
   useEffect(() => {
     async function fetchProfile() {
       try {
@@ -77,6 +114,59 @@ export default function ProxyAddItemPage() {
     }
     fetchProfile()
   }, [proxyId])
+
+  // ── Catalog handlers ──────────────────────────────────────────────────
+
+  async function handleAddFromCatalog(item: CuratedItem) {
+    setAddingIds((prev) => new Set(prev).add(item.id))
+
+    try {
+      const category = CATALOG_CATEGORIES.find((c) => {
+        const items = CURATED_ITEMS[c.key] ?? []
+        return items.some((i) => i.id === item.id)
+      })?.key || 'other'
+
+      const res = await fetch('/api/registry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          proxyProfileId: proxyId,
+          title: item.title,
+          description: item.description,
+          imageUrl: item.imageUrl,
+          sourceUrl: item.sourceUrl,
+          affiliateUrl: item.affiliateUrl || null,
+          retailer: item.retailer,
+          priceCents: Math.round(item.price * 100),
+          category,
+          priority: 'want',
+        }),
+      })
+
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.error || 'Failed to add item')
+      }
+
+      setAddedIds((prev) => new Set(prev).add(item.id))
+      showToast(`"${item.title}" added to ${recipientName}'s registry!`, 'success')
+    } catch (error: any) {
+      showToast(error.message || 'Something went wrong', 'error')
+    } finally {
+      setAddingIds((prev) => {
+        const next = new Set(prev)
+        next.delete(item.id)
+        return next
+      })
+    }
+  }
+
+  function showToast(message: string, type: 'success' | 'error') {
+    setToast({ message, type })
+    setTimeout(() => setToast(null), 3000)
+  }
+
+  // ── URL scrape handlers ───────────────────────────────────────────────
 
   const handleScrapeUrl = async () => {
     setSubmitError('')
@@ -107,6 +197,8 @@ export default function ProxyAddItemPage() {
       setIsScraping(false)
     }
   }
+
+  // ── Form handlers ─────────────────────────────────────────────────────
 
   const handleFormChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -157,6 +249,15 @@ export default function ProxyAddItemPage() {
     }
   }
 
+  const resetForm = () => {
+    setFormData({ title: '', description: '', imageUrl: '', price: '', sourceUrl: '', category: 'other', priority: 'want', customNote: '' })
+    setScrapedData(null)
+    setUrlInput('')
+    setSubmitError('')
+  }
+
+  // ── Success screen ────────────────────────────────────────────────────
+
   if (submitSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-8 px-4">
@@ -169,7 +270,10 @@ export default function ProxyAddItemPage() {
                 The item has been added to {recipientName}&apos;s registry.
               </p>
               <div className="flex gap-3 justify-center">
-                <Button variant="primary" onClick={() => setSubmitSuccess(false)}>
+                <Button
+                  variant="primary"
+                  onClick={() => { setSubmitSuccess(false); setActiveTab('catalog'); setSelectedCategory(null) }}
+                >
                   Add Another Item
                 </Button>
                 <Button variant="secondary" onClick={() => router.push(`/dashboard/proxy/${proxyId}`)}>
@@ -183,9 +287,13 @@ export default function ProxyAddItemPage() {
     )
   }
 
+  // ── Main render ───────────────────────────────────────────────────────
+
+  const catalogItems = selectedCategory ? (CURATED_ITEMS[selectedCategory] ?? []) : []
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-8 px-4">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <Link
           href={`/dashboard/proxy/${proxyId}`}
           className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 transition-colors mb-4"
@@ -197,39 +305,124 @@ export default function ProxyAddItemPage() {
         <h1 className="text-3xl font-bold text-slate-900 mb-2">
           Add Item for {recipientName}
         </h1>
-        <p className="text-slate-600 mb-8">Add something {recipientName} needs to their registry.</p>
+        <p className="text-slate-600 mb-8">
+          Browse curated picks or add your own items to {recipientName}&apos;s registry.
+        </p>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 border-b border-slate-200">
+        <div className="flex gap-1 mb-6 border-b border-slate-200">
           <button
-            onClick={() => setActiveTab('url')}
-            className={`px-4 py-2 font-medium transition-colors ${
-              activeTab === 'url'
+            onClick={() => { setActiveTab('catalog'); setSelectedCategory(null) }}
+            className={`px-4 py-2.5 font-medium text-sm transition-colors flex items-center gap-2 ${
+              activeTab === 'catalog'
                 ? 'text-rose-600 border-b-2 border-rose-600 -mb-[2px]'
-                : 'text-slate-600 hover:text-slate-900'
+                : 'text-slate-500 hover:text-slate-900'
             }`}
           >
+            <Sparkles className="w-4 h-4" />
+            Browse Catalog
+          </button>
+          <button
+            onClick={() => setActiveTab('url')}
+            className={`px-4 py-2.5 font-medium text-sm transition-colors flex items-center gap-2 ${
+              activeTab === 'url'
+                ? 'text-rose-600 border-b-2 border-rose-600 -mb-[2px]'
+                : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <LinkIcon className="w-4 h-4" />
             Paste URL
           </button>
           <button
             onClick={() => setActiveTab('manual')}
-            className={`px-4 py-2 font-medium transition-colors ${
+            className={`px-4 py-2.5 font-medium text-sm transition-colors flex items-center gap-2 ${
               activeTab === 'manual'
                 ? 'text-rose-600 border-b-2 border-rose-600 -mb-[2px]'
-                : 'text-slate-600 hover:text-slate-900'
+                : 'text-slate-500 hover:text-slate-900'
             }`}
           >
+            <PenLine className="w-4 h-4" />
             Add Manually
           </button>
         </div>
 
+        {/* Error message */}
         {submitError && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
             {submitError}
           </div>
         )}
 
-        {/* URL Tab */}
+        {/* ── Browse Catalog Tab ─────────────────────────────────────── */}
+        {activeTab === 'catalog' && !selectedCategory && (
+          <div>
+            <p className="text-sm text-slate-500 mb-6">
+              Pick a category to browse curated items — one click to add to {recipientName}&apos;s registry.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {CATALOG_CATEGORIES.map(({ key, icon }) => {
+                const items = CURATED_ITEMS[key] ?? []
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setSelectedCategory(key)}
+                    className="text-left"
+                  >
+                    <Card hover className="h-full cursor-pointer">
+                      <CardContent className="py-6 text-center">
+                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-100 text-rose-600 mb-3">
+                          {icon}
+                        </div>
+                        <h3 className="font-semibold text-slate-900 text-sm">
+                          {CATEGORY_LABELS[key]}
+                        </h3>
+                        <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                          {CATEGORY_DESCRIPTIONS[key]}
+                        </p>
+                        <p className="text-xs text-rose-600 font-medium mt-2">
+                          {items.length} items
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'catalog' && selectedCategory && (
+          <div>
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 transition-colors mb-4"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to categories
+            </button>
+
+            <h2 className="text-2xl font-bold text-slate-900 mb-1">
+              {CATEGORY_LABELS[selectedCategory]}
+            </h2>
+            <p className="text-slate-600 text-sm mb-6">
+              {CATEGORY_DESCRIPTIONS[selectedCategory]}
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {catalogItems.map((item) => (
+                <CuratedProductCard
+                  key={item.id}
+                  item={item}
+                  onAddToRegistry={handleAddFromCatalog}
+                  isAdding={addingIds.has(item.id)}
+                  isAdded={addedIds.has(item.id)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── Paste URL Tab ──────────────────────────────────────────── */}
         {activeTab === 'url' && (
           <Card>
             <CardHeader>
@@ -237,21 +430,8 @@ export default function ProxyAddItemPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Input
-                  label="Product URL"
-                  type="url"
-                  placeholder="https://www.amazon.com/product-name/dp/..."
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  id="url-input"
-                />
-                <Button
-                  variant="primary"
-                  onClick={handleScrapeUrl}
-                  disabled={!urlInput.trim() || isScraping}
-                  loading={isScraping}
-                  className="w-full"
-                >
+                <Input label="Product URL" type="url" placeholder="https://www.amazon.com/product-name/dp/..." value={urlInput} onChange={(e) => setUrlInput(e.target.value)} id="url-input" />
+                <Button variant="primary" onClick={handleScrapeUrl} disabled={!urlInput.trim() || isScraping} loading={isScraping} className="w-full">
                   {isScraping ? 'Fetching Details...' : 'Fetch Details'}
                 </Button>
               </div>
@@ -267,7 +447,7 @@ export default function ProxyAddItemPage() {
                   <Input label="Title" value={formData.title} onChange={(e) => handleFormChange('title', e.target.value)} id="title-url" />
                   <Textarea label="Description" value={formData.description} onChange={(e) => handleFormChange('description', e.target.value)} id="desc-url" placeholder="Product description (optional)" />
                   <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-url" placeholder="0.00" />
-                  <Select label="Category" value={formData.category} onChange={(e) => handleFormChange('category', e.target.value)} options={CATEGORIES} id="cat-url" />
+                  <Select label="Category" value={formData.category} onChange={(e) => handleFormChange('category', e.target.value)} options={ALL_CATEGORIES} id="cat-url" />
                   <Select label="Priority" value={formData.priority} onChange={(e) => handleFormChange('priority', e.target.value)} options={PRIORITIES} id="pri-url" />
                   <Textarea label="Custom Note" value={formData.customNote} onChange={(e) => handleFormChange('customNote', e.target.value)} id="note-url" placeholder="Any additional notes (optional)" />
                   <Button variant="primary" onClick={handleSubmit} disabled={isSubmitting} loading={isSubmitting} className="w-full">
@@ -279,7 +459,7 @@ export default function ProxyAddItemPage() {
           </Card>
         )}
 
-        {/* Manual Tab */}
+        {/* ── Manual Add Tab ─────────────────────────────────────────── */}
         {activeTab === 'manual' && (
           <Card>
             <CardHeader>
@@ -291,7 +471,7 @@ export default function ProxyAddItemPage() {
               <Input label="Image URL" value={formData.imageUrl} onChange={(e) => handleFormChange('imageUrl', e.target.value)} id="img-manual" placeholder="https://... (optional)" />
               <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-manual" placeholder="0.00 (optional)" />
               <Input label="Source URL" type="url" value={formData.sourceUrl} onChange={(e) => handleFormChange('sourceUrl', e.target.value)} id="source-manual" placeholder="https://... (optional)" />
-              <Select label="Category" value={formData.category} onChange={(e) => handleFormChange('category', e.target.value)} options={CATEGORIES} id="cat-manual" />
+              <Select label="Category" value={formData.category} onChange={(e) => handleFormChange('category', e.target.value)} options={ALL_CATEGORIES} id="cat-manual" />
               <Select label="Priority" value={formData.priority} onChange={(e) => handleFormChange('priority', e.target.value)} options={PRIORITIES} id="pri-manual" />
               <Textarea label="Custom Note" value={formData.customNote} onChange={(e) => handleFormChange('customNote', e.target.value)} id="note-manual" placeholder="Any additional notes (optional)" />
               <div className="flex gap-3 pt-4">
@@ -306,6 +486,19 @@ export default function ProxyAddItemPage() {
           </Card>
         )}
       </div>
+
+      {/* Toast */}
+      {toast && (
+        <div
+          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-lg text-sm font-medium transition-all duration-300 ${
+            toast.type === 'success'
+              ? 'bg-emerald-600 text-white'
+              : 'bg-red-600 text-white'
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
     </div>
   )
 }
