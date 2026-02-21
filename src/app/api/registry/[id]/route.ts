@@ -9,12 +9,14 @@ export async function PATCH(
     const { id } = await params
     const supabase = await createClient()
     const {
-      data: { user },
-    } = await supabase.auth.getUser()
+      data: { session },
+    } = await supabase.auth.getSession()
 
-    if (!user) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
+    const user = session.user
 
     // Check ownership
     const { data: item, error: fetchError } = await supabase
@@ -58,12 +60,14 @@ export async function DELETE(
     const { id } = await params
     const supabase = await createClient()
     const {
-      data: { user },
-    } = await supabase.auth.getUser()
+      data: { session },
+    } = await supabase.auth.getSession()
 
-    if (!user) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
+    const user = session.user
 
     // Check ownership
     const { data: item, error: fetchError } = await supabase
