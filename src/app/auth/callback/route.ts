@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const origin = requestUrl.origin
 
   if (code) {
-    // We need a temporary response to capture the cookies from exchangeCodeForSession
+    // Collect cookies for diagnostic purposes
     const cookiesCollected: Array<{ name: string; value: string; options: any }> = []
 
     const supabase = createServerClient(
@@ -29,38 +29,30 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error && data.session) {
-      // Build cookie-setting JavaScript from the collected cookies
-      // This uses document.cookie which we've verified works on this domain
-      const cookieScript = cookiesCollected
-        .map(({ name, value, options }) => {
-          const parts = [`${encodeURIComponent(name)}=${encodeURIComponent(value)}`]
-          parts.push('path=/')
-          if (options?.maxAge) parts.push(`max-age=${options.maxAge}`)
-          if (options?.sameSite) parts.push(`samesite=${options.sameSite}`)
-          if (options?.secure) parts.push('secure')
-          // Note: we intentionally omit httpOnly so document.cookie can set them
-          return `document.cookie = "${parts.join('; ')}";`
-        })
-        .join('\n      ')
+      // DIAGNOSTIC: redirect to debug page that shows what cookies were collected
+      // Set the cookies on the redirect response (the approach that works for test cookies)
+      const redirectUrl = new URL('/api/debug-auth', origin).toString()
+      const response = NextResponse.redirect(redirectUrl)
 
-      const redirectUrl = new URL(redirectTo, origin).toString()
+      // Set each collected cookie on the response
+      for (const { name, value, options } of cookiesCollected) {
+        response.cookies.set(name, value, options)
+      }
 
-      const html = `<!DOCTYPE html>
-<html>
-  <head><title>Authenticating...</title></head>
-  <body>
-    <p>Signing you in...</p>
-    <script>
-      ${cookieScript}
-      window.location.replace("${redirectUrl}");
-    </script>
-  </body>
-</html>`
-
-      return new NextResponse(html, {
-        status: 200,
-        headers: { 'Content-Type': 'text/html' },
+      // Also set a diagnostic cookie with info about what we collected
+      response.cookies.set('auth_debug_info', JSON.stringify({
+        count: cookiesCollected.length,
+        names: cookiesCollected.map(c => c.name),
+        sizes: cookiesCollected.map(c => `${c.name}:${c.value.length}`),
+        options: cookiesCollected.map(c => JSON.stringify(c.options)),
+      }), {
+        path: '/',
+        maxAge: 300,
+        sameSite: 'lax' as const,
+        secure: true,
       })
+
+      return response
     }
 
     console.error('Auth exchange error:', error)
