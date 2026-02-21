@@ -128,7 +128,7 @@ export default function LandingPage() {
       </section>
 
       {/* Categories */}
-      <section className="py-20 bg-slate-50">
+      <section id="categories" className="py-20 bg-slate-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
@@ -141,19 +141,21 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {FEATURED_CATEGORIES.map((category) => (
-              <Card key={category} hover>
-                <CardContent className="py-6 text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-100 text-rose-600 mb-3">
-                    {CATEGORY_ICONS[category]}
-                  </div>
-                  <h3 className="font-semibold text-slate-900 text-sm">
-                    {CATEGORY_LABELS[category]}
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1">
-                    {CATEGORY_DESCRIPTIONS[category]}
-                  </p>
-                </CardContent>
-              </Card>
+              <Link key={category} href={`/shop/${category}`}>
+                <Card hover className="h-full cursor-pointer">
+                  <CardContent className="py-6 text-center">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-100 text-rose-600 mb-3">
+                      {CATEGORY_ICONS[category]}
+                    </div>
+                    <h3 className="font-semibold text-slate-900 text-sm">
+                      {CATEGORY_LABELS[category]}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1">
+                      {CATEGORY_DESCRIPTIONS[category]}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>

@@ -73,6 +73,7 @@ export async function POST(request: NextRequest) {
       description: body.description || null,
       image_url: body.imageUrl || null,
       source_url: body.sourceUrl || null,
+      affiliate_url: body.affiliateUrl || null,
       retailer: body.retailer || null,
       price_cents: body.priceCents || null,
       category: body.category,
