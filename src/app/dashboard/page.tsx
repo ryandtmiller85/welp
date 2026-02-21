@@ -8,8 +8,8 @@ import { ProgressBar } from '@/components/ui/progress-bar'
 import { CopyButton } from '@/components/ui/copy-button'
 import { ShareRegistry } from './share-registry'
 import { formatCents, progressPercent } from '@/lib/utils'
-import type { Profile, RegistryItem, CashFund } from '@/lib/types/database'
-import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart } from 'lucide-react'
+import type { Profile, RegistryItem, CashFund, Encouragement } from '@/lib/types/database'
+import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart, MessageCircleHeart } from 'lucide-react'
 
 async function getDashboardData() {
   const supabase = await createClient()
@@ -62,6 +62,15 @@ async function getDashboardData() {
     .eq('is_active', true)
     .order('created_at', { ascending: false })
 
+  // Get encouragement messages
+  const { data: encouragements = [] } = await supabase
+    .from('encouragements')
+    .select('*')
+    .eq('profile_id', user.id)
+    .eq('is_public', true)
+    .order('created_at', { ascending: false })
+    .limit(20)
+
   return {
     user,
     profile: profile || {
@@ -75,6 +84,7 @@ async function getDashboardData() {
     allItems,
     recentItems,
     funds,
+    encouragements,
   }
 }
 
@@ -114,10 +124,11 @@ function StatCard({
 }
 
 export default async function DashboardPage() {
-  const { user, profile, allItems, recentItems, funds } = await getDashboardData()
+  const { user, profile, allItems, recentItems, funds, encouragements } = await getDashboardData()
 
   const items = allItems || []
   const safeFunds = funds || []
+  const messages = encouragements || []
   const totalItems = items.length
   const claimedItems = items.filter(
     (i: any) => i.status === 'claimed' || i.status === 'fulfilled'
@@ -150,7 +161,7 @@ export default async function DashboardPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Quick Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <StatCard
             label="Total Items"
             value={totalItems}
@@ -168,6 +179,12 @@ export default async function DashboardPage() {
             value={formatCents(totalFundsRaised)}
             icon={<DollarSign className="w-6 h-6" />}
             accentColor="rose"
+          />
+          <StatCard
+            label="Messages"
+            value={messages.length}
+            icon={<MessageCircleHeart className="w-6 h-6" />}
+            accentColor="amber"
           />
         </div>
 
@@ -212,6 +229,44 @@ export default async function DashboardPage() {
             </Card>
           )}
         </div>
+
+        {/* Messages of Support */}
+        {messages.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <MessageCircleHeart className="w-5 h-5 text-amber-600" />
+              Messages of Support
+            </h2>
+            <div className="space-y-3">
+              {messages.slice(0, 5).map((msg: Encouragement) => (
+                <Card key={msg.id}>
+                  <CardContent className="py-4">
+                    <p className="text-slate-800 font-light text-base leading-relaxed mb-2">
+                      &ldquo;{msg.message}&rdquo;
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-rose-600">— {msg.author_name}</p>
+                      <p className="text-xs text-slate-400">
+                        {new Date(msg.created_at).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              {messages.length > 5 && (
+                <p className="text-sm text-slate-500 text-center pt-2">
+                  + {messages.length - 5} more messages on your{' '}
+                  <Link href={`/${profile.slug}`} className="text-rose-600 hover:underline">
+                    public page
+                  </Link>
+                </p>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Quick Actions */}
         <div>
