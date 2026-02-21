@@ -15,14 +15,19 @@ async function getDashboardData() {
   const supabase = await createClient()
 
   // Get current user
+  // Get current session (reads from cookies only, no remote API call)
+  // Using getSession() instead of getUser() because getUser() triggers
+  // a remote call that tries to update cookies via setAll(), which fails
+  // in Server Component context and causes session cookies to be cleared
   const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  if (userError || !user) {
+  if (!session?.user) {
     redirect('/auth/login')
   }
+
+  const user = session.user
 
   // Get profile
   const { data: profile, error: profileError } = await supabase
