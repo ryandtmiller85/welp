@@ -8,11 +8,8 @@ export async function GET(request: NextRequest) {
   const origin = requestUrl.origin
 
   if (code) {
-    const redirectUrl = new URL(redirectTo, origin).toString()
-
-    // Create a redirect response — cookies set on this response
-    // will be persisted by the browser during the 302 redirect
-    const response = NextResponse.redirect(redirectUrl)
+    // We need a temporary response to capture the cookies from exchangeCodeForSession
+    const cookiesCollected: Array<{ name: string; value: string; options: any }> = []
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,23 +20,52 @@ export async function GET(request: NextRequest) {
             return request.cookies.getAll()
           },
           setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              response.cookies.set(name, value, options)
-            )
+            cookiesToSet.forEach((cookie) => cookiesCollected.push(cookie))
           },
         },
       }
     )
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error) {
-      return response
+    if (!error && data.session) {
+      // Build cookie-setting JavaScript from the collected cookies
+      // This uses document.cookie which we've verified works on this domain
+      const cookieScript = cookiesCollected
+        .map(({ name, value, options }) => {
+          const parts = [`${encodeURIComponent(name)}=${encodeURIComponent(value)}`]
+          parts.push('path=/')
+          if (options?.maxAge) parts.push(`max-age=${options.maxAge}`)
+          if (options?.sameSite) parts.push(`samesite=${options.sameSite}`)
+          if (options?.secure) parts.push('secure')
+          // Note: we intentionally omit httpOnly so document.cookie can set them
+          return `document.cookie = "${parts.join('; ')}";`
+        })
+        .join('\n      ')
+
+      const redirectUrl = new URL(redirectTo, origin).toString()
+
+      const html = `<!DOCTYPE html>
+<html>
+  <head><title>Authenticating...</title></head>
+  <body>
+    <p>Signing you in...</p>
+    <script>
+      ${cookieScript}
+      window.location.replace("${redirectUrl}");
+    </script>
+  </body>
+</html>`
+
+      return new NextResponse(html, {
+        status: 200,
+        headers: { 'Content-Type': 'text/html' },
+      })
     }
 
     console.error('Auth exchange error:', error)
     return NextResponse.redirect(
-      new URL(`/auth/login?error=${encodeURIComponent(error.message)}`, origin)
+      new URL(`/auth/login?error=${encodeURIComponent(error?.message || 'Unknown error')}`, origin)
     )
   }
 
