@@ -14,14 +14,16 @@ export async function createClient() {
           return cookieStore.getAll()
         },
         setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing user sessions.
-          }
+          // IMPORTANT: Do NOT call cookieStore.set() here at all.
+          //
+          // In Server Components, cookieStore.set() throws ReadonlyRequestCookiesError.
+          // But even with a try/catch, Next.js may still process the attempted
+          // Set-Cookie headers BEFORE throwing, causing auth cookies to be
+          // deleted from the browser response.
+          //
+          // The middleware handles all cookie refreshing. Server Components
+          // only need to READ cookies (via getAll), never write them.
+          // Intentionally a no-op.
         },
       },
     }
