@@ -60,11 +60,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Priority is required' }, { status: 400 })
     }
 
+    // Determine target user_id (own profile or proxy profile)
+    let targetUserId = user.id
+
+    if (body.proxyProfileId) {
+      // Verify this user is the advocate for this proxy profile
+      const { data: proxyProfile, error: proxyError } = await supabase
+        .from('profiles')
+        .select('id, created_by_user_id, is_proxy, claimed_by_user_id')
+        .eq('id', body.proxyProfileId)
+        .eq('is_proxy', true)
+        .eq('created_by_user_id', user.id)
+        .single() as any
+
+      if (proxyError || !proxyProfile) {
+        return NextResponse.json({ error: 'Proxy profile not found or not authorized' }, { status: 403 })
+      }
+
+      if (proxyProfile.claimed_by_user_id) {
+        return NextResponse.json({ error: 'This registry has been claimed and can no longer be edited' }, { status: 403 })
+      }
+
+      targetUserId = proxyProfile.id
+    }
+
     // Get the next sort_order
     const { data: items } = await supabase
       .from('registry_items')
       .select('sort_order')
-      .eq('user_id', user.id)
+      .eq('user_id', targetUserId)
       .order('sort_order', { ascending: false })
       .limit(1)
 
@@ -72,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     // Create the item
     const itemData = {
-      user_id: user.id,
+      user_id: targetUserId,
       title: body.title,
       description: body.description || null,
       image_url: body.imageUrl || null,
