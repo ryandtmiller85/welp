@@ -69,3 +69,26 @@ export function getInitials(name: string): string {
     .toUpperCase()
     .slice(0, 2)
 }
+
+/**
+ * Construct an affiliate URL from a source URL when possible.
+ * Currently supports Amazon Associates (tag=welp-20).
+ * Returns null for retailers without affiliate programs set up.
+ */
+export function constructAffiliateUrl(sourceUrl: string): string | null {
+  try {
+    const urlObj = new URL(sourceUrl)
+    const hostname = urlObj.hostname.replace('www.', '')
+
+    // Amazon Associates — add or replace the tag parameter
+    if (hostname.includes('amazon.com')) {
+      urlObj.searchParams.set('tag', 'welp-20')
+      return urlObj.toString()
+    }
+
+    // Other retailers: no affiliate program configured yet
+    return null
+  } catch {
+    return null
+  }
+}

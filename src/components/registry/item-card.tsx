@@ -72,9 +72,9 @@ export function ItemCard({ item, isOwner, onClaim }: ItemCardProps) {
         <div className="space-y-3">
           {item.status === 'available' && !isOwner && (
             <div className="flex gap-2">
-              {item.source_url && (
+              {(item.affiliate_url || item.source_url) && (
                 <a
-                  href={item.source_url}
+                  href={item.affiliate_url || item.source_url!}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1"

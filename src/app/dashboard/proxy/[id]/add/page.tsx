@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { CuratedProductCard } from '@/components/shop/curated-product-card'
 import { CURATED_ITEMS, type CuratedItem } from '@/lib/curated-items'
 import { CATEGORY_LABELS, CATEGORY_DESCRIPTIONS, PRIORITY_LABELS } from '@/lib/constants'
+import { constructAffiliateUrl } from '@/lib/utils'
 import type { ItemCategory, ItemPriority } from '@/lib/types/database'
 import {
   ArrowLeft,
@@ -22,6 +23,8 @@ import {
   PawPrint,
   Link as LinkIcon,
   PenLine,
+  Search,
+  ExternalLink,
 } from 'lucide-react'
 
 // Categories that have curated items
@@ -57,6 +60,12 @@ const PRIORITIES: { value: ItemPriority; label: string }[] = [
   { value: 'dream', label: PRIORITY_LABELS.dream },
 ]
 
+const MARKETPLACES = [
+  { name: 'Amazon', color: '#FF9900', searchUrl: (q: string) => `https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=welp-20` },
+  { name: 'Target', color: '#CC0000', searchUrl: (q: string) => `https://www.target.com/s?searchTerm=${encodeURIComponent(q)}` },
+  { name: 'Walmart', color: '#0071DC', searchUrl: (q: string) => `https://www.walmart.com/search?q=${encodeURIComponent(q)}` },
+]
+
 interface ScrapedData {
   title: string | null
   description: string | null
@@ -74,6 +83,24 @@ export default function ProxyAddItemPage() {
   const [recipientName, setRecipientName] = useState('')
   const [activeTab, setActiveTab] = useState<'catalog' | 'url' | 'manual'>('catalog')
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(null)
+  const [showMarketplaceSearch, setShowMarketplaceSearch] = useState(false)
+
+  // Marketplace search state
+  const [marketplaceQuery, setMarketplaceQuery] = useState('')
+  const [marketplaceUrlInput, setMarketplaceUrlInput] = useState('')
+  const [isMarketplaceScraping, setIsMarketplaceScraping] = useState(false)
+  const [marketplaceScrapedData, setMarketplaceScrapedData] = useState<ScrapedData | null>(null)
+  const [marketplaceFormData, setMarketplaceFormData] = useState({
+    title: '',
+    description: '',
+    imageUrl: '',
+    price: '',
+    sourceUrl: '',
+    category: 'other' as ItemCategory,
+    priority: 'want' as ItemPriority,
+    customNote: '',
+  })
+  const [isMarketplaceSubmitting, setIsMarketplaceSubmitting] = useState(false)
 
   // Catalog state
   const [addingIds, setAddingIds] = useState<Set<string>>(new Set())
@@ -166,6 +193,119 @@ export default function ProxyAddItemPage() {
     setTimeout(() => setToast(null), 3000)
   }
 
+  // ── Marketplace search handlers ─────────────────────────────────────
+
+  function openMarketplaceSearch() {
+    setShowMarketplaceSearch(true)
+    setMarketplaceUrlInput('')
+    setMarketplaceScrapedData(null)
+    setMarketplaceQuery('')
+    if (selectedCategory) {
+      setMarketplaceFormData((prev) => ({ ...prev, category: selectedCategory }))
+    }
+  }
+
+  function handleSearchMarketplace(marketplace: typeof MARKETPLACES[number]) {
+    const query = marketplaceQuery.trim() || CATEGORY_LABELS[selectedCategory || 'other']
+    window.open(marketplace.searchUrl(query), '_blank')
+  }
+
+  async function handleMarketplaceScrape() {
+    setSubmitError('')
+    setIsMarketplaceScraping(true)
+
+    try {
+      const response = await fetch('/api/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: marketplaceUrlInput }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to scrape URL')
+      }
+
+      const data: ScrapedData = await response.json()
+      setMarketplaceScrapedData(data)
+
+      setMarketplaceFormData((prev) => ({
+        ...prev,
+        title: data.title || '',
+        description: data.description || '',
+        imageUrl: data.imageUrl || '',
+        price: data.priceCents ? String(data.priceCents / 100) : '',
+        sourceUrl: data.sourceUrl,
+        category: selectedCategory || prev.category,
+      }))
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Failed to scrape URL')
+    } finally {
+      setIsMarketplaceScraping(false)
+    }
+  }
+
+  async function handleMarketplaceSubmit() {
+    setSubmitError('')
+    if (!marketplaceFormData.title.trim()) {
+      setSubmitError('Title is required')
+      return
+    }
+
+    setIsMarketplaceSubmitting(true)
+
+    try {
+      const priceValue = marketplaceFormData.price
+        ? Math.round(parseFloat(marketplaceFormData.price) * 100)
+        : null
+      if (marketplaceFormData.price && isNaN(priceValue || 0)) throw new Error('Invalid price format')
+
+      const affiliateUrl = constructAffiliateUrl(marketplaceFormData.sourceUrl)
+
+      const response = await fetch('/api/registry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          proxyProfileId: proxyId,
+          title: marketplaceFormData.title,
+          description: marketplaceFormData.description || null,
+          imageUrl: marketplaceFormData.imageUrl || null,
+          priceCents: priceValue,
+          sourceUrl: marketplaceFormData.sourceUrl || null,
+          affiliateUrl: affiliateUrl || null,
+          retailer: marketplaceScrapedData?.retailer || null,
+          category: marketplaceFormData.category,
+          priority: marketplaceFormData.priority,
+          customNote: marketplaceFormData.customNote || null,
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to add item')
+      }
+
+      showToast(`"${marketplaceFormData.title}" added to ${recipientName}'s registry!`, 'success')
+      setShowMarketplaceSearch(false)
+      setMarketplaceScrapedData(null)
+      setMarketplaceUrlInput('')
+      setMarketplaceFormData({
+        title: '',
+        description: '',
+        imageUrl: '',
+        price: '',
+        sourceUrl: '',
+        category: selectedCategory || 'other',
+        priority: 'want',
+        customNote: '',
+      })
+    } catch (error: any) {
+      setSubmitError(error.message || 'Something went wrong')
+    } finally {
+      setIsMarketplaceSubmitting(false)
+    }
+  }
+
   // ── URL scrape handlers ───────────────────────────────────────────────
 
   const handleScrapeUrl = async () => {
@@ -216,6 +356,9 @@ export default function ProxyAddItemPage() {
       const priceValue = formData.price ? Math.round(parseFloat(formData.price) * 100) : null
       if (formData.price && isNaN(priceValue || 0)) throw new Error('Invalid price format')
 
+      // Auto-construct affiliate URL for the Paste URL tab
+      const affiliateUrl = activeTab === 'url' ? constructAffiliateUrl(formData.sourceUrl) : null
+
       const response = await fetch('/api/registry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -226,6 +369,7 @@ export default function ProxyAddItemPage() {
           imageUrl: formData.imageUrl || null,
           priceCents: priceValue,
           sourceUrl: formData.sourceUrl || null,
+          affiliateUrl: affiliateUrl || null,
           retailer: scrapedData?.retailer || null,
           category: formData.category,
           priority: formData.priority,
@@ -312,7 +456,7 @@ export default function ProxyAddItemPage() {
         {/* Tabs */}
         <div className="flex gap-1 mb-6 border-b border-slate-200">
           <button
-            onClick={() => { setActiveTab('catalog'); setSelectedCategory(null) }}
+            onClick={() => { setActiveTab('catalog'); setSelectedCategory(null); setShowMarketplaceSearch(false) }}
             className={`px-4 py-2.5 font-medium text-sm transition-colors flex items-center gap-2 ${
               activeTab === 'catalog'
                 ? 'text-rose-600 border-b-2 border-rose-600 -mb-[2px]'
@@ -391,7 +535,7 @@ export default function ProxyAddItemPage() {
           </div>
         )}
 
-        {activeTab === 'catalog' && selectedCategory && (
+        {activeTab === 'catalog' && selectedCategory && !showMarketplaceSearch && (
           <div>
             <button
               onClick={() => setSelectedCategory(null)}
@@ -418,7 +562,187 @@ export default function ProxyAddItemPage() {
                   isAdded={addedIds.has(item.id)}
                 />
               ))}
+
+              {/* "Something Else?" card */}
+              <button
+                onClick={openMarketplaceSearch}
+                className="text-left"
+              >
+                <Card className="flex flex-col h-full overflow-hidden border-2 border-dashed border-slate-300 hover:border-rose-300 hover:bg-rose-50/50 transition-all cursor-pointer">
+                  <div className="relative aspect-square bg-slate-50 overflow-hidden flex items-center justify-center">
+                    <div className="text-center px-4">
+                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-rose-100 text-rose-500 mb-3">
+                        <Search className="w-8 h-8" />
+                      </div>
+                      <h3 className="font-semibold text-slate-700 text-sm">
+                        Don&apos;t see what you need?
+                      </h3>
+                    </div>
+                  </div>
+                  <CardContent className="flex flex-col flex-1 py-4 text-center">
+                    <p className="text-xs text-slate-500 leading-relaxed mb-3">
+                      Search Amazon, Target, Walmart and add any item — we&apos;ll handle the rest.
+                    </p>
+                    <div className="mt-auto">
+                      <span className="inline-flex items-center gap-1.5 text-sm font-medium text-rose-600">
+                        <Search className="w-3.5 h-3.5" />
+                        Search Stores
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </button>
             </div>
+          </div>
+        )}
+
+        {/* ── Marketplace Search Flow ────────────────────────────────── */}
+        {activeTab === 'catalog' && selectedCategory && showMarketplaceSearch && (
+          <div>
+            <button
+              onClick={() => {
+                setShowMarketplaceSearch(false)
+                setMarketplaceScrapedData(null)
+                setMarketplaceUrlInput('')
+                setSubmitError('')
+              }}
+              className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 transition-colors mb-4"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to {CATEGORY_LABELS[selectedCategory]}
+            </button>
+
+            <h2 className="text-2xl font-bold text-slate-900 mb-1">
+              Search Partner Stores
+            </h2>
+            <p className="text-slate-600 text-sm mb-6">
+              Find what you&apos;re looking for, then paste the product link below.
+            </p>
+
+            {/* Search & store buttons */}
+            <Card className="mb-6">
+              <CardContent className="py-6">
+                <label htmlFor="mp-search" className="block text-sm font-medium text-slate-700 mb-2">
+                  What are you looking for?
+                </label>
+                <div className="flex gap-2 mb-4">
+                  <Input
+                    id="mp-search"
+                    placeholder={`e.g. "cast iron skillet", "throw pillows"...`}
+                    value={marketplaceQuery}
+                    onChange={(e) => setMarketplaceQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && marketplaceQuery.trim()) {
+                        handleSearchMarketplace(MARKETPLACES[0])
+                      }
+                    }}
+                  />
+                </div>
+
+                <p className="text-xs text-slate-500 mb-3">Open a store to search — then copy the product URL:</p>
+                <div className="flex flex-wrap gap-2">
+                  {MARKETPLACES.map((mp) => (
+                    <button
+                      key={mp.name}
+                      onClick={() => handleSearchMarketplace(mp)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all text-sm font-medium text-slate-700"
+                    >
+                      <span
+                        className="w-3 h-3 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: mp.color }}
+                      />
+                      {mp.name}
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Paste URL section */}
+            <Card>
+              <CardHeader>
+                <h3 className="text-lg font-semibold text-slate-900">Paste the product URL</h3>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Input
+                    label="Product URL"
+                    type="url"
+                    placeholder="https://www.amazon.com/dp/..."
+                    value={marketplaceUrlInput}
+                    onChange={(e) => setMarketplaceUrlInput(e.target.value)}
+                    id="mp-url-input"
+                  />
+                  <Button
+                    variant="primary"
+                    onClick={handleMarketplaceScrape}
+                    disabled={!marketplaceUrlInput.trim() || isMarketplaceScraping}
+                    loading={isMarketplaceScraping}
+                    className="w-full"
+                  >
+                    {isMarketplaceScraping ? 'Fetching Details...' : 'Fetch Details'}
+                  </Button>
+                </div>
+
+                {marketplaceScrapedData && (
+                  <div className="border-t pt-6 space-y-4">
+                    <h3 className="font-semibold text-slate-900">Preview & Edit</h3>
+
+                    {marketplaceScrapedData.imageUrl && (
+                      <div className="bg-slate-100 rounded-lg overflow-hidden">
+                        <img
+                          src={marketplaceScrapedData.imageUrl}
+                          alt={marketplaceScrapedData.title || 'Product'}
+                          className="w-full h-48 object-contain p-2"
+                        />
+                      </div>
+                    )}
+
+                    {constructAffiliateUrl(marketplaceFormData.sourceUrl) && (
+                      <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-700">
+                        Affiliate link will be included — you&apos;ll earn commission on this item!
+                      </div>
+                    )}
+
+                    <Input label="Title" value={marketplaceFormData.title} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, title: e.target.value }))} id="mp-title" />
+                    <Textarea label="Description" value={marketplaceFormData.description} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, description: e.target.value }))} id="mp-desc" placeholder="Product description (optional)" />
+                    <Input label="Price (USD)" type="number" step="0.01" value={marketplaceFormData.price} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, price: e.target.value }))} id="mp-price" placeholder="0.00" />
+
+                    {marketplaceScrapedData.retailer && (
+                      <div className="p-3 bg-slate-100 rounded-lg text-sm text-slate-700">
+                        Retailer: <strong>{marketplaceScrapedData.retailer}</strong>
+                      </div>
+                    )}
+
+                    <Select label="Category" value={marketplaceFormData.category} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, category: e.target.value as ItemCategory }))} options={ALL_CATEGORIES.map((c) => ({ value: c.value, label: c.label }))} id="mp-cat" />
+                    <Select label="Priority" value={marketplaceFormData.priority} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, priority: e.target.value as ItemPriority }))} options={PRIORITIES.map((p) => ({ value: p.value, label: p.label }))} id="mp-pri" />
+
+                    <div className="flex gap-3 pt-4">
+                      <Button
+                        variant="primary"
+                        onClick={handleMarketplaceSubmit}
+                        disabled={isMarketplaceSubmitting}
+                        loading={isMarketplaceSubmitting}
+                        className="flex-1"
+                      >
+                        Add to {recipientName}&apos;s Registry
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setMarketplaceScrapedData(null)
+                          setMarketplaceUrlInput('')
+                          setMarketplaceFormData(prev => ({ ...prev, title: '', description: '', imageUrl: '', price: '', sourceUrl: '' }))
+                        }}
+                      >
+                        Clear
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         )}
 
@@ -444,6 +768,13 @@ export default function ProxyAddItemPage() {
                       <img src={scrapedData.imageUrl} alt={scrapedData.title || 'Product'} className="w-full h-48 object-cover" />
                     </div>
                   )}
+
+                  {constructAffiliateUrl(formData.sourceUrl) && (
+                    <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-700">
+                      Affiliate link detected — you&apos;ll earn commission on this item!
+                    </div>
+                  )}
+
                   <Input label="Title" value={formData.title} onChange={(e) => handleFormChange('title', e.target.value)} id="title-url" />
                   <Textarea label="Description" value={formData.description} onChange={(e) => handleFormChange('description', e.target.value)} id="desc-url" placeholder="Product description (optional)" />
                   <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-url" placeholder="0.00" />
