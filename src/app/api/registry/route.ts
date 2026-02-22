@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import type { RegistryItem } from '@/lib/types/database'
+import { validateBody, createRegistryItemSchema } from '@/lib/validation'
+import { checkRateLimit, getRateLimitId, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,6 +15,10 @@ export async function GET(request: NextRequest) {
     }
 
     const user = session.user
+
+    // Rate limit
+    const rl = checkRateLimit(getRateLimitId(request, user.id), RATE_LIMITS.authenticated)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
 
     const { data, error } = await supabase
       .from('registry_items')
@@ -45,30 +50,26 @@ export async function POST(request: NextRequest) {
 
     const user = session.user
 
+    // Rate limit
+    const rl = checkRateLimit(getRateLimitId(request, user.id), RATE_LIMITS.authenticated)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
     const body = await request.json()
 
-    // Validate required fields
-    if (!body.title || typeof body.title !== 'string') {
-      return NextResponse.json({ error: 'Title is required' }, { status: 400 })
-    }
+    // Validate with Zod
+    const validation = validateBody(createRegistryItemSchema, body)
+    if (!validation.success) return validation.response
 
-    if (!body.category || typeof body.category !== 'string') {
-      return NextResponse.json({ error: 'Category is required' }, { status: 400 })
-    }
-
-    if (!body.priority || typeof body.priority !== 'string') {
-      return NextResponse.json({ error: 'Priority is required' }, { status: 400 })
-    }
+    const v = validation.data
 
     // Determine target user_id (own profile or proxy profile)
     let targetUserId = user.id
 
-    if (body.proxyProfileId) {
-      // Verify this user is the advocate for this proxy profile
+    if (v.proxyProfileId) {
       const { data: proxyProfile, error: proxyError } = await supabase
         .from('profiles')
         .select('id, created_by_user_id, is_proxy, claimed_by_user_id')
-        .eq('id', body.proxyProfileId)
+        .eq('id', v.proxyProfileId)
         .eq('is_proxy', true)
         .eq('created_by_user_id', user.id)
         .single() as any
@@ -94,20 +95,19 @@ export async function POST(request: NextRequest) {
 
     const nextSortOrder = (items?.[0]?.sort_order ?? -1) + 1
 
-    // Create the item
     const itemData = {
       user_id: targetUserId,
-      title: body.title,
-      description: body.description || null,
-      image_url: body.imageUrl || null,
-      source_url: body.sourceUrl || null,
-      affiliate_url: body.affiliateUrl || null,
-      retailer: body.retailer || null,
-      price_cents: body.priceCents || null,
-      category: body.category,
-      priority: body.priority,
-      custom_note: body.customNote || null,
-      is_group_gift: body.isGroupGift || false,
+      title: v.title,
+      description: v.description || null,
+      image_url: v.imageUrl || null,
+      source_url: v.sourceUrl || null,
+      affiliate_url: v.affiliateUrl || null,
+      retailer: v.retailer || null,
+      price_cents: v.priceCents || null,
+      category: v.category,
+      priority: v.priority,
+      custom_note: v.customNote || null,
+      is_group_gift: v.isGroupGift || false,
       sort_order: nextSortOrder,
     }
 

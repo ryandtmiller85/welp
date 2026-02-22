@@ -19,6 +19,7 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [emailSent, setEmailSent] = useState(false)
+  const [ageConfirmed, setAgeConfirmed] = useState(false)
 
   const validateForm = (): boolean => {
     if (!email || !password || !confirmPassword) {
@@ -26,13 +27,18 @@ export default function SignupPage() {
       return false
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters')
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters')
       return false
     }
 
     if (password !== confirmPassword) {
       setError('Passwords do not match')
+      return false
+    }
+
+    if (!ageConfirmed) {
+      setError('You must confirm you are 18 or older')
       return false
     }
 
@@ -198,7 +204,7 @@ export default function SignupPage() {
                 id="password"
                 type="password"
                 label="Password"
-                placeholder="At least 6 characters"
+                placeholder="At least 8 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
@@ -216,10 +222,20 @@ export default function SignupPage() {
                 required
               />
 
+              <label className="flex items-start gap-2 text-sm text-slate-600 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={ageConfirmed}
+                  onChange={(e) => setAgeConfirmed(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-rose-500"
+                />
+                <span>I confirm that I am at least 18 years old</span>
+              </label>
+
               <Button
                 type="submit"
                 variant="primary"
-                disabled={loading}
+                disabled={loading || !ageConfirmed}
                 loading={loading}
                 className="w-full"
               >

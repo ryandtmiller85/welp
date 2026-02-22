@@ -14,6 +14,7 @@ import { EncouragementWall } from '@/components/registry/encouragement-wall'
 import { ShareButton } from './share-button'
 import { ProxyBanner } from '@/components/proxy/proxy-banner'
 import Link from 'next/link'
+import { Flag } from 'lucide-react'
 
 // Dynamic metadata for social sharing
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -92,6 +93,7 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
 
   const encouragements = (encouragementsData as Encouragement[]) || []
 
+  const hasAffiliateLinks = items.some(item => !!item.affiliate_url)
   const displayName = profile.display_name || profile.alias || 'A Friend'
   const daysAgo = profile.event_date ? daysSince(profile.event_date) : 0
   const showCounter = profile.show_days_counter && profile.event_date
@@ -252,8 +254,30 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
         )}
       </div>
 
-      {/* Footer Spacing */}
-      <div className="h-12" />
+      {/* Affiliate Disclosure + Report */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        {/* Affiliate Disclosure — required by FTC + Amazon Associates ToS */}
+        {hasAffiliateLinks && (
+          <p className="text-xs text-slate-400 mb-4">
+            Some links on this page are affiliate links. Welp may earn a small commission at no extra cost to you.
+            As an Amazon Associate, Welp earns from qualifying purchases.
+          </p>
+        )}
+
+        {/* Report Button */}
+        <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+          <p className="text-xs text-slate-400">
+            Powered by <Link href="/" className="underline hover:text-slate-600">Welp</Link>
+          </p>
+          <a
+            href={`mailto:support@alliswelp.com?subject=Report%20Registry:%20${encodeURIComponent(slug)}&body=I%20would%20like%20to%20report%20this%20registry%20for%20the%20following%20reason:%0A%0A`}
+            className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-red-500 transition-colors"
+          >
+            <Flag className="w-3 h-3" />
+            Report this registry
+          </a>
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
+import { validateBody, createProxyRegistrySchema } from '@/lib/validation'
+import { checkRateLimit, getRateLimitId, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit'
 
 // GET — return all proxy registries the current user is managing
 export async function GET() {
@@ -48,7 +50,7 @@ export async function GET() {
 }
 
 // POST — create a new proxy registry
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const supabase = await createClient()
   const { data: { session } } = await supabase.auth.getSession()
 
@@ -56,7 +58,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  // Rate limit
+  const rl = checkRateLimit(getRateLimitId(request, session.user.id), RATE_LIMITS.sensitive)
+  if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
   const body = await request.json()
+
+  // Validate with Zod
+  const validation = validateBody(createProxyRegistrySchema, body)
+  if (!validation.success) return validation.response
+
   const {
     recipientName,
     relationship,
@@ -65,14 +76,7 @@ export async function POST(request: Request) {
     storyText,
     city,
     state,
-  } = body
-
-  if (!recipientName || !relationship) {
-    return NextResponse.json(
-      { error: 'Recipient name and relationship are required' },
-      { status: 400 }
-    )
-  }
+  } = validation.data
 
   // Generate a unique ID for the proxy profile
   // Since profiles.id references auth.users(id), proxy profiles need a different approach:

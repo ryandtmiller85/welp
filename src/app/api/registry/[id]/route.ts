@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { validateBody, updateRegistryItemSchema, claimRegistryItemSchema } from '@/lib/validation'
+import { checkRateLimit, getRateLimitId, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function PATCH(
   request: NextRequest,
@@ -18,6 +20,10 @@ export async function PATCH(
 
     const user = session.user
 
+    // Rate limit
+    const rl = checkRateLimit(getRateLimitId(request, user.id), RATE_LIMITS.authenticated)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
     // Check ownership
     const { data: item, error: fetchError } = await supabase
       .from('registry_items')
@@ -33,11 +39,14 @@ export async function PATCH(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    // Update the item
+    // Validate and whitelist fields — .strict() rejects unknown fields like user_id, status, claimed_at
     const body = await request.json()
+    const validation = validateBody(updateRegistryItemSchema, body)
+    if (!validation.success) return validation.response
+
     const { data, error } = await supabase
       .from('registry_items')
-      .update(body as any)
+      .update(validation.data)
       .eq('id', id)
       .select()
 
@@ -69,6 +78,10 @@ export async function DELETE(
 
     const user = session.user
 
+    // Rate limit
+    const rl = checkRateLimit(getRateLimitId(request, user.id), RATE_LIMITS.authenticated)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
     // Check ownership
     const { data: item, error: fetchError } = await supabase
       .from('registry_items')
@@ -84,7 +97,6 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    // Delete the item
     const { error } = await supabase.from('registry_items').delete().eq('id', id)
 
     if (error) {
@@ -106,10 +118,17 @@ export async function POST(
     const { id } = await params
     const body = await request.json()
 
+    // Rate limit (public endpoint — uses IP)
+    const rl = checkRateLimit(getRateLimitId(request), RATE_LIMITS.public)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
     if (body.action === 'claim') {
+      // Validate claim body
+      const validation = validateBody(claimRegistryItemSchema, body)
+      if (!validation.success) return validation.response
+
       const supabase = await createClient()
 
-      // Check if item exists
       const { data: item, error: fetchError } = await supabase
         .from('registry_items')
         .select('*')
@@ -120,22 +139,15 @@ export async function POST(
         return NextResponse.json({ error: 'Item not found' }, { status: 404 })
       }
 
-      // Check if already claimed
       if ((item as any).status === 'claimed') {
         return NextResponse.json({ error: 'Item is already claimed' }, { status: 400 })
       }
 
-      // Validate claim data
-      if (!body.claimed_by_name || typeof body.claimed_by_name !== 'string') {
-        return NextResponse.json({ error: 'Claimed by name is required' }, { status: 400 })
-      }
-
-      // Update item with claim
       const { data, error } = await supabase
         .from('registry_items')
         .update({
           status: 'claimed',
-          claimed_by_name: body.claimed_by_name,
+          claimed_by_name: validation.data.claimed_by_name,
           claimed_at: new Date().toISOString(),
         } as any)
         .eq('id', id)

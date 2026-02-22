@@ -23,8 +23,9 @@ export async function updateSession(request: NextRequest) {
       response.cookies.set(cookie.name, cookie.value, {
         path: '/',
         sameSite: 'lax',
-        httpOnly: false,
-        maxAge: 400 * 24 * 60 * 60, // 400 days
+        httpOnly: true,
+        secure: true,
+        maxAge: 30 * 24 * 60 * 60, // 30 days (was 400 — reduced to limit token compromise window)
       })
     }
   }

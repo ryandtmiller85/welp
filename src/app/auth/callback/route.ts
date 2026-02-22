@@ -4,8 +4,11 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
-  const redirectTo = requestUrl.searchParams.get('redirect_to') || '/dashboard'
+  const rawRedirect = requestUrl.searchParams.get('redirect_to') || '/dashboard'
   const origin = requestUrl.origin
+
+  // Prevent open redirect: only allow relative paths starting with /
+  const redirectTo = rawRedirect.startsWith('/') && !rawRedirect.startsWith('//') ? rawRedirect : '/dashboard'
 
   if (code) {
     const redirectUrl = new URL(redirectTo, origin).toString()

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { scrapeProductMetadata } from '@/lib/scraper'
 import { createClient } from '@/lib/supabase/server'
+import { validateBody, scrapeUrlSchema } from '@/lib/validation'
+import { checkRateLimit, getRateLimitId, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
-    // Authenticate user
     const supabase = await createClient()
     const {
       data: { session },
@@ -14,27 +15,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Parse request body
+    // Rate limit (sensitive — external HTTP calls)
+    const rl = checkRateLimit(getRateLimitId(request, session.user.id), RATE_LIMITS.sensitive)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
     const body = await request.json()
-    const { url } = body
 
-    // Validate URL
-    if (!url || typeof url !== 'string') {
-      return NextResponse.json({ error: 'URL is required' }, { status: 400 })
-    }
+    // Validate with Zod
+    const validation = validateBody(scrapeUrlSchema, body)
+    if (!validation.success) return validation.response
 
-    // Validate URL format
-    try {
-      const urlObj = new URL(url)
-      if (!['http:', 'https:'].includes(urlObj.protocol)) {
-        return NextResponse.json({ error: 'URL must be HTTP or HTTPS' }, { status: 400 })
-      }
-    } catch {
-      return NextResponse.json({ error: 'Invalid URL format' }, { status: 400 })
-    }
-
-    // Scrape metadata
-    const metadata = await scrapeProductMetadata(url)
+    // SSRF protection is handled inside scrapeProductMetadata via ssrf-guard.ts
+    const metadata = await scrapeProductMetadata(validation.data.url)
 
     return NextResponse.json(metadata)
   } catch (error) {

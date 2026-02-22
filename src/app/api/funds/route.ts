@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { validateBody, createFundSchema } from '@/lib/validation'
+import { checkRateLimit, getRateLimitId, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,15 +16,16 @@ export async function GET(request: NextRequest) {
 
     const user = session.user
 
+    const rl = checkRateLimit(getRateLimitId(request, user.id), RATE_LIMITS.authenticated)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
     const { data, error } = await supabase
       .from('cash_funds')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
 
-    if (error) {
-      throw error
-    }
+    if (error) throw error
 
     return NextResponse.json(data)
   } catch (error) {
@@ -44,30 +47,22 @@ export async function POST(request: NextRequest) {
 
     const user = session.user
 
+    const rl = checkRateLimit(getRateLimitId(request, user.id), RATE_LIMITS.authenticated)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
     const body = await request.json()
+    const validation = validateBody(createFundSchema, body)
+    if (!validation.success) return validation.response
 
-    // Validate required fields
-    if (!body.title || typeof body.title !== 'string') {
-      return NextResponse.json({ error: 'Title is required' }, { status: 400 })
-    }
+    const v = validation.data
 
-    if (!body.goal_cents || typeof body.goal_cents !== 'number') {
-      return NextResponse.json({ error: 'Goal (in cents) is required' }, { status: 400 })
-    }
-
-    if (!body.fund_type || typeof body.fund_type !== 'string') {
-      return NextResponse.json({ error: 'Fund type is required' }, { status: 400 })
-    }
-
-    // Determine target user_id (own profile or proxy profile)
     let targetUserId = user.id
 
-    if (body.proxyProfileId) {
-      // Verify this user is the advocate for this proxy profile
+    if (v.proxyProfileId) {
       const { data: proxyProfile, error: proxyError } = await supabase
         .from('profiles')
         .select('id, created_by_user_id, is_proxy, claimed_by_user_id')
-        .eq('id', body.proxyProfileId)
+        .eq('id', v.proxyProfileId)
         .eq('is_proxy', true)
         .eq('created_by_user_id', user.id)
         .single() as any
@@ -83,21 +78,18 @@ export async function POST(request: NextRequest) {
       targetUserId = proxyProfile.id
     }
 
-    // Create the fund
     const fundData = {
       user_id: targetUserId,
-      title: body.title,
-      description: body.description || null,
-      goal_cents: body.goal_cents,
-      fund_type: body.fund_type,
+      title: v.title,
+      description: v.description || null,
+      goal_cents: v.goal_cents,
+      fund_type: v.fund_type,
       is_active: true,
     }
 
     const { data, error } = await supabase.from('cash_funds').insert(fundData as any).select()
 
-    if (error) {
-      throw error
-    }
+    if (error) throw error
 
     return NextResponse.json(data[0], { status: 201 })
   } catch (error) {

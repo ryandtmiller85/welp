@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { validateBody, createEncouragementSchema } from '@/lib/validation'
+import { checkRateLimit, getRateLimitId, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,6 +12,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'profile_id query parameter is required' }, { status: 400 })
     }
 
+    // Rate limit (public endpoint)
+    const rl = checkRateLimit(getRateLimitId(request), RATE_LIMITS.public)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
     const supabase = await createClient()
 
     const { data, error } = await supabase
@@ -19,9 +25,7 @@ export async function GET(request: NextRequest) {
       .eq('is_public', true)
       .order('created_at', { ascending: false })
 
-    if (error) {
-      throw error
-    }
+    if (error) throw error
 
     return NextResponse.json(data)
   } catch (error) {
@@ -32,29 +36,25 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit (anonymous endpoint — tighter limits)
+    const rl = checkRateLimit(getRateLimitId(request), RATE_LIMITS.anonymous)
+    if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
     const body = await request.json()
 
-    // Validate required fields
-    if (!body.profile_id || typeof body.profile_id !== 'string') {
-      return NextResponse.json({ error: 'profile_id is required' }, { status: 400 })
-    }
+    // Validate with Zod
+    const validation = validateBody(createEncouragementSchema, body)
+    if (!validation.success) return validation.response
 
-    if (!body.author_name || typeof body.author_name !== 'string') {
-      return NextResponse.json({ error: 'author_name is required' }, { status: 400 })
-    }
-
-    if (!body.message || typeof body.message !== 'string') {
-      return NextResponse.json({ error: 'message is required' }, { status: 400 })
-    }
+    const v = validation.data
 
     const supabase = await createClient()
 
-    // Create the encouragement
     const encouragementData = {
-      profile_id: body.profile_id,
-      author_name: body.author_name,
-      message: body.message,
-      is_public: body.is_public ?? true,
+      profile_id: v.profile_id,
+      author_name: v.author_name,
+      message: v.message,
+      is_public: v.is_public,
     }
 
     const { data, error } = await supabase
@@ -62,9 +62,7 @@ export async function POST(request: NextRequest) {
       .insert(encouragementData as any)
       .select()
 
-    if (error) {
-      throw error
-    }
+    if (error) throw error
 
     return NextResponse.json(data[0], { status: 201 })
   } catch (error) {

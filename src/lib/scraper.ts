@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio'
 import { detectRetailer } from '@/lib/utils'
+import { isUrlSafeToFetch } from '@/lib/ssrf-guard'
 
 export interface ScrapedProduct {
   title: string | null
@@ -150,16 +151,50 @@ function extractFallbackData(html: string, sourceUrl: string): Partial<ScrapedPr
 }
 
 async function fetchWithTimeout(url: string, timeoutMs: number = 10000): Promise<string> {
+  // SSRF protection: block private IPs, cloud metadata, localhost
+  const ssrfCheck = isUrlSafeToFetch(url)
+  if (!ssrfCheck.safe) {
+    throw new Error(`Blocked: ${ssrfCheck.reason}`)
+  }
+
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
 
   try {
     const response = await fetch(url, {
       signal: controller.signal,
+      redirect: 'manual', // Don't follow redirects automatically (prevents SSRF via redirect)
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       },
     })
+
+    // Handle redirects safely — validate the redirect target
+    if (response.status >= 300 && response.status < 400) {
+      const location = response.headers.get('location')
+      if (!location) throw new Error('Redirect with no location header')
+
+      const redirectUrl = new URL(location, url).toString()
+      const redirectCheck = isUrlSafeToFetch(redirectUrl)
+      if (!redirectCheck.safe) {
+        throw new Error(`Blocked redirect: ${redirectCheck.reason}`)
+      }
+
+      // Follow one redirect only
+      const redirectResponse = await fetch(redirectUrl, {
+        signal: controller.signal,
+        redirect: 'manual',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        },
+      })
+
+      if (!redirectResponse.ok && !(redirectResponse.status >= 300 && redirectResponse.status < 400)) {
+        throw new Error(`HTTP ${redirectResponse.status}`)
+      }
+
+      return await redirectResponse.text()
+    }
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`)
