@@ -754,7 +754,7 @@ export default function ProxyAddItemPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Input label="Product URL" type="url" placeholder="https://www.amazon.com/product-name/dp/..." value={urlInput} onChange={(e) => setUrlInput(e.target.value)} id="url-input" />
+                <Input label="Product URL" type="url" placeholder="https://www.example.com/product-page..." value={urlInput} onChange={(e) => setUrlInput(e.target.value)} id="url-input" />
                 <Button variant="primary" onClick={handleScrapeUrl} disabled={!urlInput.trim() || isScraping} loading={isScraping} className="w-full">
                   {isScraping ? 'Fetching Details...' : 'Fetch Details'}
                 </Button>

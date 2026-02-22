@@ -776,7 +776,7 @@ export default function AddItemPage() {
                 <Input
                   label="Product URL"
                   type="url"
-                  placeholder="https://www.amazon.com/product-name/dp/..."
+                  placeholder="https://www.example.com/product-page..."
                   value={urlInput}
                   onChange={(e) => setUrlInput(e.target.value)}
                   id="url-input"
