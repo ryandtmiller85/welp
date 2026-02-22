@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ExternalLink, Plus, Check, Loader2 } from 'lucide-react'
+import { trackClick } from '@/lib/track'
 import type { CuratedItem } from '@/lib/curated-items'
 
 const BADGE_COLORS: Record<string, string> = {
@@ -119,6 +120,14 @@ export function CuratedProductCard({
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex"
+            onClick={() => {
+              trackClick({
+                url: buyUrl,
+                retailer: item.retailer,
+                isAffiliate: !!item.affiliateUrl,
+                source: 'catalog',
+              })
+            }}
           >
             <Button variant="outline" size="sm" className="gap-1.5 px-2.5">
               <ExternalLink className="w-3.5 h-3.5" />

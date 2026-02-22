@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import type { RegistryItem, ItemCategory, Profile } from '@/lib/types/database'
 import { CATEGORY_LABELS } from '@/lib/constants'
 import { ItemCard } from '@/components/registry/item-card'
+import { trackClick } from '@/lib/track'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -161,6 +162,7 @@ export function RegistrySection({ items: initialItems, profile }: RegistrySectio
                       key={item.id}
                       item={item}
                       isOwner={false}
+                      profileId={profile.id}
                       onClaim={handleClaimClick}
                     />
                   ))}
@@ -192,12 +194,23 @@ export function RegistrySection({ items: initialItems, profile }: RegistrySectio
                   {claimingItem?.title} has been marked as claimed.
                   {claimingItem?.source_url && ' Go ahead and purchase it from the link provided.'}
                 </p>
-                {claimingItem?.source_url && (
+                {(claimingItem?.affiliate_url || claimingItem?.source_url) && (
                   <a
-                    href={claimingItem.source_url}
+                    href={claimingItem.affiliate_url || claimingItem.source_url!}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block mb-3"
+                    onClick={() => {
+                      const url = claimingItem.affiliate_url || claimingItem.source_url!
+                      trackClick({
+                        url,
+                        retailer: claimingItem.retailer,
+                        isAffiliate: !!claimingItem.affiliate_url,
+                        registryItemId: claimingItem.id,
+                        profileId: profile.id,
+                        source: 'registry',
+                      })
+                    }}
                   >
                     <Button variant="primary" className="w-full">
                       Buy This Item →

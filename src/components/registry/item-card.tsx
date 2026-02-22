@@ -3,6 +3,7 @@
 import type { RegistryItem } from '@/lib/types/database'
 import { PRIORITY_LABELS, PRIORITY_COLORS } from '@/lib/constants'
 import { formatCents, progressPercent, cn } from '@/lib/utils'
+import { trackClick } from '@/lib/track'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -12,10 +13,11 @@ import { ExternalLink, ShoppingCart, Check } from 'lucide-react'
 interface ItemCardProps {
   item: RegistryItem
   isOwner: boolean
+  profileId?: string | null
   onClaim?: (itemId: string) => void
 }
 
-export function ItemCard({ item, isOwner, onClaim }: ItemCardProps) {
+export function ItemCard({ item, isOwner, profileId, onClaim }: ItemCardProps) {
   const priorityColor = PRIORITY_COLORS[item.priority] || 'bg-gray-100 text-gray-800'
   const fundingPct =
     item.is_group_gift && item.group_gift_target_cents
@@ -78,6 +80,17 @@ export function ItemCard({ item, isOwner, onClaim }: ItemCardProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1"
+                  onClick={() => {
+                    const url = item.affiliate_url || item.source_url!
+                    trackClick({
+                      url,
+                      retailer: item.retailer,
+                      isAffiliate: !!item.affiliate_url,
+                      registryItemId: item.id,
+                      profileId: profileId || null,
+                      source: 'registry',
+                    })
+                  }}
                 >
                   <Button variant="outline" size="sm" className="w-full">
                     Buy This
