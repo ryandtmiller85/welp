@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { MerchItem } from '@/lib/merch-items'
 import { Badge } from '@/components/ui/badge'
+import { Loader2 } from 'lucide-react'
 
 const BADGE_STYLES: Record<string, string> = {
   'Best Seller': 'bg-amber-100 text-amber-800',
@@ -187,6 +189,33 @@ interface MerchProductCardProps {
 
 export function MerchProductCard({ item, size = 'md' }: MerchProductCardProps) {
   const isSmall = size === 'sm'
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  async function handleBuy() {
+    setIsLoading(true)
+    setError('')
+
+    try {
+      const res = await fetch('/api/checkout/merch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemId: item.id, quantity: 1 }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Checkout failed')
+      }
+
+      // Redirect to Stripe Checkout
+      window.location.href = data.url
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong')
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="group bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden">
@@ -217,16 +246,26 @@ export function MerchProductCard({ item, size = 'md' }: MerchProductCardProps) {
             </span>
           )}
         </div>
-        <a
-          href={item.buyUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+        {error && (
+          <p className="text-xs text-red-500 mt-1">{error}</p>
+        )}
+        <button
+          onClick={handleBuy}
+          disabled={isLoading}
           className={`mt-3 w-full inline-flex items-center justify-center font-medium rounded-lg transition-all
             bg-gradient-to-r from-rose-500 to-rose-600 text-white hover:from-rose-600 hover:to-rose-700
+            disabled:opacity-60 disabled:cursor-not-allowed
             ${isSmall ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm'}`}
         >
-          Shop Now
-        </a>
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+              Loading...
+            </>
+          ) : (
+            'Shop Now'
+          )}
+        </button>
       </div>
     </div>
   )
