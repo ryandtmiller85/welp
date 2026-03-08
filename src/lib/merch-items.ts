@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Merch catalog – welp. branded swag
+// Merch catalog â welp. branded swag
 //
 // Each item has a `buyUrl` placeholder. Replace with real store links once
 // you've set up a print-on-demand provider (Printful, Printify, Spring, etc.)
@@ -30,10 +30,10 @@ export interface MerchItem {
 }
 
 export const MERCH_ITEMS: MerchItem[] = [
-  // ── The Essentials ────────────────────────────────────────────────────────
+  // ââ The Essentials ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     id: 'tee-og-black',
-    title: 'The OG — Black Tee',
+    title: 'The OG â Black Tee',
     description: '"welp." left chest. That\'s it. That\'s the shirt.',
     price: 29.99,
     comparePrice: 34.99,
@@ -47,20 +47,20 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'tee-og-white',
-    title: 'The OG — White Tee',
+    title: 'The OG â White Tee',
     description: 'Same energy, brighter outlook. Black wordmark on white heavyweight cotton.',
     price: 29.99,
     comparePrice: 34.99,
     category: 'tees',
     collection: 'essentials',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad0396a028393ce202e697/12100/92570/welp-wordmark-tee-dark.jpg?camera_label=front',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad19eed9d11928ed08b72a/12100/92570/welp-wordmark-tee-dark.jpg?camera_label=front',
     color: '#f8fafc',
     design: { type: 'wordmark', text: 'welp.', textColor: '#0f172a' },
   },
   {
     id: 'crew-couch-black',
-    title: 'The Couch Companion — Black',
+    title: 'The Couch Companion â Black',
     description: 'Oversized, fleece-lined, made for the healing era. The hero piece.',
     price: 52.99,
     comparePrice: 59.99,
@@ -74,7 +74,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'hat-dad-black',
-    title: 'The Conversation Starter — Black',
+    title: 'The Conversation Starter â Black',
     description: 'Embroidered "welp." on unstructured cotton. Someone asks. You tell the story.',
     price: 26.99,
     comparePrice: 29.99,
@@ -87,7 +87,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'mug-morning-white',
-    title: 'The Morning Mood — White',
+    title: 'The Morning Mood â White',
     description: '11oz ceramic. For the "I woke up single and I\'m fine" morning coffee.',
     price: 19.99,
     comparePrice: 24.99,
@@ -112,7 +112,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     design: { type: 'wordmark', text: 'welp.', textColor: '#1a1a1a', fontSize: '22px' },
   },
 
-  // ── The Statements ────────────────────────────────────────────────────────
+  // ââ The Statements ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     id: 'tee-start-over',
     title: '"Time to Start Over" Tee',
@@ -122,7 +122,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'statements',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad03b16e2aebfc7402bf00/12124/92570/welp-time-to-start-over-tee.jpg?camera_label=front',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad19e2b3472339850520c6/12124/92570/welp-time-to-start-over-tee.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'centered-text',
@@ -134,7 +134,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'crew-spite',
-    title: '"Built with Spite and ❤️" Crewneck',
+    title: '"Built with Spite and â¤ï¸" Crewneck',
     description: 'The footer line everyone loves. Charcoal crewneck, centered chest print.',
     price: 52.99,
     comparePrice: 59.99,
@@ -146,13 +146,13 @@ export const MERCH_ITEMS: MerchItem[] = [
     design: {
       type: 'centered-text',
       text: 'Built with spite and',
-      subtext: '❤️',
+      subtext: 'â¤ï¸',
       textColor: '#d1d5db',
     },
   },
   {
     id: 'mug-still-here',
-    title: '"Still Here. Still Good." Mug — Matte Black',
+    title: '"Still Here. Still Good." Mug â Matte Black',
     description: 'Matte black ceramic. "welp." up top, affirmation below.',
     price: 21.99,
     comparePrice: 26.99,
@@ -169,7 +169,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     },
   },
 
-  // ── The Petty Collection ──────────────────────────────────────────────────
+  // ââ The Petty Collection ââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     id: 'tee-kept-pots',
     title: '"He Kept the Pots." Tee',
@@ -179,19 +179,19 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'petty',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad03b5581a48c85001c2ba/12124/92570/he-kept-the-pots-tee.jpg?camera_label=front',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad19d0b360648baa02132d/12124/92570/he-kept-the-pots-tee.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'multi-line',
       text: 'He kept\nthe pots.',
-      subtext: '— welp.',
+      subtext: 'â welp.',
       textColor: '#fda4af',
     },
     badge: 'New',
   },
   {
     id: 'crew-funded-blush',
-    title: '"Funded by My Friends" Crewneck — Blush',
+    title: '"Funded by My Friends" Crewneck â Blush',
     description: 'Because when your friends literally buy you a new life, you wear the receipt.',
     price: 52.99,
     comparePrice: 59.99,
@@ -209,25 +209,25 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'tee-main-character',
-    title: '"Main Character Energy" Tee — White',
+    title: '"Main Character Energy" Tee â White',
     description: 'All caps, spaced out, very much "I\'m the protagonist now."',
     price: 31.99,
     comparePrice: 36.99,
     category: 'tees',
     collection: 'petty',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad03baee0d13a41b05280b/12100/92570/main-character-energy-tee.jpg?camera_label=front',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad19fa2571c7daeb009097/12124/92570/main-character-energy-tee.jpg?camera_label=front',
     color: '#f8fafc',
     design: {
       type: 'centered-text',
       text: 'MAIN CHARACTER',
-      subtext: 'ENERGY ✦ SINCE 2026',
+      subtext: 'ENERGY â¦ SINCE 2026',
       textColor: '#0f172a',
     },
   },
   {
     id: 'hat-dad-rose',
-    title: 'The Conversation Starter — Rose',
+    title: 'The Conversation Starter â Rose',
     description: 'Embroidered "welp." on dusty rose unstructured cotton.',
     price: 26.99,
     comparePrice: 29.99,
@@ -240,7 +240,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'sticker-pack',
-    title: 'welp. Sticker Pack — 8 Stickers',
+    title: 'welp. Sticker Pack â 8 Stickers',
     description: 'Logo, taglines, badges. Laptop-ready, water-bottle-approved.',
     price: 9.99,
     comparePrice: 14.99,
