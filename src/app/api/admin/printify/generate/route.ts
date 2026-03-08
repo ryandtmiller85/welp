@@ -140,11 +140,11 @@ interface DesignSpec {
   svgGenerator: () => string
 }
 
-const TEE = { w: 4500, h: 5400 }
-const HAT = { w: 2400, h: 1200 }
-const MUG = { w: 2700, h: 1100 }
-const TOTE= { w: 3600, h: 3600 }
-const STICKER= { w: 1500, h: 1500 }
+const TEE = { width: 4500, height: 5400 }
+const HAT = { width: 2400, height: 1200 }
+const MUG = { width: 2700, height: 1100 }
+const TOTE = { width: 3600, height: 3600 }
+const STICKER = { width: 1500, height: 1500 }
 
 const rgba = (r: number, g: number, b: number) => `rgb(${r},${g},${b})`
 const WHITE = rgba(255, 255, 255)
@@ -159,38 +159,38 @@ const DESIGNS: DesignSpec[] = [
   {
     fileName: 'welp_wordmark_white.png',
     ...TEE,
-    svgGenerator: () => svgWordmark(TEE.w, TEE.h, 'welp.', WHITE, 900),
+    svgGenerator: () => svgWordmark(TEE.width, TEE.height, 'welp.', WHITE, 900),
   },
   {
     fileName: 'welp_wordmark_dark.png',
     ...TEE,
-    svgGenerator: () => svgWordmark(TEE.w, TEE.h, 'welp.', DARK, 900),
+    svgGenerator: () => svgWordmark(TEE.width, TEE.height, 'welp.', DARK, 900),
   },
   {
     fileName: 'tee_start_over.png',
     ...TEE,
     svgGenerator: () =>
-      svgCenteredText(TEE.w, TEE.h, 'welp.', 'TIME TO START OVER', WHITE, 900, 280, 120),
+      svgCenteredText(TEE.width, TEE.height, 'welp.', 'TIME TO START OVER', WHITE, 900, 280, 120),
   },
   {
     fileName: 'crew_spite.png',
     ...TEE,
     svgGenerator: () =>
-      svgCenteredText(TEE.w, TEE.h, 'Built with spite', 'and love.', GRAY, 500, 400, 80),
+      svgCenteredText(TEE.width, TEE.height, 'Built with spite', 'and love.', GRAY, 500, 400, 80),
   },
   {
     fileName: 'tee_kept_pots.png',
     ...TEE,
     svgGenerator: () =>
-      svgMultiline(TEE.w, TEE.h, ['He kept', 'the pots.'], '— welp.', ROSE_PINK, 700, 350, 50, 120),
+      svgMultiline(TEE.width, TEE.height, ['He kept', 'the pots.'], '— welp.', ROSE_PINK, 700, 350, 50, 120),
   },
   {
     fileName: 'crew_funded.png',
     ...TEE,
     svgGenerator: () =>
       svgMultiline(
-        TEE.w,
-        TEE.h,
+        TEE.width,
+        TEE.height,
         ['This sweatshirt', 'was funded by', 'my friends.'],
         'welp.',
         DARK_ROSE,
@@ -204,37 +204,37 @@ const DESIGNS: DesignSpec[] = [
     fileName: 'tee_main_character.png',
     ...TEE,
     svgGenerator: () =>
-      svgCenteredText(TEE.w, TEE.h, 'MAIN CHARACTER', 'ENERGY  ✨  SINCE 2026', DARK, 650, 280, 80),
+      svgCenteredText(TEE.width, TEE.height, 'MAIN CHARACTER', 'ENERGY  ✦  SINCE 2026', DARK, 650, 280, 80),
   },
   // HATS
   {
     fileName: 'hat_welp_white.png',
     ...HAT,
-    svgGenerator: () => svgWordmark(HAT.w, HAT.h, 'welp.', WHITE, 500),
+    svgGenerator: () => svgWordmark(HAT.width, HAT.height, 'welp.', WHITE, 500),
   },
   // MUGS
   {
     fileName: 'mug_welp_dark.png',
     ...MUG,
-    svgGenerator: () => svgWordmark(MUG.w, MUG.h, 'welp.', DARK, 450),
+    svgGenerator: () => svgWordmark(MUG.width, MUG.height, 'welp.', DARK, 450),
   },
   {
     fileName: 'mug_still_here.png',
     ...MUG,
     svgGenerator: () =>
-      svgCenteredText(MUG.w, MUG.h, 'welp.', 'still here. still good.', WHITE, 400, 180, 60),
+      svgCenteredText(MUG.width, MUG.height, 'welp.', 'still here. still good.', WHITE, 400, 180, 60),
   },
   // TOTES
   {
     fileName: 'tote_welp_dark.png',
     ...TOTE,
-    svgGenerator: () => svgWordmark(TOTE.w, TOTE.h, 'welp.', rgba(26, 26, 26), 800),
+    svgGenerator: () => svgWordmark(TOTE.width, TOTE.height, 'welp.', rgba(26, 26, 26), 800),
   },
   // STICKERS
   {
     fileName: 'sticker_welp_rose.png',
     ...STICKER,
-    svgGenerator: () => svgSticker(STICKER.w, 'welp.', ROSE, WHITE, 380),
+    svgGenerator: () => svgSticker(STICKER.width, 'welp.', ROSE, WHITE, 380),
   },
 ]
 
