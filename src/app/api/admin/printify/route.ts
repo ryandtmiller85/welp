@@ -18,7 +18,7 @@ import {
 } from '@/lib/printify'
 import { PRINTIFY_SHOP_ID } from '@/lib/printify-products'
 
-// Simple admin key check â use ADMIN_SECRET env var
+// Simple admin key check Ã¢ÂÂ use ADMIN_SECRET env var
 function isAuthorized(req: NextRequest): boolean {
   const secret = process.env.ADMIN_SECRET
   if (!secret) return false // must be configured
@@ -96,33 +96,6 @@ export async function GET(req: NextRequest) {
 
       case 'images':
         return NextResponse.json(await getImages())
-
-case 'delete-product': {
-        const { productId: delProdId } = body
-        if (!delProdId) {
-          return NextResponse.json({ error: 'productId required' }, { status: 400 })
-        }
-        await deleteProduct(PRINTIFY_SHOP_ID, delProdId)
-        return NextResponse.json({ success: true })
-      }
-
-      case 'unpublish-product': {
-        const { productId: unpubProdId } = body
-        if (!unpubProdId) {
-          return NextResponse.json({ error: 'productId required' }, { status: 400 })
-        }
-        await unpublishProduct(PRINTIFY_SHOP_ID, unpubProdId)
-        return NextResponse.json({ success: true })
-      }
-
-      case 'notify-publishing-succeeded': {
-        const { productId: notifyProdId, externalId } = body
-        if (!notifyProdId) {
-          return NextResponse.json({ error: 'productId required' }, { status: 400 })
-        }
-        await notifyPublishingSucceeded(PRINTIFY_SHOP_ID, notifyProdId, externalId || notifyProdId)
-        return NextResponse.json({ success: true })
-      }
 
             default:
         return NextResponse.json(
@@ -215,6 +188,34 @@ export async function POST(req: NextRequest) {
           )
         }
         await publishProduct(PRINTIFY_SHOP_ID, productId)
+        return NextResponse.json({ success: true })
+      }
+
+      
+      case 'delete-product': {
+        const { productId: delProdId } = body
+        if (!delProdId) {
+          return NextResponse.json({ error: 'productId required' }, { status: 400 })
+        }
+        await deleteProduct(PRINTIFY_SHOP_ID, delProdId)
+        return NextResponse.json({ success: true })
+      }
+
+      case 'unpublish-product': {
+        const { productId: unpubProdId } = body
+        if (!unpubProdId) {
+          return NextResponse.json({ error: 'productId required' }, { status: 400 })
+        }
+        await unpublishProduct(PRINTIFY_SHOP_ID, unpubProdId)
+        return NextResponse.json({ success: true })
+      }
+
+      case 'notify-publishing-succeeded': {
+        const { productId: notifyProdId, externalId } = body
+        if (!notifyProdId) {
+          return NextResponse.json({ error: 'productId required' }, { status: 400 })
+        }
+        await notifyPublishingSucceeded(PRINTIFY_SHOP_ID, notifyProdId, externalId || notifyProdId)
         return NextResponse.json({ success: true })
       }
 
