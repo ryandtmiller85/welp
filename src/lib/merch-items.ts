@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Merch catalog â welp. branded swag
+// Merch catalog — welp. branded swag
 //
 // Each item has a `buyUrl` placeholder. Replace with real store links once
 // you've set up a print-on-demand provider (Printful, Printify, Spring, etc.)
@@ -30,24 +30,23 @@ export interface MerchItem {
 }
 
 export const MERCH_ITEMS: MerchItem[] = [
-  // ââ The Essentials ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // —— The Essentials ————————————————————————————————————————————————————————
   {
     id: 'tee-og-black',
-    title: 'The OG â Black Tee',
+    title: 'The OG — Black Tee',
     description: '"welp." left chest. That\'s it. That\'s the shirt.',
     price: 29.99,
     comparePrice: 34.99,
     category: 'tees',
     collection: 'essentials',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad0379581a48c85001c2b0/12124/92570/welp-wordmark-tee-white.jpg?camera_label=front',
     color: '#111111',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff' },
     badge: 'Best Seller',
   },
   {
     id: 'tee-og-white',
-    title: 'The OG â White Tee',
+    title: 'The OG — White Tee',
     description: 'Same energy, brighter outlook. Black wordmark on white heavyweight cotton.',
     price: 29.99,
     comparePrice: 34.99,
@@ -60,41 +59,38 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'crew-couch-black',
-    title: 'The Couch Companion â Black',
+    title: 'The Couch Companion — Black',
     description: 'Oversized, fleece-lined, made for the healing era. The hero piece.',
     price: 52.99,
     comparePrice: 59.99,
     category: 'sweatshirts',
     collection: 'essentials',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad0420a58961e1690168ce/25457/98502/built-with-spite-crewneck.jpg?camera_label=front',
     color: '#1c1c1c',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff' },
     badge: 'Best Seller',
   },
   {
     id: 'hat-dad-black',
-    title: 'The Conversation Starter â Black',
+    title: 'The Conversation Starter — Black',
     description: 'Embroidered "welp." on unstructured cotton. Someone asks. You tell the story.',
     price: 26.99,
     comparePrice: 29.99,
     category: 'hats',
     collection: 'essentials',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/102307/welp-dad-cap.jpg?camera_label=front',
     color: '#222222',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff', fontSize: '14px' },
   },
   {
     id: 'mug-morning-white',
-    title: 'The Morning Mood â White',
+    title: 'The Morning Mood — White',
     description: '11oz ceramic. For the "I woke up single and I\'m fine" morning coffee.',
     price: 19.99,
     comparePrice: 24.99,
     category: 'mugs',
     collection: 'essentials',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad04a94f892b151f0fcf91/71302/12360/welp-accent-mug.jpg?camera_label=front',
     color: '#ffffff',
     design: { type: 'wordmark', text: 'welp.', textColor: '#0f172a', fontSize: '24px' },
   },
@@ -107,12 +103,11 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'totes',
     collection: 'essentials',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad04b12571c7daeb008ba4/70646/11317/welp-tote-bag.jpg?camera_label=front',
     color: '#d4c5a9',
     design: { type: 'wordmark', text: 'welp.', textColor: '#1a1a1a', fontSize: '22px' },
   },
 
-  // ââ The Statements ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // —— The Statements ————————————————————————————————————————————————————————
   {
     id: 'tee-start-over',
     title: '"Time to Start Over" Tee',
@@ -134,32 +129,30 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'crew-spite',
-    title: '"Built with Spite and â¤ï¸" Crewneck',
+    title: '"Built with Spite and ❤️" Crewneck',
     description: 'The footer line everyone loves. Charcoal crewneck, centered chest print.',
     price: 52.99,
     comparePrice: 59.99,
     category: 'sweatshirts',
     collection: 'statements',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad0420a58961e1690168ce/25457/98502/built-with-spite-crewneck.jpg?camera_label=front',
     color: '#374151',
     design: {
       type: 'centered-text',
       text: 'Built with spite and',
-      subtext: 'â¤ï¸',
+      subtext: '❤️',
       textColor: '#d1d5db',
     },
   },
   {
     id: 'mug-still-here',
-    title: '"Still Here. Still Good." Mug â Matte Black',
+    title: '"Still Here. Still Good." Mug — Matte Black',
     description: 'Matte black ceramic. "welp." up top, affirmation below.',
     price: 21.99,
     comparePrice: 26.99,
     category: 'mugs',
     collection: 'statements',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad04ad8c8b40ac4a0c3d48/71304/12362/still-here-still-good-mug.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'multi-line',
@@ -169,7 +162,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     },
   },
 
-  // ââ The Petty Collection ââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // —— The Petty Collection ——————————————————————————————————————————————————
   {
     id: 'tee-kept-pots',
     title: '"He Kept the Pots." Tee',
@@ -184,21 +177,20 @@ export const MERCH_ITEMS: MerchItem[] = [
     design: {
       type: 'multi-line',
       text: 'He kept\nthe pots.',
-      subtext: 'â welp.',
+      subtext: '— welp.',
       textColor: '#fda4af',
     },
     badge: 'New',
   },
   {
     id: 'crew-funded-blush',
-    title: '"Funded by My Friends" Crewneck â Blush',
+    title: '"Funded by My Friends" Crewneck — Blush',
     description: 'Because when your friends literally buy you a new life, you wear the receipt.',
     price: 52.99,
     comparePrice: 59.99,
     category: 'sweatshirts',
     collection: 'petty',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad0424295a70101209a39c/25459/98502/funded-by-my-friends-crewneck.jpg?camera_label=front',
     color: '#ffe4e6',
     design: {
       type: 'multi-line',
@@ -209,7 +201,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'tee-main-character',
-    title: '"Main Character Energy" Tee â White',
+    title: '"Main Character Energy" Tee — White',
     description: 'All caps, spaced out, very much "I\'m the protagonist now."',
     price: 31.99,
     comparePrice: 36.99,
@@ -221,33 +213,31 @@ export const MERCH_ITEMS: MerchItem[] = [
     design: {
       type: 'centered-text',
       text: 'MAIN CHARACTER',
-      subtext: 'ENERGY â¦ SINCE 2026',
+      subtext: 'ENERGY ✦ SINCE 2026',
       textColor: '#0f172a',
     },
   },
   {
     id: 'hat-dad-rose',
-    title: 'The Conversation Starter â Rose',
+    title: 'The Conversation Starter — Rose',
     description: 'Embroidered "welp." on dusty rose unstructured cotton.',
     price: 26.99,
     comparePrice: 29.99,
     category: 'hats',
     collection: 'petty',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/102307/welp-dad-cap.jpg?camera_label=front',
     color: '#be123c',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff', fontSize: '14px' },
   },
   {
     id: 'sticker-pack',
-    title: 'welp. Sticker Pack â 8 Stickers',
+    title: 'welp. Sticker Pack — 8 Stickers',
     description: 'Logo, taglines, badges. Laptop-ready, water-bottle-approved.',
     price: 9.99,
     comparePrice: 14.99,
     category: 'stickers',
     collection: 'essentials',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad04b2a028393ce202e6c4/45750/16655/welp-sticker.jpg?camera_label=front',
     color: '#f43f5e',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff', fontSize: '18px' },
   },

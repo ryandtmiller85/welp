@@ -18,7 +18,7 @@ import {
 } from '@/lib/printify'
 import { PRINTIFY_SHOP_ID } from '@/lib/printify-products'
 
-// Simple admin key check — supports GET and POST actions ÃÂ¢ÃÂÃÂ use ADMIN_SECRET env var
+// Simple admin key check — supports GET and POST actions — use ADMIN_SECRET env var
 function isAuthorized(req: NextRequest): boolean {
   const secret = process.env.ADMIN_SECRET
   if (!secret) return false // must be configured
