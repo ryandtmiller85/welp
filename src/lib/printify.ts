@@ -124,6 +124,13 @@ export interface CreateOrderPayload {
   send_shipping_notification: boolean
   address_to: OrderAddress
 }
+export async function updateProduct(shopId: number, productId: string, data: Partial<CreateProductPayload>) {
+  return printifyFetch(`/shops/${shopId}/products/${productId}.json`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+}
+
 export async function createOrder(shopId: number, order: CreateOrderPayload) {
   return printifyFetch(`/shops/${shopId}/orders.json`, { method: 'POST', body: JSON.stringify(order) })
 }
