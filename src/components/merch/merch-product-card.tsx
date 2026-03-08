@@ -220,7 +220,16 @@ export function MerchProductCard({ item, size = 'md' }: MerchProductCardProps) {
   return (
     <div className="group bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden">
       <div className="relative overflow-hidden">
-        <ProductMockup item={item} size={size} />
+        {item.imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={item.imageUrl}
+            alt={item.title}
+            className={`w-full object-cover ${isSmall ? 'h-48' : 'h-64'}`}
+          />
+        ) : (
+          <ProductMockup item={item} size={size} />
+        )}
         {item.badge && (
           <div className="absolute top-3 left-3">
             <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${BADGE_STYLES[item.badge] || 'bg-slate-100 text-slate-800'}`}>
