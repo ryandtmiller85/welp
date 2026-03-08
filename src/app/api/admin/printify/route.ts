@@ -7,18 +7,25 @@ import {
   getProducts,
   getImages,
   uploadImageFromUrl,
+  uploadImageBase64,
   createProduct,
   publishProduct,
 } from '@/lib/printify'
 import { PRINTIFY_SHOP_ID } from '@/lib/printify-products'
 
+// Simple admin key check — use ADMIN_SECRET env var
 function isAuthorized(req: NextRequest): boolean {
   const secret = process.env.ADMIN_SECRET
-  if (!secret) return false
+  if (!secret) return false // must be configured
   const auth = req.headers.get('authorization')
-  return auth === 'Bearer ' + secret
+  return auth === `Bearer ${secret}`
 }
 
+/**
+ * GET /api/admin/printify?action=shops|blueprints|providers|variants|products|images
+ *
+ * Query Printify API for catalog data and existing products.
+ */
 export async function GET(req: NextRequest) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -34,6 +41,7 @@ export async function GET(req: NextRequest) {
 
       case 'blueprints': {
         const blueprints = await getBlueprints()
+        // Optionally filter by search term
         const q = searchParams.get('q')?.toLowerCase()
         const filtered = q
           ? blueprints.filter(
@@ -76,7 +84,7 @@ export async function GET(req: NextRequest) {
 
       default:
         return NextResponse.json(
-          { error: 'Unknown action' },
+          { error: `Unknown action: ${action}` },
           { status: 400 }
         )
     }
@@ -88,6 +96,11 @@ export async function GET(req: NextRequest) {
   }
 }
 
+/**
+ * POST /api/admin/printify
+ *
+ * Actions: upload-image, create-product, publish-product
+ */
 export async function POST(req: NextRequest) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -99,6 +112,7 @@ export async function POST(req: NextRequest) {
 
     switch (action) {
       case 'upload-image': {
+        // Upload image from a URL
         const { fileName, url } = body
         if (!fileName || !url) {
           return NextResponse.json(
@@ -110,7 +124,21 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(image)
       }
 
+      case 'upload-image-base64': {
+        // Upload image from base64 data
+        const { fileName: b64FileName, base64 } = body
+        if (!b64FileName || !base64) {
+          return NextResponse.json(
+            { error: 'fileName and base64 required' },
+            { status: 400 }
+          )
+        }
+        const b64Image = await uploadImageBase64(b64FileName, base64)
+        return NextResponse.json(b64Image)
+      }
+
       case 'create-product': {
+        // Create a product in Printify
         const { product } = body
         if (!product) {
           return NextResponse.json(
@@ -123,6 +151,7 @@ export async function POST(req: NextRequest) {
       }
 
       case 'publish-product': {
+        // Publish a product
         const { productId } = body
         if (!productId) {
           return NextResponse.json(
@@ -136,7 +165,7 @@ export async function POST(req: NextRequest) {
 
       default:
         return NextResponse.json(
-          { error: 'Unknown action' },
+          { error: `Unknown action: ${action}` },
           { status: 400 }
         )
     }
