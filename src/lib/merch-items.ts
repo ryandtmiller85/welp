@@ -14,9 +14,11 @@ export interface MerchItem {
   category: 'tees' | 'sweatshirts' | 'hats' | 'mugs' | 'totes' | 'stickers'
   collection: 'essentials' | 'statements' | 'petty'
   buyUrl: string
-  /** Hex color of the product for the mockup */
+  /** Printify product mockup image URL */
+  imageUrl?: string
+  /** Hex color of the product for the mockup (fallback) */
   color: string
-  /** Design details for the CSS mockup */
+  /** Design details for the CSS mockup (fallback) */
   design: {
     type: 'wordmark' | 'centered-text' | 'multi-line'
     text: string
@@ -38,6 +40,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad0379581a48c85001c2b0/12124/92570/welp-wordmark-tee-white.jpg?camera_label=front',
     color: '#111111',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff' },
     badge: 'Best Seller',
@@ -51,6 +54,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad0396a028393ce202e697/12100/92570/welp-wordmark-tee-dark.jpg?camera_label=front',
     color: '#f8fafc',
     design: { type: 'wordmark', text: 'welp.', textColor: '#0f172a' },
   },
@@ -63,6 +67,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'sweatshirts',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad0420a58961e1690168ce/25457/98502/built-with-spite-crewneck.jpg?camera_label=front',
     color: '#1c1c1c',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff' },
     badge: 'Best Seller',
@@ -76,6 +81,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'hats',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/102307/welp-dad-cap.jpg?camera_label=front',
     color: '#222222',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff', fontSize: '14px' },
   },
@@ -88,6 +94,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'mugs',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad04a94f892b151f0fcf91/71302/12360/welp-accent-mug.jpg?camera_label=front',
     color: '#ffffff',
     design: { type: 'wordmark', text: 'welp.', textColor: '#0f172a', fontSize: '24px' },
   },
@@ -100,6 +107,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'totes',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad04b12571c7daeb008ba4/70646/11317/welp-tote-bag.jpg?camera_label=front',
     color: '#d4c5a9',
     design: { type: 'wordmark', text: 'welp.', textColor: '#1a1a1a', fontSize: '22px' },
   },
@@ -114,6 +122,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'statements',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad03b16e2aebfc7402bf00/12124/92570/welp-time-to-start-over-tee.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'centered-text',
@@ -132,6 +141,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'sweatshirts',
     collection: 'statements',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad0420a58961e1690168ce/25457/98502/built-with-spite-crewneck.jpg?camera_label=front',
     color: '#374151',
     design: {
       type: 'centered-text',
@@ -149,6 +159,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'mugs',
     collection: 'statements',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad04ad8c8b40ac4a0c3d48/71304/12362/still-here-still-good-mug.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'multi-line',
@@ -168,6 +179,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'petty',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad03b5581a48c85001c2ba/12124/92570/he-kept-the-pots-tee.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'multi-line',
@@ -186,6 +198,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'sweatshirts',
     collection: 'petty',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad0424295a70101209a39c/25459/98502/funded-by-my-friends-crewneck.jpg?camera_label=front',
     color: '#ffe4e6',
     design: {
       type: 'multi-line',
@@ -203,6 +216,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'petty',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad03baee0d13a41b05280b/12100/92570/main-character-energy-tee.jpg?camera_label=front',
     color: '#f8fafc',
     design: {
       type: 'centered-text',
@@ -220,6 +234,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'hats',
     collection: 'petty',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/102307/welp-dad-cap.jpg?camera_label=front',
     color: '#be123c',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff', fontSize: '14px' },
   },
@@ -232,6 +247,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'stickers',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl: 'https://images-api.printify.com/mockup/69ad04b2a028393ce202e6c4/45750/16655/welp-sticker.jpg?camera_label=front',
     color: '#f43f5e',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff', fontSize: '18px' },
   },
