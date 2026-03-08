@@ -5,15 +5,17 @@ import {
   getBlueprintProviders,
   getProviderVariants,
   getProducts,
+  getProduct,
   getImages,
   uploadImageFromUrl,
   uploadImageBase64,
   createProduct,
+  updateProduct,
   publishProduct,
 } from '@/lib/printify'
 import { PRINTIFY_SHOP_ID } from '@/lib/printify-products'
 
-// Simple admin key check — use ADMIN_SECRET env var
+// Simple admin key check â use ADMIN_SECRET env var
 function isAuthorized(req: NextRequest): boolean {
   const secret = process.env.ADMIN_SECRET
   if (!secret) return false // must be configured
@@ -78,6 +80,16 @@ export async function GET(req: NextRequest) {
 
       case 'products':
         return NextResponse.json(await getProducts(PRINTIFY_SHOP_ID))
+
+      case 'product': {
+        // Get a single product by ID
+        const productId = searchParams.get('product_id')
+        if (!productId) {
+          return NextResponse.json({ error: 'product_id required' }, { status: 400 })
+        }
+        const product = await getProduct(PRINTIFY_SHOP_ID, productId)
+        return NextResponse.json(product)
+      }
 
       case 'images':
         return NextResponse.json(await getImages())
@@ -148,6 +160,19 @@ export async function POST(req: NextRequest) {
         }
         const created = await createProduct(PRINTIFY_SHOP_ID, product)
         return NextResponse.json(created)
+      }
+
+      case 'update-product': {
+        // Update an existing product
+        const { productId: updateProdId, data: updateData } = body
+        if (!updateProdId || !updateData) {
+          return NextResponse.json(
+            { error: 'productId and data required' },
+            { status: 400 }
+          )
+        }
+        const updated = await updateProduct(PRINTIFY_SHOP_ID, updateProdId, updateData)
+        return NextResponse.json(updated)
       }
 
       case 'publish-product': {
