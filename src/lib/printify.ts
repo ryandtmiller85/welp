@@ -131,6 +131,26 @@ export async function updateProduct(shopId: number, productId: string, data: Par
   })
 }
 
+export async function deleteProduct(shopId: number, productId: string) {
+  return printifyFetch(`/shops/${shopId}/products/${productId}.json`, {
+    method: 'DELETE',
+  })
+}
+
+export async function unpublishProduct(shopId: number, productId: string) {
+  return printifyFetch(`/shops/${shopId}/products/${productId}/unpublish.json`, {
+    method: 'POST',
+    body: JSON.stringify({ title: true, description: true, images: true, variants: true, tags: true }),
+  })
+}
+
+export async function notifyPublishingSucceeded(shopId: number, productId: string, externalId: string) {
+  return printifyFetch(`/shops/${shopId}/products/${productId}/publishing_succeeded.json`, {
+    method: 'POST',
+    body: JSON.stringify({ external: { id: externalId, handle: `https://alliswelp.com/merch` } }),
+  })
+}
+
 export async function createOrder(shopId: number, order: CreateOrderPayload) {
   return printifyFetch(`/shops/${shopId}/orders.json`, { method: 'POST', body: JSON.stringify(order) })
 }
