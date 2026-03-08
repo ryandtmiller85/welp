@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Printify product mapping for welp. merch
 //
-// Maps our merch catalog item IDs → Printify product + variant IDs.
+// Maps our merch catalog item IDs â Printify product + variant IDs.
 // After creating products in Printify, fill in the product_id and variant_id
 // for each entry. The variant_id is the default size/color to fulfill.
 //
@@ -29,7 +29,7 @@ export interface PrintifyProductMapping {
  * and defaultVariantId fields.
  */
 export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
-  // ── The Essentials ──────────────────────────────────────────────────────
+  // ââ The Essentials ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     merchItemId: 'tee-og-black',
     printifyProductId: '69ad0379581a48c85001c2b0',
@@ -39,7 +39,7 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
   },
   {
     merchItemId: 'tee-og-white',
-    printifyProductId: '69ad0396a028393ce202e697',
+    printifyProductId: '69ad19eed9d11928ed08b72a',
     defaultVariantId: 12101, // White / M
     note: 'OG welp. wordmark on white tee (dark text)',
     designFile: 'welp_wordmark_dark.png',
@@ -73,10 +73,10 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
     designFile: 'tote_welp_dark.png',
   },
 
-  // ── The Statements ──────────────────────────────────────────────────────
+  // ââ The Statements ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     merchItemId: 'tee-start-over',
-    printifyProductId: '69ad03b16e2aebfc7402bf00',
+    printifyProductId: '69ad19e2b3472339850520c6',
     defaultVariantId: 12125, // Black / M
     note: 'Time to Start Over tee, black (white text)',
     designFile: 'tee_start_over.png',
@@ -96,10 +96,10 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
     designFile: 'mug_still_here.png',
   },
 
-  // ── The Petty Collection ────────────────────────────────────────────────
+  // ââ The Petty Collection ââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     merchItemId: 'tee-kept-pots',
-    printifyProductId: '69ad03b5581a48c85001c2ba',
+    printifyProductId: '69ad19d0b360648baa02132d',
     defaultVariantId: 12125, // Black / M
     note: 'He Kept the Pots tee, black (rose gold text)',
     designFile: 'tee_kept_pots.png',
@@ -113,7 +113,7 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
   },
   {
     merchItemId: 'tee-main-character',
-    printifyProductId: '69ad03baee0d13a41b05280b',
+    printifyProductId: '69ad19fa2571c7daeb009097',
     defaultVariantId: 12101, // White / M
     note: 'Main Character Energy tee, white (dark text)',
     designFile: 'tee_main_character.png',
@@ -128,7 +128,7 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
   {
     merchItemId: 'sticker-pack',
     printifyProductId: '69ad04b2a028393ce202e6c4',
-    defaultVariantId: 45750, // 3" × 3" / White
+    defaultVariantId: 45750, // 3" Ã 3" / White
     note: 'welp. rose kiss-cut sticker',
     designFile: 'sticker_welp_rose.png',
   },
