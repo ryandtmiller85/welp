@@ -14,20 +14,21 @@ interface MerchProduct {
 }
 
 const PRODUCTS: MerchProduct[] = [
-  { merchItemId: "tee-og-black", title: "The OG — Black Tee", description: "welp. wordmark white on black", designFile: "welp_wordmark_white.png", category: "tees", color: "Black" },
-  { merchItemId: "tee-og-white", title: "The OG — White Tee", description: "welp. wordmark dark on white", designFile: "welp_wordmark_dark.png", category: "tees", color: "White" },
-  { merchItemId: "tee-start-over", title: "\"Time to Start Over\" Tee", description: "welp. + TIME TO START OVER, white on black", designFile: "tee_start_over.png", category: "tees", color: "Black" },
-  { merchItemId: "tee-kept-pots", title: "\"He Kept the Pots.\" Tee", description: "Rose gold text on black", designFile: "tee_kept_pots.png", category: "tees", color: "Black" },
-  { merchItemId: "tee-main-character", title: "\"Main Character Energy\" Tee", description: "Dark text on white", designFile: "tee_main_character.png", category: "tees", color: "White" },
-  { merchItemId: "crew-couch-black", title: "The Couch Companion — Black", description: "welp. wordmark white on black crewneck", designFile: "welp_wordmark_white.png", category: "sweatshirts", color: "Black" },
-  { merchItemId: "crew-spite", title: "\"Built with Spite\" Crewneck", description: "Light gray on charcoal", designFile: "crew_spite.png", category: "sweatshirts", color: "Charcoal Heather" },
-  { merchItemId: "crew-funded-blush", title: "\"Funded by My Friends\" Crewneck", description: "Dark rose on blush", designFile: "crew_funded.png", category: "sweatshirts", color: "Light Pink" },
-  { merchItemId: "hat-dad-black", title: "Conversation Starter — Black", description: "welp. embroidered white on black", designFile: "hat_welp_white.png", category: "hats", color: "Black" },
-  { merchItemId: "hat-dad-rose", title: "Conversation Starter — Rose", description: "welp. embroidered white on rose", designFile: "hat_welp_white.png", category: "hats", color: "Maroon" },
-  { merchItemId: "mug-morning-white", title: "The Morning Mood — White", description: "welp. dark on white mug", designFile: "mug_welp_dark.png", category: "mugs", color: "White" },
-  { merchItemId: "mug-still-here", title: "\"Still Here. Still Good.\" Mug", description: "welp. + tagline, white on black mug", designFile: "mug_still_here.png", category: "mugs", color: "Black" },
-  { merchItemId: "tote-carry-all", title: "The Carry-All", description: "welp. dark on natural canvas", designFile: "tote_welp_dark.png", category: "totes", color: "Natural" },
-  { merchItemId: "sticker-pack", title: "welp. Sticker Pack", description: "8 circle stickers", designFile: "sticker_welp_rose.png", category: "stickers", color: "" },
+  // Essentials
+  { merchItemId: "tee-og-black", title: "welp. Wordmark Tee — Dark", description: "welp. wordmark white on black", designFile: "welp_wordmark_white.png", category: "tees", color: "Black" },
+  { merchItemId: "tee-og-white", title: "welp. Wordmark Tee — White", description: "welp. wordmark dark on white", designFile: "welp_wordmark_dark.png", category: "tees", color: "White" },
+  { merchItemId: "hat-dad-black", title: "welp. Dad Cap", description: "welp. embroidered white on black", designFile: "hat_welp_white.png", category: "hats", color: "Black" },
+  { merchItemId: "mug-accent", title: "welp. Accent Mug", description: "welp. dark on white 11oz accent mug", designFile: "mug_welp_dark.png", category: "mugs", color: "White" },
+  { merchItemId: "tote-carry-all", title: "welp. Tote Bag", description: "welp. dark on natural canvas", designFile: "tote_welp_dark.png", category: "totes", color: "Natural" },
+  { merchItemId: "sticker-welp", title: "welp. Sticker", description: "Kiss-cut logo sticker", designFile: "sticker_welp_rose.png", category: "stickers", color: "" },
+  // Statements
+  { merchItemId: "tee-definition", title: "welp. Definition Tee", description: "Dictionary-style definition on white", designFile: "tee_definition.png", category: "tees", color: "White" },
+  { merchItemId: "tee-start-over", title: "welp. Time to Start Over Tee", description: "welp. + TIME TO START OVER, white on black", designFile: "tee_start_over.png", category: "tees", color: "Black" },
+  { merchItemId: "crew-spite", title: "Built with Spite Crewneck", description: "Centered chest print on charcoal", designFile: "crew_spite.png", category: "sweatshirts", color: "Charcoal Heather" },
+  { merchItemId: "mug-everything-fine", title: "Everything is Fine Mug", description: "Everything is fine. (Terms apply.) Red accent", designFile: "mug_everything_fine.png", category: "mugs", color: "White" },
+  // Petty
+  { merchItemId: "tee-kept-pots", title: "He Kept the Pots Tee", description: "Rose gold text on black", designFile: "tee_kept_pots.png", category: "tees", color: "Black" },
+  { merchItemId: "tee-everything-fine", title: "Everything is Fine Tee", description: "Everything is fine. (Terms apply.) on white", designFile: "tee_everything_fine.png", category: "tees", color: "White" },
 ]
 
 interface UploadedImage {

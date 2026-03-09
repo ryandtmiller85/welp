@@ -8,7 +8,7 @@ import { MerchProductCard } from './merch-product-card'
 
 // Show a curated mix for the carousel — best sellers + new items
 const CAROUSEL_ITEMS = MERCH_ITEMS.filter(
-  (item) => item.badge === 'Best Seller' || item.badge === 'New' || item.id === 'sticker-pack' || item.id === 'mug-still-here' || item.id === 'hat-dad-black'
+  (item) => item.badge === 'Best Seller' || item.badge === 'New' || item.id === 'sticker-welp' || item.id === 'mug-accent' || item.id === 'hat-dad-black'
 ).slice(0, 8)
 
 export function MerchCarousel() {

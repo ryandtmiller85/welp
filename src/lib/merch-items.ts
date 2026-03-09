@@ -1,8 +1,7 @@
 // ---------------------------------------------------------------------------
 // Merch catalog — welp. branded swag
 //
-// Each item has a `buyUrl` placeholder. Replace with real store links once
-// you've set up a print-on-demand provider (Printful, Printify, Spring, etc.)
+// Synced with Printify shop (12 products). Every item has a real mockup URL.
 // ---------------------------------------------------------------------------
 
 export interface MerchItem {
@@ -33,91 +32,149 @@ export const MERCH_ITEMS: MerchItem[] = [
   // —— The Essentials ————————————————————————————————————————————————————————
   {
     id: 'tee-og-black',
-    title: 'The OG — Black Tee',
+    title: 'welp. Wordmark Tee — Dark',
     description: '"welp." left chest. That\'s it. That\'s the shirt.',
     price: 29.99,
     comparePrice: 34.99,
     category: 'tees',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ad19eed9d11928ed08b72a/12100/92570/welp-wordmark-tee-dark.jpg?camera_label=front',
     color: '#111111',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff' },
     badge: 'Best Seller',
   },
   {
     id: 'tee-og-white',
-    title: 'The OG — White Tee',
-    description: 'Same energy, brighter outlook. Black wordmark on white heavyweight cotton.',
+    title: 'welp. Wordmark Tee — White',
+    description:
+      'Same energy, brighter outlook. Black wordmark on white heavyweight cotton.',
     price: 29.99,
     comparePrice: 34.99,
     category: 'tees',
     collection: 'essentials',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad19eed9d11928ed08b72a/12100/92570/welp-wordmark-tee-dark.jpg?camera_label=front',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ad0379581a48c85001c2b0/12124/92570/welp-wordmark-tee-white.jpg?camera_label=front',
     color: '#f8fafc',
     design: { type: 'wordmark', text: 'welp.', textColor: '#0f172a' },
   },
   {
-    id: 'crew-couch-black',
-    title: 'The Couch Companion — Black',
-    description: 'Oversized, fleece-lined, made for the healing era. The hero piece.',
-    price: 52.99,
-    comparePrice: 59.99,
-    category: 'sweatshirts',
-    collection: 'essentials',
-    buyUrl: '#',
-    color: '#1c1c1c',
-    design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff' },
-    badge: 'Best Seller',
-  },
-  {
     id: 'hat-dad-black',
-    title: 'The Conversation Starter — Black',
-    description: 'Embroidered "welp." on unstructured cotton. Someone asks. You tell the story.',
+    title: 'welp. Dad Cap',
+    description:
+      'Embroidered "welp." on unstructured cotton. Someone asks. You tell the story.',
     price: 26.99,
     comparePrice: 29.99,
     category: 'hats',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/102307/welp-dad-cap.jpg?camera_label=front',
     color: '#222222',
-    design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff', fontSize: '14px' },
+    design: {
+      type: 'wordmark',
+      text: 'welp.',
+      textColor: '#ffffff',
+      fontSize: '14px',
+    },
   },
   {
-    id: 'mug-morning-white',
-    title: 'The Morning Mood — White',
-    description: '11oz ceramic. For the "I woke up single and I\'m fine" morning coffee.',
+    id: 'mug-accent',
+    title: 'welp. Accent Mug',
+    description:
+      '11oz ceramic with color accent. For the "I woke up single and I\'m fine" morning coffee.',
     price: 19.99,
     comparePrice: 24.99,
     category: 'mugs',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ad04a94f892b151f0fcf91/71302/12360/welp-accent-mug.jpg?camera_label=front',
     color: '#ffffff',
-    design: { type: 'wordmark', text: 'welp.', textColor: '#0f172a', fontSize: '24px' },
+    design: {
+      type: 'wordmark',
+      text: 'welp.',
+      textColor: '#0f172a',
+      fontSize: '24px',
+    },
   },
   {
     id: 'tote-carry-all',
-    title: 'The Carry-All',
-    description: 'Heavy-duty natural canvas. For groceries, gym clothes, or emotional baggage.',
+    title: 'welp. Tote Bag',
+    description:
+      'Heavy-duty canvas. For groceries, gym clothes, or emotional baggage.',
     price: 18.99,
     comparePrice: 22.99,
     category: 'totes',
     collection: 'essentials',
     buyUrl: '#',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ad04b12571c7daeb008ba4/70646/11317/welp-tote-bag.jpg?camera_label=front',
     color: '#d4c5a9',
-    design: { type: 'wordmark', text: 'welp.', textColor: '#1a1a1a', fontSize: '22px' },
+    design: {
+      type: 'wordmark',
+      text: 'welp.',
+      textColor: '#1a1a1a',
+      fontSize: '22px',
+    },
+  },
+  {
+    id: 'sticker-welp',
+    title: 'welp. Sticker',
+    description:
+      'Logo sticker. Laptop-ready, water-bottle-approved.',
+    price: 4.99,
+    comparePrice: 6.99,
+    category: 'stickers',
+    collection: 'essentials',
+    buyUrl: '#',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ad04b2a028393ce202e6c4/45750/16655/welp-sticker.jpg?camera_label=front',
+    color: '#f43f5e',
+    design: {
+      type: 'wordmark',
+      text: 'welp.',
+      textColor: '#ffffff',
+      fontSize: '18px',
+    },
   },
 
   // —— The Statements ————————————————————————————————————————————————————————
   {
-    id: 'tee-start-over',
-    title: '"Time to Start Over" Tee',
-    description: 'Centered wordmark with the mission statement beneath. The manifesto, worn.',
+    id: 'tee-definition',
+    title: 'welp. Definition Tee',
+    description:
+      'Dictionary-style definition: "an acceptance of the unavoidable." The intellectual\'s breakup shirt.',
     price: 31.99,
     comparePrice: 36.99,
     category: 'tees',
     collection: 'statements',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad19e2b3472339850520c6/12124/92570/welp-time-to-start-over-tee.jpg?camera_label=front',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ae058c63b683ea0d0cf4c6/12100/92570/welp-definition-tee.jpg?camera_label=front',
+    color: '#f8fafc',
+    design: {
+      type: 'multi-line',
+      text: '**welp**\n/welp/ interjection',
+      subtext: '1. an acceptance of the unavoidable.',
+      textColor: '#374151',
+    },
+    badge: 'New',
+  },
+  {
+    id: 'tee-start-over',
+    title: 'welp. Time to Start Over Tee',
+    description:
+      'Centered wordmark with the mission statement beneath. The manifesto, worn.',
+    price: 31.99,
+    comparePrice: 36.99,
+    category: 'tees',
+    collection: 'statements',
+    buyUrl: '#',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ad19e2b3472339850520c6/12124/92570/welp-time-to-start-over-tee.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'centered-text',
@@ -125,121 +182,92 @@ export const MERCH_ITEMS: MerchItem[] = [
       subtext: 'TIME TO START OVER',
       textColor: '#ffffff',
     },
-    badge: 'New',
   },
   {
     id: 'crew-spite',
-    title: '"Built with Spite and ❤️" Crewneck',
-    description: 'The footer line everyone loves. Charcoal crewneck, centered chest print.',
+    title: 'Built with Spite Crewneck',
+    description:
+      'The footer line everyone loves. Crewneck, centered chest print with a heart.',
     price: 52.99,
     comparePrice: 59.99,
     category: 'sweatshirts',
     collection: 'statements',
     buyUrl: '#',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ad0420a58961e1690168ce/25457/98502/built-with-spite-crewneck.jpg?camera_label=front',
     color: '#374151',
     design: {
       type: 'centered-text',
       text: 'Built with spite and',
-      subtext: '❤️',
+      subtext: '\u2764\uFE0F',
       textColor: '#d1d5db',
     },
+    badge: 'Best Seller',
   },
   {
-    id: 'mug-still-here',
-    title: '"Still Here. Still Good." Mug — Matte Black',
-    description: 'Matte black ceramic. "welp." up top, affirmation below.',
+    id: 'mug-everything-fine',
+    title: 'Everything is Fine Mug',
+    description:
+      '"Everything is fine. (Terms and conditions apply.)" White ceramic with red accent.',
     price: 21.99,
     comparePrice: 26.99,
     category: 'mugs',
     collection: 'statements',
     buyUrl: '#',
-    color: '#111111',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ae2583b347233985055a72/71305/12363/everything-is-fine-mug.jpg?camera_label=front',
+    color: '#ffffff',
     design: {
       type: 'multi-line',
-      text: 'welp.',
-      subtext: 'still here. still good.',
-      textColor: '#ffffff',
+      text: 'Everything is fine.',
+      subtext: '(Terms and conditions apply.)',
+      textColor: '#111111',
     },
+    badge: 'New',
   },
 
   // —— The Petty Collection ——————————————————————————————————————————————————
   {
     id: 'tee-kept-pots',
-    title: '"He Kept the Pots." Tee',
-    description: 'The Kitchen Reset tagline. Rose gold on black. A whole mood.',
+    title: 'He Kept the Pots Tee',
+    description:
+      'The Kitchen Reset tagline. Rose on black. A whole mood.',
     price: 31.99,
     comparePrice: 36.99,
     category: 'tees',
     collection: 'petty',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad19d0b360648baa02132d/12124/92570/he-kept-the-pots-tee.jpg?camera_label=front',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ad19d0b360648baa02132d/12124/92570/he-kept-the-pots-tee.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'multi-line',
       text: 'He kept\nthe pots.',
-      subtext: '— welp.',
+      subtext: '\u2014 welp.',
       textColor: '#fda4af',
     },
     badge: 'New',
   },
   {
-    id: 'crew-funded-blush',
-    title: '"Funded by My Friends" Crewneck — Blush',
-    description: 'Because when your friends literally buy you a new life, you wear the receipt.',
-    price: 52.99,
-    comparePrice: 59.99,
-    category: 'sweatshirts',
-    collection: 'petty',
-    buyUrl: '#',
-    color: '#ffe4e6',
-    design: {
-      type: 'multi-line',
-      text: 'This sweatshirt\nwas funded by\nmy friends.',
-      subtext: 'welp.',
-      textColor: '#9f1239',
-    },
-  },
-  {
-    id: 'tee-main-character',
-    title: '"Main Character Energy" Tee — White',
-    description: 'All caps, spaced out, very much "I\'m the protagonist now."',
+    id: 'tee-everything-fine',
+    title: 'Everything is Fine Tee',
+    description:
+      '"Everything is fine." The shirt you wear when it is absolutely not fine.',
     price: 31.99,
     comparePrice: 36.99,
     category: 'tees',
     collection: 'petty',
     buyUrl: '#',
-    imageUrl: 'https://images-api.printify.com/mockup/69ad19fa2571c7daeb009097/12124/92570/main-character-energy-tee.jpg?camera_label=front',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ae058763b683ea0d0cf4c4/12100/92570/everything-is-fine-tee.jpg?camera_label=front',
     color: '#f8fafc',
     design: {
       type: 'centered-text',
-      text: 'MAIN CHARACTER',
-      subtext: 'ENERGY ✦ SINCE 2026',
-      textColor: '#0f172a',
+      text: 'Everything is fine.',
+      subtext: '(Terms and conditions apply.)',
+      textColor: '#111111',
     },
-  },
-  {
-    id: 'hat-dad-rose',
-    title: 'The Conversation Starter — Rose',
-    description: 'Embroidered "welp." on dusty rose unstructured cotton.',
-    price: 26.99,
-    comparePrice: 29.99,
-    category: 'hats',
-    collection: 'petty',
-    buyUrl: '#',
-    color: '#be123c',
-    design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff', fontSize: '14px' },
-  },
-  {
-    id: 'sticker-pack',
-    title: 'welp. Sticker Pack — 8 Stickers',
-    description: 'Logo, taglines, badges. Laptop-ready, water-bottle-approved.',
-    price: 9.99,
-    comparePrice: 14.99,
-    category: 'stickers',
-    collection: 'essentials',
-    buyUrl: '#',
-    color: '#f43f5e',
-    design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff', fontSize: '18px' },
+    badge: 'New',
   },
 ]
 
@@ -256,6 +284,14 @@ export const MERCH_CATEGORIES = [
 export const MERCH_COLLECTIONS = [
   { id: 'all', label: 'All', description: 'The full catalog' },
   { id: 'essentials', label: 'The Essentials', description: 'Clean logo pieces' },
-  { id: 'statements', label: 'The Statements', description: 'Tagline-driven designs' },
-  { id: 'petty', label: 'The Petty Collection', description: 'The viral ones' },
+  {
+    id: 'statements',
+    label: 'The Statements',
+    description: 'Tagline-driven designs',
+  },
+  {
+    id: 'petty',
+    label: 'The Petty Collection',
+    description: 'The viral ones',
+  },
 ] as const
