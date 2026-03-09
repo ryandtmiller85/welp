@@ -38,6 +38,8 @@ export interface MerchItem {
   variants: SizeVariant[]
   /** Index into variants[] for the default size (used for mockups) */
   defaultVariantIndex: number
+  /** Additional product photos from Printify (different angles) */
+  galleryImages?: { label: string; url: string }[]
 }
 
 // ---------------------------------------------------------------------------
@@ -72,6 +74,40 @@ const CREWNECK_SIZES: SizeVariant[] = [
   { label: '2XL', variantId: 25519 },
 ]
 
+// ---------------------------------------------------------------------------
+// Gallery image helpers — Printify mockup URLs with correct subvariant IDs
+// ---------------------------------------------------------------------------
+
+function teeGallery(productId: string, variantId: number, slug: string) {
+  const base = `https://images-api.printify.com/mockup/${productId}/${variantId}`
+  return [
+    { label: 'Front', url: `${base}/92570/${slug}.jpg?camera_label=front` },
+    { label: 'Back', url: `${base}/92571/${slug}.jpg?camera_label=back` },
+    { label: 'Flat Lay', url: `${base}/102005/${slug}.jpg?camera_label=front-2` },
+    { label: 'Folded', url: `${base}/102001/${slug}.jpg?camera_label=folded` },
+  ]
+}
+
+function crewneckGallery(productId: string, variantId: number, slug: string) {
+  const base = `https://images-api.printify.com/mockup/${productId}/${variantId}`
+  return [
+    { label: 'Front', url: `${base}/98502/${slug}.jpg?camera_label=front` },
+    { label: 'Back', url: `${base}/98503/${slug}.jpg?camera_label=back` },
+    { label: 'Folded', url: `${base}/100648/${slug}.jpg?camera_label=folded` },
+    { label: 'Lifestyle', url: `${base}/98504/${slug}.jpg?camera_label=person-1` },
+  ]
+}
+
+function mugGallery(productId: string, variantId: number, slug: string) {
+  const base = `https://images-api.printify.com/mockup/${productId}/${variantId}`
+  return [
+    { label: 'Front', url: `${base}/${variantId === 71305 ? 12363 : 12360}/${slug}.jpg?camera_label=front` },
+    { label: 'Left', url: `${base}/${variantId === 71305 ? 12367 : 12364}/${slug}.jpg?camera_label=left` },
+    { label: 'Right', url: `${base}/${variantId === 71305 ? 12371 : 12368}/${slug}.jpg?camera_label=right` },
+    { label: 'Lifestyle', url: `${base}/${variantId === 71305 ? 12375 : 12372}/${slug}.jpg?camera_label=context` },
+  ]
+}
+
 export const MERCH_ITEMS: MerchItem[] = [
   // —— The Essentials ————————————————————————————————————————————————————————
   {
@@ -91,6 +127,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     badge: 'Best Seller',
     variants: BLACK_TEE_SIZES,
     defaultVariantIndex: 1, // M
+    galleryImages: teeGallery('69ad0379581a48c85001c2b0', 12125, 'welp-wordmark-tee-dark'),
   },
   {
     id: 'tee-og-white',
@@ -109,6 +146,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     design: { type: 'wordmark', text: 'welp.', textColor: '#0f172a' },
     variants: WHITE_TEE_SIZES,
     defaultVariantIndex: 1, // M
+    galleryImages: teeGallery('69ad19eed9d11928ed08b72a', 12101, 'welp-wordmark-tee-white'),
   },
   {
     id: 'hat-dad-black',
@@ -132,6 +170,12 @@ export const MERCH_ITEMS: MerchItem[] = [
     },
     variants: [{ label: 'One Size', variantId: 105372 }],
     defaultVariantIndex: 0,
+    galleryImages: [
+      { label: 'Front', url: 'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/102307/welp-dad-cap.jpg?camera_label=front' },
+      { label: 'Back', url: 'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/102724/welp-dad-cap.jpg?camera_label=back' },
+      { label: 'Left', url: 'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/112104/welp-dad-cap.jpg?camera_label=left' },
+      { label: 'Right', url: 'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/112107/welp-dad-cap.jpg?camera_label=right' },
+    ],
   },
   {
     id: 'mug-accent',
@@ -155,6 +199,12 @@ export const MERCH_ITEMS: MerchItem[] = [
     },
     variants: [{ label: '11oz', variantId: 71302 }],
     defaultVariantIndex: 0,
+    galleryImages: [
+      { label: 'Front', url: 'https://images-api.printify.com/mockup/69ad04a94f892b151f0fcf91/71302/12360/welp-accent-mug.jpg?camera_label=front' },
+      { label: 'Left', url: 'https://images-api.printify.com/mockup/69ad04a94f892b151f0fcf91/71302/12364/welp-accent-mug.jpg?camera_label=left' },
+      { label: 'Right', url: 'https://images-api.printify.com/mockup/69ad04a94f892b151f0fcf91/71302/12368/welp-accent-mug.jpg?camera_label=right' },
+      { label: 'Lifestyle', url: 'https://images-api.printify.com/mockup/69ad04a94f892b151f0fcf91/71302/12372/welp-accent-mug.jpg?camera_label=context' },
+    ],
   },
   {
     id: 'tote-carry-all',
@@ -178,6 +228,10 @@ export const MERCH_ITEMS: MerchItem[] = [
     },
     variants: [{ label: 'One Size', variantId: 70646 }],
     defaultVariantIndex: 0,
+    galleryImages: [
+      { label: 'Front', url: 'https://images-api.printify.com/mockup/69ad04b12571c7daeb008ba4/70646/11317/welp-tote-bag.jpg?camera_label=front' },
+      { label: 'Back', url: 'https://images-api.printify.com/mockup/69ad04b12571c7daeb008ba4/70646/11319/welp-tote-bag.jpg?camera_label=back' },
+    ],
   },
   {
     id: 'sticker-welp',
@@ -230,6 +284,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     badge: 'New',
     variants: WHITE_TEE_SIZES,
     defaultVariantIndex: 1, // M
+    galleryImages: teeGallery('69ae058c63b683ea0d0cf4c6', 12101, 'welp-definition-tee'),
   },
   {
     id: 'tee-start-over',
@@ -253,6 +308,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     },
     variants: BLACK_TEE_SIZES,
     defaultVariantIndex: 1, // M
+    galleryImages: teeGallery('69ad19e2b3472339850520c6', 12125, 'welp-time-to-start-over-tee'),
   },
   {
     id: 'crew-spite',
@@ -277,6 +333,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     badge: 'Best Seller',
     variants: CREWNECK_SIZES,
     defaultVariantIndex: 2, // L (index 2 in crewneck sizes)
+    galleryImages: crewneckGallery('69ad0420a58961e1690168ce', 25457, 'built-with-spite-crewneck'),
   },
   {
     id: 'mug-everything-fine',
@@ -301,6 +358,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     badge: 'New',
     variants: [{ label: '11oz', variantId: 71305 }],
     defaultVariantIndex: 0,
+    galleryImages: mugGallery('69ae2583b347233985055a72', 71305, 'everything-is-fine-mug'),
   },
 
   // —— The Petty Collection ——————————————————————————————————————————————————
@@ -327,6 +385,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     badge: 'New',
     variants: BLACK_TEE_SIZES,
     defaultVariantIndex: 1, // M
+    galleryImages: teeGallery('69ad19d0b360648baa02132d', 12125, 'he-kept-the-pots-tee'),
   },
   {
     id: 'tee-everything-fine',
@@ -351,6 +410,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     badge: 'New',
     variants: WHITE_TEE_SIZES,
     defaultVariantIndex: 1, // M
+    galleryImages: teeGallery('69ae058763b683ea0d0cf4c4', 12101, 'everything-is-fine-tee'),
   },
 ]
 

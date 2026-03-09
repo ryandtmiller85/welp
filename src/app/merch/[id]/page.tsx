@@ -7,40 +7,6 @@ import { ArrowLeft, Loader2, Minus, Plus } from 'lucide-react'
 import { MERCH_ITEMS, type MerchItem, type SizeVariant } from '@/lib/merch-items'
 
 // ---------------------------------------------------------------------------
-// Helpers for Printify mockup URLs
-// ---------------------------------------------------------------------------
-
-/** Parse the imageUrl to extract the URL parts we need for other camera angles */
-function parseMockupUrl(imageUrl: string) {
-  // Pattern: https://images-api.printify.com/mockup/{productId}/{variantId}/{subvariantId}/{slug}.jpg?camera_label=front
-  const match = imageUrl.match(
-    /\/mockup\/([^/]+)\/(\d+)\/(\d+)\/([^.]+)\.jpg/
-  )
-  if (!match) return null
-  return {
-    productId: match[1],
-    variantId: match[2],
-    subvariantId: match[3],
-    slug: match[4],
-  }
-}
-
-function buildMockupUrl(
-  parts: { productId: string; variantId: string; subvariantId: string; slug: string },
-  cameraLabel: string
-) {
-  return `https://images-api.printify.com/mockup/${parts.productId}/${parts.variantId}/${parts.subvariantId}/${parts.slug}.jpg?camera_label=${cameraLabel}`
-}
-
-// Camera labels that Printify supports for apparel
-const CAMERA_LABELS = [
-  { id: 'front', label: 'Front' },
-  { id: 'back', label: 'Back' },
-  { id: 'left', label: 'Left' },
-  { id: 'right', label: 'Right' },
-]
-
-// ---------------------------------------------------------------------------
 // Product Detail Page
 // ---------------------------------------------------------------------------
 
@@ -92,13 +58,9 @@ export default function ProductDetailPage() {
     )
   }
 
-  // Build gallery images from mockup URL
-  const mockupParts = item.imageUrl ? parseMockupUrl(item.imageUrl) : null
-  const galleryImages = mockupParts
-    ? CAMERA_LABELS.map((cam) => ({
-        label: cam.label,
-        url: buildMockupUrl(mockupParts, cam.id),
-      }))
+  // Use pre-built gallery images from the catalog, or fall back to the single front image
+  const galleryImages = item.galleryImages && item.galleryImages.length > 0
+    ? item.galleryImages
     : item.imageUrl
       ? [{ label: 'Front', url: item.imageUrl }]
       : []
