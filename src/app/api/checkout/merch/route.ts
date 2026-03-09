@@ -4,7 +4,7 @@ import { MERCH_ITEMS } from '@/lib/merch-items'
 
 export async function POST(req: NextRequest) {
   try {
-    const { itemId, quantity = 1 } = await req.json()
+    const { itemId, variantId, size, quantity = 1 } = await req.json()
 
     // Validate the item exists in our catalog
     const item = MERCH_ITEMS.find((i) => i.id === itemId)
@@ -16,7 +16,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Quantity must be 1-10' }, { status: 400 })
     }
 
+    // Validate variant if provided
+    let selectedSize = size || 'One Size'
+    if (variantId && item.variants.length > 0) {
+      const variant = item.variants.find((v) => v.variantId === variantId)
+      if (!variant) {
+        return NextResponse.json({ error: 'Invalid size selection' }, { status: 400 })
+      }
+      selectedSize = variant.label
+    }
+
     const origin = req.headers.get('origin') || 'https://alliswelp.com'
+
+    const metadata = {
+      merch_item_id: item.id,
+      category: item.category,
+      collection: item.collection,
+      variant_id: variantId?.toString() || '',
+      selected_size: selectedSize,
+    }
 
     // Create Stripe Checkout session
     const session = await getStripe().checkout.sessions.create({
@@ -26,13 +44,9 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: item.title,
+              name: `${item.title}${selectedSize !== 'One Size' ? ` (${selectedSize})` : ''}`,
               description: item.description,
-              metadata: {
-                merch_item_id: item.id,
-                category: item.category,
-                collection: item.collection,
-              },
+              metadata,
             },
             unit_amount: Math.round(item.price * 100),
           },
@@ -45,11 +59,8 @@ export async function POST(req: NextRequest) {
       // Automatic tax calculation (enabled in Stripe dashboard)
       automatic_tax: { enabled: true },
       success_url: `${origin}/merch/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/merch`,
-      metadata: {
-        merch_item_id: item.id,
-        item_title: item.title,
-      },
+      cancel_url: `${origin}/merch/${item.id}`,
+      metadata,
     })
 
     return NextResponse.json({ url: session.url })

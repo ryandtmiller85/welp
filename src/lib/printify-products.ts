@@ -29,15 +29,15 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
   // —— The Essentials ————————————————————————————————————————————————————————
   {
     merchItemId: 'tee-og-black',
-    printifyProductId: '69ad19eed9d11928ed08b72a',
-    defaultVariantId: 12100, // Black / M
+    printifyProductId: '69ad0379581a48c85001c2b0',
+    defaultVariantId: 12125, // Black / M
     note: 'OG welp. wordmark on black tee (white text)',
     designFile: 'welp_wordmark_white.png',
   },
   {
     merchItemId: 'tee-og-white',
-    printifyProductId: '69ad0379581a48c85001c2b0',
-    defaultVariantId: 12124, // White / M
+    printifyProductId: '69ad19eed9d11928ed08b72a',
+    defaultVariantId: 12101, // White / M
     note: 'OG welp. wordmark on white tee (dark text)',
     designFile: 'welp_wordmark_dark.png',
   },

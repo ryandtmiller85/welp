@@ -2,7 +2,13 @@
 // Merch catalog — welp. branded swag
 //
 // Synced with Printify shop (12 products). Every item has a real mockup URL.
+// Variant data sourced from Printify API — size IDs are Printify variant IDs.
 // ---------------------------------------------------------------------------
+
+export interface SizeVariant {
+  label: string
+  variantId: number
+}
 
 export interface MerchItem {
   id: string
@@ -15,6 +21,8 @@ export interface MerchItem {
   buyUrl: string
   /** Printify product mockup image URL */
   imageUrl?: string
+  /** Printify product ID (extracted from imageUrl for convenience) */
+  printifyProductId?: string
   /** Hex color of the product for the mockup (fallback) */
   color: string
   /** Design details for the CSS mockup (fallback) */
@@ -26,7 +34,43 @@ export interface MerchItem {
     fontSize?: string
   }
   badge?: 'Best Seller' | 'New' | 'Limited'
+  /** Available sizes for this product */
+  variants: SizeVariant[]
+  /** Index into variants[] for the default size (used for mockups) */
+  defaultVariantIndex: number
 }
+
+// ---------------------------------------------------------------------------
+// Printify variant ID reference (from API):
+//
+// White tees: S=12102, M=12101, L=12100, XL=12103, 2XL=12104
+// Black tees: S=12126, M=12125, L=12124, XL=12127, 2XL=12128
+// Crewneck (Sport Grey): S=25395, M=25426, L=25457, XL=25488, 2XL=25519
+// ---------------------------------------------------------------------------
+
+const WHITE_TEE_SIZES: SizeVariant[] = [
+  { label: 'S', variantId: 12102 },
+  { label: 'M', variantId: 12101 },
+  { label: 'L', variantId: 12100 },
+  { label: 'XL', variantId: 12103 },
+  { label: '2XL', variantId: 12104 },
+]
+
+const BLACK_TEE_SIZES: SizeVariant[] = [
+  { label: 'S', variantId: 12126 },
+  { label: 'M', variantId: 12125 },
+  { label: 'L', variantId: 12124 },
+  { label: 'XL', variantId: 12127 },
+  { label: '2XL', variantId: 12128 },
+]
+
+const CREWNECK_SIZES: SizeVariant[] = [
+  { label: 'S', variantId: 25395 },
+  { label: 'M', variantId: 25426 },
+  { label: 'L', variantId: 25457 },
+  { label: 'XL', variantId: 25488 },
+  { label: '2XL', variantId: 25519 },
+]
 
 export const MERCH_ITEMS: MerchItem[] = [
   // —— The Essentials ————————————————————————————————————————————————————————
@@ -39,11 +83,14 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'essentials',
     buyUrl: '#',
+    printifyProductId: '69ad0379581a48c85001c2b0',
     imageUrl:
-      'https://images-api.printify.com/mockup/69ad19eed9d11928ed08b72a/12100/92570/welp-wordmark-tee-dark.jpg?camera_label=front',
+      'https://images-api.printify.com/mockup/69ad0379581a48c85001c2b0/12125/92570/welp-wordmark-tee-dark.jpg?camera_label=front',
     color: '#111111',
     design: { type: 'wordmark', text: 'welp.', textColor: '#ffffff' },
     badge: 'Best Seller',
+    variants: BLACK_TEE_SIZES,
+    defaultVariantIndex: 1, // M
   },
   {
     id: 'tee-og-white',
@@ -55,10 +102,13 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'essentials',
     buyUrl: '#',
+    printifyProductId: '69ad19eed9d11928ed08b72a',
     imageUrl:
-      'https://images-api.printify.com/mockup/69ad0379581a48c85001c2b0/12124/92570/welp-wordmark-tee-white.jpg?camera_label=front',
+      'https://images-api.printify.com/mockup/69ad19eed9d11928ed08b72a/12101/92570/welp-wordmark-tee-white.jpg?camera_label=front',
     color: '#f8fafc',
     design: { type: 'wordmark', text: 'welp.', textColor: '#0f172a' },
+    variants: WHITE_TEE_SIZES,
+    defaultVariantIndex: 1, // M
   },
   {
     id: 'hat-dad-black',
@@ -70,6 +120,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'hats',
     collection: 'essentials',
     buyUrl: '#',
+    printifyProductId: '69ad04a45ef4eca23b03ae44',
     imageUrl:
       'https://images-api.printify.com/mockup/69ad04a45ef4eca23b03ae44/105372/102307/welp-dad-cap.jpg?camera_label=front',
     color: '#222222',
@@ -79,6 +130,8 @@ export const MERCH_ITEMS: MerchItem[] = [
       textColor: '#ffffff',
       fontSize: '14px',
     },
+    variants: [{ label: 'One Size', variantId: 105372 }],
+    defaultVariantIndex: 0,
   },
   {
     id: 'mug-accent',
@@ -90,6 +143,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'mugs',
     collection: 'essentials',
     buyUrl: '#',
+    printifyProductId: '69ad04a94f892b151f0fcf91',
     imageUrl:
       'https://images-api.printify.com/mockup/69ad04a94f892b151f0fcf91/71302/12360/welp-accent-mug.jpg?camera_label=front',
     color: '#ffffff',
@@ -99,6 +153,8 @@ export const MERCH_ITEMS: MerchItem[] = [
       textColor: '#0f172a',
       fontSize: '24px',
     },
+    variants: [{ label: '11oz', variantId: 71302 }],
+    defaultVariantIndex: 0,
   },
   {
     id: 'tote-carry-all',
@@ -110,6 +166,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'totes',
     collection: 'essentials',
     buyUrl: '#',
+    printifyProductId: '69ad04b12571c7daeb008ba4',
     imageUrl:
       'https://images-api.printify.com/mockup/69ad04b12571c7daeb008ba4/70646/11317/welp-tote-bag.jpg?camera_label=front',
     color: '#d4c5a9',
@@ -119,6 +176,8 @@ export const MERCH_ITEMS: MerchItem[] = [
       textColor: '#1a1a1a',
       fontSize: '22px',
     },
+    variants: [{ label: 'One Size', variantId: 70646 }],
+    defaultVariantIndex: 0,
   },
   {
     id: 'sticker-welp',
@@ -130,6 +189,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'stickers',
     collection: 'essentials',
     buyUrl: '#',
+    printifyProductId: '69ad04b2a028393ce202e6c4',
     imageUrl:
       'https://images-api.printify.com/mockup/69ad04b2a028393ce202e6c4/45750/16655/welp-sticker.jpg?camera_label=front',
     color: '#f43f5e',
@@ -139,6 +199,11 @@ export const MERCH_ITEMS: MerchItem[] = [
       textColor: '#ffffff',
       fontSize: '18px',
     },
+    variants: [
+      { label: '3" × 3"', variantId: 45750 },
+      { label: '4" × 4"', variantId: 45752 },
+    ],
+    defaultVariantIndex: 0,
   },
 
   // —— The Statements ————————————————————————————————————————————————————————
@@ -152,8 +217,9 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'statements',
     buyUrl: '#',
+    printifyProductId: '69ae058c63b683ea0d0cf4c6',
     imageUrl:
-      'https://images-api.printify.com/mockup/69ae058c63b683ea0d0cf4c6/12100/92570/welp-definition-tee.jpg?camera_label=front',
+      'https://images-api.printify.com/mockup/69ae058c63b683ea0d0cf4c6/12101/92570/welp-definition-tee.jpg?camera_label=front',
     color: '#f8fafc',
     design: {
       type: 'multi-line',
@@ -162,6 +228,8 @@ export const MERCH_ITEMS: MerchItem[] = [
       textColor: '#374151',
     },
     badge: 'New',
+    variants: WHITE_TEE_SIZES,
+    defaultVariantIndex: 1, // M
   },
   {
     id: 'tee-start-over',
@@ -173,8 +241,9 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'statements',
     buyUrl: '#',
+    printifyProductId: '69ad19e2b3472339850520c6',
     imageUrl:
-      'https://images-api.printify.com/mockup/69ad19e2b3472339850520c6/12124/92570/welp-time-to-start-over-tee.jpg?camera_label=front',
+      'https://images-api.printify.com/mockup/69ad19e2b3472339850520c6/12125/92570/welp-time-to-start-over-tee.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'centered-text',
@@ -182,6 +251,8 @@ export const MERCH_ITEMS: MerchItem[] = [
       subtext: 'TIME TO START OVER',
       textColor: '#ffffff',
     },
+    variants: BLACK_TEE_SIZES,
+    defaultVariantIndex: 1, // M
   },
   {
     id: 'crew-spite',
@@ -193,6 +264,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'sweatshirts',
     collection: 'statements',
     buyUrl: '#',
+    printifyProductId: '69ad0420a58961e1690168ce',
     imageUrl:
       'https://images-api.printify.com/mockup/69ad0420a58961e1690168ce/25457/98502/built-with-spite-crewneck.jpg?camera_label=front',
     color: '#374151',
@@ -203,6 +275,8 @@ export const MERCH_ITEMS: MerchItem[] = [
       textColor: '#d1d5db',
     },
     badge: 'Best Seller',
+    variants: CREWNECK_SIZES,
+    defaultVariantIndex: 2, // L (index 2 in crewneck sizes)
   },
   {
     id: 'mug-everything-fine',
@@ -214,6 +288,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'mugs',
     collection: 'statements',
     buyUrl: '#',
+    printifyProductId: '69ae2583b347233985055a72',
     imageUrl:
       'https://images-api.printify.com/mockup/69ae2583b347233985055a72/71305/12363/everything-is-fine-mug.jpg?camera_label=front',
     color: '#ffffff',
@@ -224,6 +299,8 @@ export const MERCH_ITEMS: MerchItem[] = [
       textColor: '#111111',
     },
     badge: 'New',
+    variants: [{ label: '11oz', variantId: 71305 }],
+    defaultVariantIndex: 0,
   },
 
   // —— The Petty Collection ——————————————————————————————————————————————————
@@ -237,8 +314,9 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'petty',
     buyUrl: '#',
+    printifyProductId: '69ad19d0b360648baa02132d',
     imageUrl:
-      'https://images-api.printify.com/mockup/69ad19d0b360648baa02132d/12124/92570/he-kept-the-pots-tee.jpg?camera_label=front',
+      'https://images-api.printify.com/mockup/69ad19d0b360648baa02132d/12125/92570/he-kept-the-pots-tee.jpg?camera_label=front',
     color: '#111111',
     design: {
       type: 'multi-line',
@@ -247,6 +325,8 @@ export const MERCH_ITEMS: MerchItem[] = [
       textColor: '#fda4af',
     },
     badge: 'New',
+    variants: BLACK_TEE_SIZES,
+    defaultVariantIndex: 1, // M
   },
   {
     id: 'tee-everything-fine',
@@ -258,8 +338,9 @@ export const MERCH_ITEMS: MerchItem[] = [
     category: 'tees',
     collection: 'petty',
     buyUrl: '#',
+    printifyProductId: '69ae058763b683ea0d0cf4c4',
     imageUrl:
-      'https://images-api.printify.com/mockup/69ae058763b683ea0d0cf4c4/12100/92570/everything-is-fine-tee.jpg?camera_label=front',
+      'https://images-api.printify.com/mockup/69ae058763b683ea0d0cf4c4/12101/92570/everything-is-fine-tee.jpg?camera_label=front',
     color: '#f8fafc',
     design: {
       type: 'centered-text',
@@ -268,6 +349,8 @@ export const MERCH_ITEMS: MerchItem[] = [
       textColor: '#111111',
     },
     badge: 'New',
+    variants: WHITE_TEE_SIZES,
+    defaultVariantIndex: 1, // M
   },
 ]
 
