@@ -81,10 +81,10 @@ const CREWNECK_SIZES: SizeVariant[] = [
 function teeGallery(productId: string, variantId: number, slug: string) {
   const base = `https://images-api.printify.com/mockup/${productId}/${variantId}`
   return [
-    { label: 'Front', url: `${base}/92570/${slug}.jpg?camera_label=front` },
-    { label: 'Back', url: `${base}/92571/${slug}.jpg?camera_label=back` },
     { label: 'Flat Lay', url: `${base}/102005/${slug}.jpg?camera_label=front-2` },
-    { label: 'Folded', url: `${base}/102001/${slug}.jpg?camera_label=folded` },
+    { label: 'Back', url: `${base}/102006/${slug}.jpg?camera_label=back-2` },
+    { label: 'Model 1', url: `${base}/92572/${slug}.jpg?camera_label=person-1` },
+    { label: 'Model 2', url: `${base}/92574/${slug}.jpg?camera_label=person-3` },
   ]
 }
 
