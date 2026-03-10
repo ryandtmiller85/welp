@@ -7,7 +7,7 @@
 
 export interface SizeVariant {
   label: string
-  variantId: numbe
+  variantId: number
 }
 
 export interface MerchItem {
