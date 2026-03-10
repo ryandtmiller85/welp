@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Printify product mapping for welp. merch
 //
-// Maps our merch catalog item IDs → Printify product + variant IDs.
+// Maps our merch catalog item IDs â Printify product + variant IDs.
 // All 12 products are live in Printify with working mockup images.
 //
 // Shop ID: 26575604
@@ -23,10 +23,10 @@ export interface PrintifyProductMapping {
 }
 
 /**
- * Product mapping table — 12 products synced with Printify.
+ * Product mapping table â 12 products synced with Printify.
  */
 export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
-  // —— The Essentials ————————————————————————————————————————————————————————
+  // ââ The Essentials ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     merchItemId: 'tee-og-black',
     printifyProductId: '69ad0379581a48c85001c2b0',
@@ -65,12 +65,12 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
   {
     merchItemId: 'sticker-welp',
     printifyProductId: '69ad04b2a028393ce202e6c4',
-    defaultVariantId: 45750, // 3" × 3" / White
+    defaultVariantId: 45750, // 3" Ã 3" / White
     note: 'welp. kiss-cut sticker',
     designFile: 'sticker_welp_rose.png',
   },
 
-  // —— The Statements ————————————————————————————————————————————————————————
+  // ââ The Statements ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     merchItemId: 'tee-definition',
     printifyProductId: '69ae058c63b683ea0d0cf4c6',
@@ -99,8 +99,15 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
     note: 'Everything is Fine accent mug (red accent)',
     designFile: 'mug_everything_fine.png',
   },
+  {
+    merchItemId: 'tote-definition',
+    printifyProductId: '69ae5866d9d11928ed08faa6',
+    defaultVariantId: 70646, // Natural (Cream) / One size
+    note: 'welp. Definition Tote, cream + black variants',
+    designFile: 'tote_definition.png',
+  },
 
-  // —— The Petty Collection ——————————————————————————————————————————————————
+  // ââ The Petty Collection ââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     merchItemId: 'tee-kept-pots',
     printifyProductId: '69ad19d0b360648baa02132d',
