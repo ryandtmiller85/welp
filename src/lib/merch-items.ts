@@ -7,7 +7,7 @@
 
 export interface SizeVariant {
   label: string
-  variantId: number
+  variantId: numbe
 }
 
 export interface MerchItem {
@@ -112,7 +112,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   // ââ The Essentials ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     id: 'tee-og-black',
-    title: 'welp. Wordmark Tee â Dark',
+    title: 'welp. Wordmark Tee - Dark',
     description: '"welp." left chest. That\'s it. That\'s the shirt.',
     price: 29.99,
     comparePrice: 34.99,
@@ -131,7 +131,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'tee-og-white',
-    title: 'welp. Wordmark Tee â White',
+        title: 'welp. Wordmark Tee - White',
     description:
       'Same energy, brighter outlook. Black wordmark on white heavyweight cotton.',
     price: 29.99,
