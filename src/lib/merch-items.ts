@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------
-// Merch catalog — welp. branded swag
+// Merch catalog â welp. branded swag
 //
-// Synced with Printify shop (12 products). Every item has a real mockup URL.
-// Variant data sourced from Printify API — size IDs are Printify variant IDs.
+// Synced with Printify shop (13 products). Every item has a real mockup URL.
+// Variant data sourced from Printify API â size IDs are Printify variant IDs.
 // ---------------------------------------------------------------------------
 
 export interface SizeVariant {
@@ -75,7 +75,7 @@ const CREWNECK_SIZES: SizeVariant[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// Gallery image helpers — Printify mockup URLs with correct subvariant IDs
+// Gallery image helpers â Printify mockup URLs with correct subvariant IDs
 // ---------------------------------------------------------------------------
 
 function teeGallery(productId: string, variantId: number, slug: string) {
@@ -109,10 +109,10 @@ function mugGallery(productId: string, variantId: number, slug: string) {
 }
 
 export const MERCH_ITEMS: MerchItem[] = [
-  // —— The Essentials ————————————————————————————————————————————————————————
+  // ââ The Essentials ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     id: 'tee-og-black',
-    title: 'welp. Wordmark Tee — Dark',
+    title: 'welp. Wordmark Tee â Dark',
     description: '"welp." left chest. That\'s it. That\'s the shirt.',
     price: 29.99,
     comparePrice: 34.99,
@@ -131,7 +131,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   },
   {
     id: 'tee-og-white',
-    title: 'welp. Wordmark Tee — White',
+    title: 'welp. Wordmark Tee â White',
     description:
       'Same energy, brighter outlook. Black wordmark on white heavyweight cotton.',
     price: 29.99,
@@ -254,13 +254,13 @@ export const MERCH_ITEMS: MerchItem[] = [
       fontSize: '18px',
     },
     variants: [
-      { label: '3" × 3"', variantId: 45750 },
-      { label: '4" × 4"', variantId: 45752 },
+      { label: '3" Ã 3"', variantId: 45750 },
+      { label: '4" Ã 4"', variantId: 45752 },
     ],
     defaultVariantIndex: 0,
   },
 
-  // —— The Statements ————————————————————————————————————————————————————————
+  // ââ The Statements ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     id: 'tee-definition',
     title: 'welp. Definition Tee',
@@ -361,7 +361,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     galleryImages: mugGallery('69ae2583b347233985055a72', 71305, 'everything-is-fine-mug'),
   },
 
-  // —— The Petty Collection ——————————————————————————————————————————————————
+  // ââ The Petty Collection ââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     id: 'tee-kept-pots',
     title: 'He Kept the Pots Tee',
@@ -411,6 +411,43 @@ export const MERCH_ITEMS: MerchItem[] = [
     variants: WHITE_TEE_SIZES,
     defaultVariantIndex: 1, // M
     galleryImages: teeGallery('69ae058763b683ea0d0cf4c4', 12101, 'everything-is-fine-tee'),
+  },
+
+  {
+    id: 'tote-definition',
+    title: 'welp. Definition Tote',
+    description: 'The dictionary definition of welp — on a tote. Available in cream or black.',
+    price: 24.99,
+    comparePrice: 29.99,
+    category: 'totes',
+    collection: 'statements',
+    buyUrl: '#',
+    printifyProductId: '69ae5866d9d11928ed08faa6',
+    imageUrl:
+      'https://images-api.printify.com/mockup/69ae5866d9d11928ed08faa6/70646/11317/welp-definition-tote.jpg?camera_label=front',
+    color: '#d4c5a9',
+    design: {
+      type: 'multi-line',
+      text: '**welp**\n/welp/ interjection',
+      subtext: '1. an acceptance of the unavoidable.',
+      textColor: '#374151',
+    },
+    badge: 'New',
+    variants: [
+      { label: 'Natural (Cream)', variantId: 70646 },
+      { label: 'Black', variantId: 70603 },
+    ],
+    defaultVariantIndex: 0,
+    galleryImages: [
+      {
+        label: 'Front (Cream)',
+        url: 'https://images-api.printify.com/mockup/69ae5866d9d11928ed08faa6/70646/11317/welp-definition-tote.jpg?camera_label=front',
+      },
+      {
+        label: 'Front (Black)',
+        url: 'https://images-api.printify.com/mockup/69ae5866d9d11928ed08faa6/70603/11317/welp-definition-tote.jpg?camera_label=front',
+      },
+    ],
   },
 ]
 
