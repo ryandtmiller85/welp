@@ -5,11 +5,20 @@ import Link from 'next/link'
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 import { MERCH_ITEMS, type MerchItem } from '@/lib/merch-items'
 import { MerchProductCard } from './merch-product-card'
+// Primary 4 items shown first in the carousel
+const PRIMARY_IDS = ['tee-og-black', 'crew-spite', 'hat-dad-black', 'sticker-welp']
 
-// Show a curated mix for the carousel — best sellers + new items
-const CAROUSEL_ITEMS = MERCH_ITEMS.filter(
-  (item) => item.badge === 'Best Seller' || item.badge === 'New' || item.id === 'sticker-welp' || item.id === 'mug-accent' || item.id === 'hat-dad-black'
-).slice(0, 8)
+const primaryItems = PRIMARY_IDS
+  .map((id) => MERCH_ITEMS.find((item) => item.id === id))
+  .filter((item): item is MerchItem => item !== undefined)
+
+const otherItems = MERCH_ITEMS.filter(
+    (item) =>
+          !PRIMARY_IDS.includes(item.id) &&
+          (item.badge === 'Best Seller' || item.badge === 'New')
+      ).slice(0, 8 - primaryItems.length)
+
+const CAROUSEL_ITEMS = [...primaryItems, ...otherItems]
 
 export function MerchCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null)
