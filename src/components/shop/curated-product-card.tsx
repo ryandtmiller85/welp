@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -46,12 +45,13 @@ export function CuratedProductCard({
     <Card hover className="flex flex-col h-full overflow-hidden">
       {/* Image */}
       <div className="relative aspect-square bg-slate-50 overflow-hidden">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={item.imageUrl}
           alt={item.title}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-contain p-4"
+          referrerPolicy="no-referrer"
+          loading="lazy"
+          className="absolute inset-0 w-full h-full object-contain p-4"
         />
         {item.badge && (
           <div className="absolute top-2 left-2">
