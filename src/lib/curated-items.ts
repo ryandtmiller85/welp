@@ -32,7 +32,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 26.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B07QH4QLNT',
-      affiliateUrl: 'https://www.amazon.com/dp/B07QH4QLNT?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B07QH4QLNT?tag=welp20-20',
       badge: 'Essential',
     },
     {
@@ -43,7 +43,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 34.97,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B00NQDGYXM',
-      affiliateUrl: 'https://www.amazon.com/dp/B00NQDGYXM?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B00NQDGYXM?tag=welp20-20',
       badge: 'Popular',
     },
     {
@@ -64,7 +64,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 37.98,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B00WSWGVZQ',
-      affiliateUrl: 'https://www.amazon.com/dp/B00WSWGVZQ?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B00WSWGVZQ?tag=welp20-20',
     },
     {
       id: 'basics-hangers',
@@ -74,7 +74,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 24.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B0B2BS2CJR',
-      affiliateUrl: 'https://www.amazon.com/dp/B0B2BS2CJR?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B0B2BS2CJR?tag=welp20-20',
       badge: 'Great Value',
     },
   ],
@@ -89,7 +89,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 79.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B00LBK7OSO',
-      affiliateUrl: 'https://www.amazon.com/dp/B00LBK7OSO?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B00LBK7OSO?tag=welp20-20',
       badge: 'Popular',
     },
     {
@@ -100,7 +100,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 99.95,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B00375MQUQ',
-      affiliateUrl: 'https://www.amazon.com/dp/B00375MQUQ?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B00375MQUQ?tag=welp20-20',
     },
     {
       id: 'kitchen-dinnerware',
@@ -110,7 +110,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 49.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B0000CF7BO',
-      affiliateUrl: 'https://www.amazon.com/dp/B0000CF7BO?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B0000CF7BO?tag=welp20-20',
       badge: 'Essential',
     },
     {
@@ -131,7 +131,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 69.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B07WSHSW9F',
-      affiliateUrl: 'https://www.amazon.com/dp/B07WSHSW9F?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B07WSHSW9F?tag=welp20-20',
     },
   ],
 
@@ -145,7 +145,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 49.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B07TKNKZ4N',
-      affiliateUrl: 'https://www.amazon.com/dp/B07TKNKZ4N?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B07TKNKZ4N?tag=welp20-20',
       badge: 'Popular',
     },
     {
@@ -156,7 +156,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 49.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B01LYNW421',
-      affiliateUrl: 'https://www.amazon.com/dp/B01LYNW421?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B01LYNW421?tag=welp20-20',
       badge: 'Staff Pick',
     },
     {
@@ -167,7 +167,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 27.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B09PMGVGBP',
-      affiliateUrl: 'https://www.amazon.com/dp/B09PMGVGBP?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B09PMGVGBP?tag=welp20-20',
     },
     {
       id: 'bedroom-blackout-curtains',
@@ -177,7 +177,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 24.95,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B01586OFRK',
-      affiliateUrl: 'https://www.amazon.com/dp/B01586OFRK?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B01586OFRK?tag=welp20-20',
       badge: 'Great Value',
     },
     {
@@ -201,7 +201,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 16.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B01HPI46EC',
-      affiliateUrl: 'https://www.amazon.com/dp/B01HPI46EC?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B01HPI46EC?tag=welp20-20',
       badge: 'Great Value',
     },
     {
@@ -212,7 +212,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 14.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B09FHXV3FN',
-      affiliateUrl: 'https://www.amazon.com/dp/B09FHXV3FN?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B09FHXV3FN?tag=welp20-20',
     },
     {
       id: 'living-bathroom-set',
@@ -222,7 +222,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 19.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B0BXTLQ81Q',
-      affiliateUrl: 'https://www.amazon.com/dp/B0BXTLQ81Q?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B0BXTLQ81Q?tag=welp20-20',
     },
     {
       id: 'living-bookshelf',
@@ -232,7 +232,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 45.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B07SZ558K5',
-      affiliateUrl: 'https://www.amazon.com/dp/B07SZ558K5?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B07SZ558K5?tag=welp20-20',
       badge: 'Popular',
     },
     {
@@ -243,7 +243,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 29.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B0BCH5H2YP',
-      affiliateUrl: 'https://www.amazon.com/dp/B0BCH5H2YP?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B0BCH5H2YP?tag=welp20-20',
       badge: 'Essential',
     },
   ],
@@ -258,7 +258,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 39.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B073429DV2',
-      affiliateUrl: 'https://www.amazon.com/dp/B073429DV2?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B073429DV2?tag=welp20-20',
       badge: 'Staff Pick',
     },
     {
@@ -269,7 +269,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 19.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B07L4R5WKT',
-      affiliateUrl: 'https://www.amazon.com/dp/B07L4R5WKT?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B07L4R5WKT?tag=welp20-20',
     },
     {
       id: 'selfcare-journal',
@@ -279,7 +279,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 14.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B09MZFL2KN',
-      affiliateUrl: 'https://www.amazon.com/dp/B09MZFL2KN?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B09MZFL2KN?tag=welp20-20',
     },
     {
       id: 'selfcare-yoga-mat',
@@ -289,7 +289,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 21.98,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B07H9PYFRY',
-      affiliateUrl: 'https://www.amazon.com/dp/B07H9PYFRY?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B07H9PYFRY?tag=welp20-20',
       badge: 'Popular',
     },
     {
@@ -300,7 +300,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 26.80,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B01MFBTKQI',
-      affiliateUrl: 'https://www.amazon.com/dp/B01MFBTKQI?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B01MFBTKQI?tag=welp20-20',
       badge: 'Great Value',
     },
   ],
@@ -315,7 +315,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 29.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B08B3X7NXC',
-      affiliateUrl: 'https://www.amazon.com/dp/B08B3X7NXC?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B08B3X7NXC?tag=welp20-20',
       badge: 'Popular',
     },
     {
@@ -326,7 +326,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 99.95,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B09GYZ7MHF',
-      affiliateUrl: 'https://www.amazon.com/dp/B09GYZ7MHF?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B09GYZ7MHF?tag=welp20-20',
       badge: 'Staff Pick',
     },
     {
@@ -337,7 +337,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 163.00,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B001UQ71G4',
-      affiliateUrl: 'https://www.amazon.com/dp/B001UQ71G4?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B001UQ71G4?tag=welp20-20',
     },
     {
       id: 'petty-perfume',
@@ -347,7 +347,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 68.00,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B002GKKAB2',
-      affiliateUrl: 'https://www.amazon.com/dp/B002GKKAB2?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B002GKKAB2?tag=welp20-20',
     },
     {
       id: 'petty-neon-sign',
@@ -357,7 +357,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 29.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B0BN4CSMC2',
-      affiliateUrl: 'https://www.amazon.com/dp/B0BN4CSMC2?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B0BN4CSMC2?tag=welp20-20',
       badge: 'Great Value',
     },
   ],
@@ -372,7 +372,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 69.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B07FDJMC9Q',
-      affiliateUrl: 'https://www.amazon.com/dp/B07FDJMC9Q?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B07FDJMC9Q?tag=welp20-20',
       badge: 'Popular',
     },
     {
@@ -383,7 +383,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 79.95,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B00FLYWNYQ',
-      affiliateUrl: 'https://www.amazon.com/dp/B00FLYWNYQ?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B00FLYWNYQ?tag=welp20-20',
     },
     {
       id: 'treat-bluetooth-earbuds',
@@ -393,7 +393,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 189.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B0D1XD1ZV3',
-      affiliateUrl: 'https://www.amazon.com/dp/B0D1XD1ZV3?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B0D1XD1ZV3?tag=welp20-20',
       badge: 'Staff Pick',
     },
     {
@@ -404,7 +404,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 45.00,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B0BRDL7HSL',
-      affiliateUrl: 'https://www.amazon.com/dp/B0BRDL7HSL?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B0BRDL7HSL?tag=welp20-20',
     },
     {
       id: 'treat-robe',
@@ -414,7 +414,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 28.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B075F8RKYH',
-      affiliateUrl: 'https://www.amazon.com/dp/B075F8RKYH?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B075F8RKYH?tag=welp20-20',
       badge: 'Great Value',
     },
   ],
@@ -429,7 +429,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 39.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B07MG48WXG',
-      affiliateUrl: 'https://www.amazon.com/dp/B07MG48WXG?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B07MG48WXG?tag=welp20-20',
       badge: 'Popular',
     },
     {
@@ -440,7 +440,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 45.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B083LSVV2Z',
-      affiliateUrl: 'https://www.amazon.com/dp/B083LSVV2Z?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B083LSVV2Z?tag=welp20-20',
     },
     {
       id: 'pets-automatic-feeder',
@@ -450,7 +450,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 54.95,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B00VIXRB6O',
-      affiliateUrl: 'https://www.amazon.com/dp/B00VIXRB6O?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B00VIXRB6O?tag=welp20-20',
       badge: 'Staff Pick',
     },
     {
@@ -461,7 +461,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 14.97,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B01ITESXO2',
-      affiliateUrl: 'https://www.amazon.com/dp/B01ITESXO2?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B01ITESXO2?tag=welp20-20',
       badge: 'Great Value',
     },
     {
@@ -472,7 +472,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
       price: 49.99,
       retailer: 'Amazon',
       sourceUrl: 'https://www.amazon.com/dp/B0C5LKDFMD',
-      affiliateUrl: 'https://www.amazon.com/dp/B0C5LKDFMD?tag=welp-20',
+      affiliateUrl: 'https://www.amazon.com/dp/B0C5LKDFMD?tag=welp20-20',
     },
   ],
 }

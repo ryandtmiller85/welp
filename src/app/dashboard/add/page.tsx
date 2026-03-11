@@ -61,7 +61,7 @@ const PRIORITIES: { value: ItemPriority; label: string }[] = [
 ]
 
 const MARKETPLACES = [
-  { name: 'Amazon', color: '#FF9900', searchUrl: (q: string) => `https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=welp-20` },
+  { name: 'Amazon', color: '#FF9900', searchUrl: (q: string) => `https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=welp20-20` },
   { name: 'Target', color: '#CC0000', searchUrl: (q: string) => `https://www.target.com/s?searchTerm=${encodeURIComponent(q)}` },
   { name: 'Walmart', color: '#0071DC', searchUrl: (q: string) => `https://www.walmart.com/search?q=${encodeURIComponent(q)}` },
 ]

@@ -72,7 +72,7 @@ export function getInitials(name: string): string {
 
 /**
  * Construct an affiliate URL from a source URL when possible.
- * Currently supports Amazon Associates (tag=welp-20).
+ * Currently supports Amazon Associates (tag=welp20-20).
  * Returns null for retailers without affiliate programs set up.
  */
 export function constructAffiliateUrl(sourceUrl: string): string | null {
