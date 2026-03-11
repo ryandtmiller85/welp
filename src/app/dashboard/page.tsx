@@ -9,7 +9,7 @@ import { CopyButton } from '@/components/ui/copy-button'
 import { ShareRegistry } from './share-registry'
 import { formatCents, progressPercent } from '@/lib/utils'
 import type { Profile, RegistryItem, CashFund, Encouragement } from '@/lib/types/database'
-import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart, MessageCircleHeart, Users } from 'lucide-react'
+import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart, MessageCircleHeart, Users, Banknote } from 'lucide-react'
 import { ProxyRegistryCard } from '@/components/proxy/proxy-registry-card'
 
 async function getDashboardData() {
@@ -317,10 +317,29 @@ export default async function DashboardPage() {
           </div>
         )}
 
+        {/* Payout Setup Alert */}
+        {!profile.stripe_onboarding_complete && safeFunds.length > 0 && (
+          <Card className="border-l-4 border-l-rose-500 bg-rose-50/50">
+            <CardContent className="py-4 flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-rose-900 mb-1">Set up payouts to receive contributions</h3>
+                <p className="text-sm text-rose-800">
+                  Connect your bank account so people can contribute to your funds.
+                </p>
+              </div>
+              <Link href="/dashboard/payouts" className="ml-4 flex-shrink-0">
+                <Button variant="primary" size="sm">
+                  Set Up Payouts
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Quick Actions */}
         <div>
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Link href="/dashboard/add" className="block">
               <Button
                 variant="primary"
@@ -339,6 +358,16 @@ export default async function DashboardPage() {
               >
                 <DollarSign className="w-5 h-5" />
                 Create Fund
+              </Button>
+            </Link>
+            <Link href="/dashboard/payouts" className="block">
+              <Button
+                variant="outline"
+                className="w-full justify-center gap-2"
+                size="lg"
+              >
+                <Banknote className="w-5 h-5" />
+                Payouts
               </Button>
             </Link>
             <Link href="/dashboard/edit" className="block">

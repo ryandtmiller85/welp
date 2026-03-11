@@ -67,6 +67,9 @@ export interface Profile {
   is_proxy: boolean
   claimed_by_user_id: string | null
   claimed_at: string | null
+  // Stripe Connect fields
+  stripe_account_id: string | null
+  stripe_onboarding_complete: boolean
   created_at: string
   updated_at: string
 }

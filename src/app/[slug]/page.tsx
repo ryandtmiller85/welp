@@ -12,6 +12,7 @@ import { FundCard } from '@/components/registry/fund-card'
 import { RegistrySection } from './registry-section'
 import { EncouragementWall } from '@/components/registry/encouragement-wall'
 import { ShareButton } from './share-button'
+import { ContributionSuccess } from './contribution-success'
 import { ProxyBanner } from '@/components/proxy/proxy-banner'
 import Link from 'next/link'
 import { Flag } from 'lucide-react'
@@ -94,6 +95,7 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
   const encouragements = (encouragementsData as Encouragement[]) || []
 
   const hasAffiliateLinks = items.some(item => !!item.affiliate_url)
+  const canContribute = !!profile.stripe_account_id && profile.stripe_onboarding_complete
   const displayName = profile.display_name || profile.alias || 'A Friend'
   const daysAgo = profile.event_date ? daysSince(profile.event_date) : 0
   const showCounter = profile.show_days_counter && profile.event_date
@@ -113,6 +115,9 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Contribution Success Banner */}
+      <ContributionSuccess />
+
       {/* Hero Section with Cover Photo */}
       <div className="relative w-full h-80 bg-gradient-to-br from-slate-900 via-rose-800 to-pink-700 overflow-hidden">
         {profile.cover_photo_url ? (
@@ -227,7 +232,13 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
             <h2 className="text-3xl font-bold text-slate-900 mb-8">Help Fund My Recovery</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {funds.map((fund) => (
-                <FundCard key={fund.id} fund={fund} isOwner={false} />
+                <FundCard
+                  key={fund.id}
+                  fund={fund}
+                  isOwner={false}
+                  ownerName={displayName}
+                  canContribute={canContribute}
+                />
               ))}
             </div>
           </div>
