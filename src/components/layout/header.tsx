@@ -60,6 +60,12 @@ export function Header() {
               Browse
             </Link>
             <Link
+              href="/shop"
+              className="text-sm text-slate-600 hover:text-slate-900 transition-colors"
+            >
+              Shop
+            </Link>
+            <Link
               href="/merch"
               className="text-sm text-slate-600 hover:text-slate-900 transition-colors"
             >
@@ -137,6 +143,13 @@ export function Header() {
               onClick={() => setMenuOpen(false)}
             >
               Browse Registries
+            </Link>
+            <Link
+              href="/shop"
+              className="block px-3 py-2 text-sm text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50"
+              onClick={() => setMenuOpen(false)}
+            >
+              Shop
             </Link>
             <Link
               href="/merch"
