@@ -191,6 +191,13 @@ export function CategoryShopClient({
             </Button>
           </div>
         )}
+
+        {/* Affiliate Disclosure — required by FTC + Amazon Associates ToS */}
+        <p className="mt-8 text-xs text-slate-400 leading-relaxed">
+          Products shown include affiliate links that help support Welp. As an
+          Amazon Associate, Welp earns from qualifying purchases. Welp may earn
+          a small commission at no extra cost to you.
+        </p>
       </div>
 
       {/* Toast */}

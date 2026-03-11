@@ -63,7 +63,17 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        {/* Affiliate Disclosures — required by FTC + Amazon Associates ToS */}
+        <div className="mt-10 pt-6 border-t border-slate-800">
+          <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">
+            Some links on this site are affiliate links. Welp may earn a small
+            commission at no extra cost to you. As an Amazon Associate, Welp
+            earns from qualifying purchases. Products shown include affiliate
+            links that help support Welp.
+          </p>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs">
             &copy; {new Date().getFullYear()} Welp. All rights reserved.
           </p>
