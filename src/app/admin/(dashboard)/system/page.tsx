@@ -2,7 +2,7 @@
 
 import { useAdminFetch } from '@/components/admin/use-admin-fetch'
 import { Badge } from '@/components/admin/admin-table'
-import { RefreshCw } from 'lucide-react'
+import { RefreshCw, ExternalLink } from 'lucide-react'
 
 interface HealthData {
   checks: Record<string, { status: string; detail?: string }>
@@ -79,6 +79,20 @@ export default function AdminSystemPage() {
               ))}
             </div>
           </div>
+
+          {/* Analytics */}
+          <a
+            href="https://vercel.com/ryans-projects-1cff6bce/welp/analytics"
+            target="_blank"
+            rel="noopener"
+            className="bg-slate-900 border border-slate-800 rounded-xl p-5 flex items-center justify-between hover:bg-slate-800/50 transition-colors block"
+          >
+            <div>
+              <h3 className="text-sm font-semibold text-white">Vercel Analytics</h3>
+              <p className="text-xs text-slate-500 mt-0.5">Page views, visitors, and web vitals</p>
+            </div>
+            <ExternalLink className="w-4 h-4 text-slate-500" />
+          </a>
 
           {/* Runtime */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
