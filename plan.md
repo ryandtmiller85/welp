@@ -218,3 +218,251 @@ CREATE POLICY "Advocates can manage proxy cash funds"
 ### Phase 6: Deploy & Verify
 19. Full build, commit, push, deploy
 20. End-to-end test on production
+
+---
+---
+
+# Admin Portal — `/admin`
+
+## The Concept
+
+A protected dashboard where you (Ryan) can see everything happening across Welp — users, registries, transactions, merch orders, affiliate clicks, errors, and system health. Designed for a single admin operator (you) during early growth, with room to add role-based access later if needed.
+
+## Authentication
+
+### Current State
+- Bearer token auth via `ADMIN_SECRET` env var
+- Used by `/api/admin/*` routes already
+
+### Planned Upgrade
+- **Login page** at `/admin/login` — simple password form that stores the admin secret in an httpOnly session cookie
+- All `/admin/*` pages check for this cookie via middleware
+- No database-backed admin users yet — just the single `ADMIN_SECRET`
+- Future: add Supabase-backed admin roles if you bring on team members
+
+---
+
+## Pages & Layout
+
+### Shell / Layout (`/admin/layout.tsx`)
+- Dark sidebar nav with Welp logo + "Admin" badge
+- Sidebar links: Dashboard, Users, Registries, Transactions, Merch, Shop/Affiliate, Errors, Settings
+- Top bar: current admin indicator, quick search, logout
+- Responsive: collapses to hamburger on mobile
+
+### 1. Dashboard Overview (`/admin`)
+The home screen — a snapshot of everything at a glance.
+
+**Stat cards (top row):**
+- Total users (with +N this week)
+- Active registries (public + link_only)
+- Total contributions ($ amount)
+- Merch orders (pending / fulfilled)
+- Affiliate clicks (this week)
+
+**Activity feed (center):**
+- Real-time-ish feed of recent events: new signups, new registries, contributions, merch orders, claims
+- Each entry: timestamp, event type icon, description, link to detail
+- Filterable by event type
+
+**Charts (bottom row):**
+- Signups over time (line chart, last 30 days)
+- Contributions over time (bar chart, last 30 days)
+- Top registries by contribution amount
+
+### 2. Users (`/admin/users`)
+**Table view:**
+- Columns: name/alias, email, signup date, registry count, total raised, proxy registries created, last active
+- Search by name or email
+- Sort by any column
+- Click row → user detail
+
+**User detail (`/admin/users/[id]`):**
+- Profile info (display name, alias, email, event type, signup date)
+- Their registries (with links)
+- Their contributions received
+- Proxy registries they created
+- Proxy registries they claimed
+- Account actions: (future) suspend, delete, impersonate-view
+
+### 3. Registries (`/admin/registries`)
+**Table view:**
+- Columns: owner name, slug, event type, privacy level, item count, fund count, total raised, is_proxy, created date
+- Filters: event type, privacy level, proxy vs self-created, claimed/unclaimed
+- Search by slug or owner name
+- Click row → registry detail
+
+**Registry detail (`/admin/registries/[id]`):**
+- Full profile info
+- All registry items (with status, retailer, price)
+- All cash funds (with progress bars)
+- All contributions received (with Stripe payment IDs)
+- All encouragements/comments
+- Proxy info (if applicable): who created it, claim status
+- Click tracking stats for this registry
+- Actions: (future) feature/unfeature, flag, edit privacy
+
+### 4. Transactions (`/admin/transactions`)
+**Two tabs:**
+
+**Cash Fund Contributions:**
+- Columns: date, contributor name, amount, fund title, registry owner, Stripe payment ID, status
+- Filters: date range, status (succeeded/pending/failed), amount range
+- Search by contributor name or Stripe ID
+- Click → Stripe dashboard link
+
+**Merch Orders:**
+- Columns: date, customer email, item, amount, Stripe session ID, Printify order ID, fulfillment status
+- Filters: date range, fulfillment status, product type
+- Search by email or order ID
+- Click → order detail with Printify tracking info
+
+**Summary stats at top:**
+- Total revenue (contributions + merch)
+- This month vs last month
+- Average contribution size
+- Top contributing registries
+
+### 5. Merch / Printify (`/admin/merch`)
+Upgrade of the existing `/admin/printify` page.
+
+**Products tab:**
+- All Printify products with images, titles, prices, status (published/draft)
+- Sales count per product
+- Quick actions: view on Printify, unpublish
+
+**Orders tab:**
+- Recent merch orders with fulfillment status
+- Link to Printify order detail
+
+**Design management:**
+- Current design upload tool (already built)
+- Preview all uploaded designs
+
+### 6. Shop / Affiliate (`/admin/shop`)
+**Curated catalog overview:**
+- All 40 products across 8 categories
+- Image preview, title, price, retailer, broken link status
+- Click tracking: total clicks per product, clicks this week
+- Flag any products where the Amazon URL returns an error
+
+**Affiliate performance:**
+- Total affiliate clicks (from `click_events` table)
+- Clicks by category
+- Clicks by product (top performers)
+- Clicks over time chart
+- Source breakdown (which registry pages drive the most clicks)
+
+### 7. System / Errors (`/admin/system`)
+**Error log:**
+- Recent server-side errors (pulled from Vercel logs API or a custom error table)
+- Client-side error reports (if you add an error boundary reporter)
+- Filterable by severity, route, date
+
+**Health checks:**
+- Supabase connection status
+- Stripe webhook status (last received, any failures)
+- Printify API status
+- Build/deploy status (latest Vercel deployment)
+
+**Environment:**
+- Which env vars are configured (not their values — just present/missing)
+- Current deploy URL and git commit
+
+### 8. Settings (`/admin/settings`)
+- Change admin secret
+- Toggle maintenance mode (shows a "we're updating" page to visitors)
+- Feature flags (e.g., enable/disable proxy registries, enable/disable merch)
+- Manage curated shop categories
+
+---
+
+## Database Changes
+
+### New table: `admin_activity_log`
+```sql
+CREATE TABLE public.admin_activity_log (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_type text NOT NULL,        -- 'signup', 'registry_created', 'contribution', 'merch_order', 'claim', 'error'
+  event_data jsonb DEFAULT '{}',   -- flexible payload
+  actor_id uuid,                   -- user who triggered the event (NULL for system events)
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX idx_admin_activity_type ON public.admin_activity_log(event_type);
+CREATE INDEX idx_admin_activity_created ON public.admin_activity_log(created_at DESC);
+
+-- Only service role can write; admin reads via API route
+ALTER TABLE public.admin_activity_log ENABLE ROW LEVEL SECURITY;
+```
+
+### New table: `feature_flags`
+```sql
+CREATE TABLE public.feature_flags (
+  key text PRIMARY KEY,
+  enabled boolean DEFAULT true,
+  updated_at timestamptz DEFAULT now()
+);
+
+INSERT INTO public.feature_flags (key, enabled) VALUES
+  ('proxy_registries', true),
+  ('merch_store', true),
+  ('curated_shop', true),
+  ('maintenance_mode', false);
+```
+
+---
+
+## New API Routes
+
+All under `/api/admin/` — protected by bearer token auth (same pattern as existing Printify routes).
+
+| Route | Method | Purpose |
+|-------|--------|---------|
+| `/api/admin/stats` | GET | Dashboard stat cards + chart data |
+| `/api/admin/activity` | GET | Activity feed (paginated, filterable) |
+| `/api/admin/users` | GET | User list (paginated, searchable, sortable) |
+| `/api/admin/users/[id]` | GET | User detail with related data |
+| `/api/admin/registries` | GET | Registry list (paginated, filterable) |
+| `/api/admin/registries/[id]` | GET | Registry detail with items, funds, contributions |
+| `/api/admin/transactions` | GET | Contributions + merch orders (paginated) |
+| `/api/admin/clicks` | GET | Affiliate click analytics |
+| `/api/admin/errors` | GET | Error log |
+| `/api/admin/health` | GET | System health checks |
+| `/api/admin/settings` | GET/PUT | Feature flags and config |
+
+---
+
+## Build Order
+
+### Phase 1: Auth & Layout
+1. Build `/admin/login` page with session cookie flow
+2. Add admin middleware to protect all `/admin/*` routes
+3. Build admin layout shell (sidebar, top bar)
+4. Build `/admin` dashboard with placeholder stat cards
+
+### Phase 2: Core Data Views
+5. Build `/api/admin/stats` route (aggregate queries)
+6. Build `/api/admin/users` + `/api/admin/users/[id]` routes
+7. Build Users page with table + detail view
+8. Build `/api/admin/registries` + `/api/admin/registries/[id]` routes
+9. Build Registries page with table + detail view
+
+### Phase 3: Transactions & Merch
+10. Build `/api/admin/transactions` route
+11. Build Transactions page with contributions + merch tabs
+12. Migrate existing Printify admin into new layout
+13. Add order tracking to merch section
+
+### Phase 4: Analytics & Monitoring
+14. Build `/api/admin/clicks` route
+15. Build Shop/Affiliate analytics page
+16. Create `admin_activity_log` table + write triggers
+17. Build activity feed on dashboard
+18. Build System/Errors page
+
+### Phase 5: Settings & Polish
+19. Build feature flags system
+20. Build Settings page
+21. Add charts (recharts) to dashboard and analytics pages
+22. Mobile-responsive pass on all admin pages

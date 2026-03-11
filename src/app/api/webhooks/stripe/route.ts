@@ -70,8 +70,6 @@ export async function POST(req: NextRequest) {
 
         if (dbError) {
           console.error('Failed to insert merch_order:', dbError)
-        } else {
-          console.log('Merch order recorded')
         }
 
         const mapping = getPrintifyMapping(session.metadata.merch_item_id)
@@ -114,7 +112,6 @@ export async function POST(req: NextRequest) {
               })
               .eq('stripe_session_id', session.id)
 
-            console.log('Printify order created')
           } catch (printifyErr) {
             console.error('Failed to create Printify order:', printifyErr)
           }
@@ -127,7 +124,7 @@ export async function POST(req: NextRequest) {
 
     case 'payment_intent.payment_failed': {
       const pi = event.data.object as Stripe.PaymentIntent
-      console.warn('Payment failed')
+      console.error('Payment failed:', pi.id, pi.last_payment_error?.message)
       break
     }
 
