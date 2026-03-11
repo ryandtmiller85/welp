@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { Analytics } from '@vercel/analytics/next'
 import { ConditionalLayout } from '@/components/layout/conditional-layout'
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-sans antialiased min-h-screen">
         <ConditionalLayout>{children}</ConditionalLayout>
+        <Analytics />
       </body>
     </html>
   )

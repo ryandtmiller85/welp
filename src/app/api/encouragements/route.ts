@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { validateBody, createEncouragementSchema } from '@/lib/validation'
 import { checkRateLimit, getRateLimitId, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit'
+import { sendEncouragementNotification } from '@/lib/email'
 
 export async function GET(request: NextRequest) {
   try {
@@ -63,6 +64,27 @@ export async function POST(request: NextRequest) {
       .select()
 
     if (error) throw error
+
+    // Send email notification to registry owner (fire-and-forget)
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('email, display_name, slug')
+        .eq('id', v.profile_id)
+        .single()
+
+      if (profile?.email) {
+        sendEncouragementNotification({
+          ownerEmail: profile.email,
+          ownerName: profile.display_name || 'there',
+          authorName: v.author_name,
+          message: v.message,
+          registrySlug: profile.slug || '',
+        }).catch(() => {}) // Non-critical — don't fail if email fails
+      }
+    } catch {
+      // Email notification is best-effort
+    }
 
     return NextResponse.json(data[0], { status: 201 })
   } catch (error) {

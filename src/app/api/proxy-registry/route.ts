@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { NextResponse, NextRequest } from 'next/server'
 import { validateBody, createProxyRegistrySchema } from '@/lib/validation'
 import { checkRateLimit, getRateLimitId, rateLimitResponse, RATE_LIMITS } from '@/lib/rate-limit'
+import { sendProxyCreatedNotification } from '@/lib/email'
 
 // GET — return all proxy registries the current user is managing
 export async function GET() {
@@ -125,6 +126,24 @@ export async function POST(request: NextRequest) {
   if (error) {
     console.error('Proxy profile creation error:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  // Send notification email to recipient (fire-and-forget)
+  if (recipientEmail) {
+    const { data: advocateProfile } = await supabase
+      .from('profiles')
+      .select('display_name')
+      .eq('id', session.user.id)
+      .single()
+
+    sendProxyCreatedNotification({
+      recipientEmail,
+      recipientName: recipientName,
+      advocateName: advocateProfile?.display_name || 'Someone',
+      relationship: relationship || 'friend',
+      registrySlug: slug,
+      claimToken: proxyId,
+    }).catch(() => {}) // Non-critical
   }
 
   return NextResponse.json({
