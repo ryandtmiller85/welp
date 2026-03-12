@@ -24,8 +24,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Use getSession() instead of getUser() in the layout.
+  // The middleware already called getUser() to validate & refresh the token.
+  // getSession() just reads from the (now-fresh) cookies — no network call,
+  // no risk of triggering token deletion in a server component context.
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
   return (
     <html lang="en">
