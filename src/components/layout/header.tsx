@@ -8,8 +8,16 @@ import { createClient } from '@/lib/supabase/client'
 import { Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 
-export function Header() {
-  const [user, setUser] = useState<SupabaseUser | null>(null)
+type HeaderUser = SupabaseUser | { id: string; email: string }
+
+interface HeaderProps {
+  initialUser?: { id: string; email: string } | null
+}
+
+export function Header({ initialUser }: HeaderProps) {
+  // Use initialUser from server as the starting state so the header
+  // renders correctly on first paint without waiting for client-side auth
+  const [user, setUser] = useState<HeaderUser | null>(initialUser ?? null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [profileMenuOpen, setProfileMenuOpen] = useState(false)
   const router = useRouter()

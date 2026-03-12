@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/next'
 import { ConditionalLayout } from '@/components/layout/conditional-layout'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
   title: {
@@ -18,15 +19,20 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
   return (
     <html lang="en">
       <body className="font-sans antialiased min-h-screen">
-        <ConditionalLayout>{children}</ConditionalLayout>
+        <ConditionalLayout initialUser={user ? { id: user.id, email: user.email ?? '' } : null}>
+          {children}
+        </ConditionalLayout>
         <Analytics />
       </body>
     </html>
