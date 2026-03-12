@@ -1,43 +1,22 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { createClient } from '@/lib/supabase/client'
 import { Menu, X } from 'lucide-react'
-import type { User as SupabaseUser } from '@supabase/supabase-js'
-
-type HeaderUser = SupabaseUser | { id: string; email: string }
 
 interface HeaderProps {
   initialUser?: { id: string; email: string } | null
 }
 
 export function Header({ initialUser }: HeaderProps) {
-  // Use initialUser from server as the starting state so the header
-  // renders correctly on first paint without waiting for client-side auth
-  const [user, setUser] = useState<HeaderUser | null>(initialUser ?? null)
+  // Auth state comes purely from the server via initialUser.
+  // No client-side Supabase auth listener — it was causing false
+  // SIGNED_OUT events that overwrote the correct server state.
+  // Login and logout both do full page navigations, so the server
+  // always provides fresh auth state on every page load.
+  const user = initialUser ?? null
   const [menuOpen, setMenuOpen] = useState(false)
-  const supabase = createClient()
-
-  useEffect(() => {
-    // Only listen for auth state CHANGES (sign-in / sign-out).
-    // We trust the server-provided initialUser for the first render.
-    // The client-side getSession() is unreliable on hydration (often
-    // returns null before cookies are parsed), so we skip it entirely.
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      // Only react to actual sign-in/sign-out events, not INITIAL_SESSION
-      // which can race with hydration and return null incorrectly
-      if (event === 'SIGNED_IN') {
-        setUser(session?.user ?? null)
-      } else if (event === 'SIGNED_OUT') {
-        setUser(null)
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
