@@ -21,19 +21,18 @@ export function Header({ initialUser }: HeaderProps) {
   const supabase = createClient()
 
   useEffect(() => {
-    // Use getSession() instead of getUser() to avoid network calls.
-    // getUser() contacts the Supabase API server, and if the call fails
-    // (network error, token issue), the SDK fires SIGNED_OUT which
-    // deletes all auth cookies from the browser via document.cookie.
-    // getSession() only reads from local cookie state — safe and fast.
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setUser(session?.user ?? null)
-    }
-    checkSession()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+    // Only listen for auth state CHANGES (sign-in / sign-out).
+    // We trust the server-provided initialUser for the first render.
+    // The client-side getSession() is unreliable on hydration (often
+    // returns null before cookies are parsed), so we skip it entirely.
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      // Only react to actual sign-in/sign-out events, not INITIAL_SESSION
+      // which can race with hydration and return null incorrectly
+      if (event === 'SIGNED_IN') {
+        setUser(session?.user ?? null)
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null)
+      }
     })
 
     return () => subscription.unsubscribe()
