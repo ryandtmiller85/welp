@@ -2,7 +2,10 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/next'
 import { ConditionalLayout } from '@/components/layout/conditional-layout'
+import { FeedbackWidget } from '@/components/feedback/feedback-widget'
 import { createClient } from '@/lib/supabase/server'
+
+const IS_TESTING = process.env.NEXT_PUBLIC_TESTING_MODE === 'true'
 
 export const metadata: Metadata = {
   title: {
@@ -38,6 +41,7 @@ export default async function RootLayout({
         <ConditionalLayout initialUser={user ? { id: user.id, email: user.email ?? '' } : null}>
           {children}
         </ConditionalLayout>
+        {IS_TESTING && <FeedbackWidget />}
         <Analytics />
       </body>
     </html>
