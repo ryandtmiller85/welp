@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle, ExternalLink, Loader2, AlertCircle, DollarSign, ArrowLeft } from 'lucide-react'
+import { CheckCircle, ExternalLink, Loader2, AlertCircle, DollarSign, ArrowLeft, Shield, Clock, CreditCard, HelpCircle } from 'lucide-react'
 import Link from 'next/link'
 
 interface ConnectStatus {
@@ -183,31 +183,74 @@ export default function PayoutsPage() {
                     </a>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-5">
                     <p className="text-slate-600">
-                      Connect a Stripe account to start receiving contributions to your funds.
-                      Stripe handles all the payment processing, identity verification, and payouts.
+                      To receive contributions to your funds, you&apos;ll need to set up a free Stripe
+                      account. This is a one-time process that takes about 5 minutes.
                     </p>
-                    <div className="bg-slate-50 rounded-lg p-4 space-y-2">
-                      <h3 className="text-sm font-semibold text-slate-800">How it works:</h3>
-                      <ul className="text-sm text-slate-600 space-y-1.5">
-                        <li className="flex items-start gap-2">
-                          <span className="text-rose-500 font-bold mt-px">1.</span>
-                          Click the button below to set up your Stripe Express account
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-rose-500 font-bold mt-px">2.</span>
-                          Complete Stripe&apos;s quick identity verification
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-rose-500 font-bold mt-px">3.</span>
-                          Add your bank account for deposits
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-rose-500 font-bold mt-px">4.</span>
-                          Contributions flow directly to your bank (minus 5% platform fee + Stripe processing)
-                        </li>
-                      </ul>
+
+                    {/* What to expect */}
+                    <div className="bg-slate-50 rounded-xl p-5 space-y-4">
+                      <h3 className="text-sm font-semibold text-slate-900">What to expect when you click the button below:</h3>
+                      <p className="text-sm text-slate-600">
+                        You&apos;ll be redirected to Stripe (our secure payment partner) to create a free
+                        account. Stripe is used by millions of businesses worldwide including Shopify,
+                        Lyft, and DoorDash. They&apos;ll ask you for:
+                      </p>
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-3">
+                          <div className="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <span className="text-xs font-bold text-rose-600">1</span>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-slate-800">Email &amp; business type</p>
+                            <p className="text-xs text-slate-500">Just your email and that you&apos;re an individual (not a company)</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <span className="text-xs font-bold text-rose-600">2</span>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-slate-800">Industry &amp; description</p>
+                            <p className="text-xs text-slate-500">Select &quot;Personal services&quot; and describe it as receiving contributions through a Welp registry</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <span className="text-xs font-bold text-rose-600">3</span>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-slate-800">Personal details</p>
+                            <p className="text-xs text-slate-500">Your name, address, date of birth, and last 4 of your SSN for identity verification</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <span className="text-xs font-bold text-rose-600">4</span>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-slate-800">Bank account</p>
+                            <p className="text-xs text-slate-500">Link your bank account where you&apos;d like contributions deposited</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Trust signals */}
+                    <div className="flex flex-wrap gap-4 text-xs text-slate-500">
+                      <div className="flex items-center gap-1.5">
+                        <Shield className="w-3.5 h-3.5 text-slate-400" />
+                        <span>256-bit encryption</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <span>~5 minutes to complete</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CreditCard className="w-3.5 h-3.5 text-slate-400" />
+                        <span>No cost to you</span>
+                      </div>
                     </div>
 
                     <Button
@@ -235,24 +278,50 @@ export default function PayoutsPage() {
           </CardContent>
         </Card>
 
-        {/* Info Card */}
+        {/* FAQ Card */}
         <Card>
           <CardContent className="p-6">
-            <h3 className="font-semibold text-slate-900 mb-3">About contributions</h3>
-            <div className="space-y-3 text-sm text-slate-600">
-              <p>
-                When someone contributes to one of your funds, the payment is processed by Stripe.
-                A 5% platform fee is deducted to support Welp, and Stripe&apos;s standard processing
-                fee (2.9% + 30¢) applies.
-              </p>
-              <p>
-                For example, on a $25 contribution: ~$1.25 goes to Welp, ~$1.03 goes to Stripe
-                processing, and you receive ~$22.72.
-              </p>
-              <p>
-                Payouts are deposited to your bank account on Stripe&apos;s standard schedule
-                (typically 2 business days).
-              </p>
+            <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <HelpCircle className="w-5 h-5 text-slate-400" />
+              Common Questions
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-slate-800">How much do I actually receive?</p>
+                <p className="text-sm text-slate-600 mt-1">
+                  A 5% platform fee supports Welp, and Stripe charges 2.9% + 30¢ for payment
+                  processing. On a $25 contribution, you&apos;d receive about $22.72.
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-slate-800">When do I get paid?</p>
+                <p className="text-sm text-slate-600 mt-1">
+                  Contributions are deposited to your bank account automatically on a rolling
+                  basis, typically within 2 business days of each contribution.
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-slate-800">Why does Stripe need my personal info?</p>
+                <p className="text-sm text-slate-600 mt-1">
+                  US financial regulations require identity verification for anyone receiving
+                  payments. Stripe handles this securely — Welp never sees your SSN, bank
+                  details, or identity documents.
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-slate-800">Is there a minimum contribution?</p>
+                <p className="text-sm text-slate-600 mt-1">
+                  Yes, the minimum contribution is $5.00 to ensure processing fees don&apos;t
+                  eat into small amounts.
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-slate-800">Can I change my bank account later?</p>
+                <p className="text-sm text-slate-600 mt-1">
+                  Yes, you can update your bank account anytime through the Stripe Express
+                  dashboard (link available after setup is complete).
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
