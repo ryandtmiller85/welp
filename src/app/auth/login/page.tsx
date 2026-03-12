@@ -35,7 +35,9 @@ export default function LoginPage() {
         return
       }
 
-      router.push('/dashboard')
+      // Full page navigation (not router.push) to ensure cookies
+      // are sent with the request — avoids middleware redirect loop
+      window.location.href = '/dashboard'
     } catch (err) {
       setError('An unexpected error occurred. Please try again.')
       setLoading(false)
