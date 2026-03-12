@@ -1,11 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
-import { Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 type HeaderUser = SupabaseUser | { id: string; email: string }
@@ -19,8 +18,6 @@ export function Header({ initialUser }: HeaderProps) {
   // renders correctly on first paint without waiting for client-side auth
   const [user, setUser] = useState<HeaderUser | null>(initialUser ?? null)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false)
-  const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
@@ -42,12 +39,6 @@ export function Header({ initialUser }: HeaderProps) {
     return () => subscription.unsubscribe()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/')
-    router.refresh()
-  }
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
@@ -88,38 +79,12 @@ export function Header({ initialUser }: HeaderProps) {
             </Link>
 
             {user ? (
-              <div className="relative">
-                <button
-                  onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
-                >
-                  <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center">
-                    <User className="w-4 h-4 text-rose-600" />
-                  </div>
-                </button>
-
-                {profileMenuOpen && (
-                  <>
-                    <div className="fixed inset-0" onClick={() => setProfileMenuOpen(false)} />
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-50">
-                      <Link
-                        href="/dashboard"
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                        onClick={() => setProfileMenuOpen(false)}
-                      >
-                        <LayoutDashboard className="w-4 h-4" />
-                        Dashboard
-                      </Link>
-                      <a href="/auth/logout"
-                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Sign Out
-                      </a>
-                    </div>
-                  </>
-                )}
-              </div>
+              <Link
+                href="/dashboard"
+                className="text-sm font-medium text-slate-700 hover:text-rose-600 transition-colors"
+              >
+                Dashboard
+              </Link>
             ) : (
               <div className="flex items-center gap-3">
                 <Link href="/auth/login">
@@ -175,20 +140,13 @@ export function Header({ initialUser }: HeaderProps) {
               About
             </Link>
             {user ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="block px-3 py-2 text-sm text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Dashboard
-                </Link>
-                <a href="/auth/logout"
-                  className="block w-full text-left px-3 py-2 text-sm text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50"
-                >
-                  Sign Out
-                </a>
-              </>
+              <Link
+                href="/dashboard"
+                className="block px-3 py-2 text-sm font-medium text-slate-700 hover:text-rose-600 rounded-lg hover:bg-slate-50"
+                onClick={() => setMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
             ) : (
               <div className="flex gap-3 px-3 pt-2">
                 <Link href="/auth/login" onClick={() => setMenuOpen(false)}>
