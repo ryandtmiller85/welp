@@ -1,59 +1,48 @@
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
-  // Check if auth cookies exist BEFORE creating the Supabase client.
-  // This is used for the redirect decision so that even if getUser()
-  // fails (and deletes cookies), we don't redirect a user who had
-  // valid cookies when the request started.
-  const hadAuthCookies = request.cookies
-    .getAll()
-    .some((c) => c.name.includes('auth-token'))
+  // Simple cookie-forwarding middleware.
+  //
+  // We intentionally do NOT create a Supabase client here. When
+  // getUser() or getSession() fails (network error, token issue),
+  // the Supabase SDK calls setAll() with maxAge:0 cookies, which
+  // deletes auth cookies from the browser. This causes users to be
+  // silently logged out on the next request.
+  //
+  // Instead: forward auth cookies on every response to keep them alive,
+  // and check cookie presence for route protection. Token refresh
+  // happens client-side via the browser Supabase client.
 
-  let supabaseResponse = NextResponse.next({ request })
+  const response = NextResponse.next({ request })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          )
-
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        },
-      },
+  // Re-set auth cookies on the response to keep them alive.
+  // Without explicit Set-Cookie headers, cookies can expire or be
+  // lost across navigations.
+  for (const cookie of request.cookies.getAll()) {
+    if (cookie.name.includes('auth-token') || cookie.name.includes('code-verifier')) {
+      response.cookies.set(cookie.name, cookie.value, {
+        path: '/',
+        sameSite: 'lax',
+        httpOnly: true,
+        secure: true,
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+      })
     }
-  )
-
-  // Call getUser() to attempt token refresh. If it fails, that's okay —
-  // we won't redirect based on this result. The layout will use
-  // getSession() which reads cookies without network calls.
-  try {
-    await supabase.auth.getUser()
-  } catch {
-    // Token refresh failed — not a reason to redirect.
-    // The layout's getSession() will still work with existing cookies.
   }
 
-  // Protect dashboard routes: only redirect if there were NO auth
-  // cookies at all (user never logged in or explicitly logged out).
-  // Don't redirect if cookies existed but getUser() failed — that
-  // would lock out users with valid refresh tokens.
-  if (!hadAuthCookies && request.nextUrl.pathname.startsWith('/dashboard')) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
-    url.searchParams.set('redirect', request.nextUrl.pathname)
-    return NextResponse.redirect(url)
+  // Protect dashboard routes: redirect to login if no auth cookies
+  if (request.nextUrl.pathname.startsWith('/dashboard')) {
+    const hasAuthCookies = request.cookies
+      .getAll()
+      .some((c) => c.name.includes('auth-token'))
+
+    if (!hasAuthCookies) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/auth/login'
+      url.searchParams.set('redirect', request.nextUrl.pathname)
+      return NextResponse.redirect(url)
+    }
   }
 
-  return supabaseResponse
+  return response
 }
