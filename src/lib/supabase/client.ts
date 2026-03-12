@@ -1,9 +1,16 @@
 import { createBrowserClient } from '@supabase/ssr'
 import type { Database } from '@/lib/types/database'
 
+// Singleton: reuse the same client across all components to avoid
+// recreating on every render, which can cause auth state race conditions
+let client: ReturnType<typeof createBrowserClient<Database>> | null = null
+
 export function createClient() {
-  return createBrowserClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  if (!client) {
+    client = createBrowserClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+  }
+  return client
 }
