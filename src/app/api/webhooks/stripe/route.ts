@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
-import { createClient } from '@supabase/supabase-js'
+import { getAdminSupabase } from '@/lib/admin-api'
 import { createOrder, getShopId } from '@/lib/printify'
 import { getPrintifyMapping } from '@/lib/printify-products'
 import { sendContributionNotification } from '@/lib/email'
 import Stripe from 'stripe'
-
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
 
 function splitName(name: string): { first_name: string; last_name: string } {
   const parts = name.trim().split(/\s+/)
@@ -77,7 +70,7 @@ export async function POST(req: NextRequest) {
 // ── Fund contribution handler ──────────────────────────────
 
 async function handleFundContribution(session: Stripe.Checkout.Session) {
-  const supabase = getSupabaseAdmin()
+  const supabase = getAdminSupabase()
   const meta = session.metadata!
 
   const fundId = meta.fund_id
@@ -156,7 +149,7 @@ async function handleFundContribution(session: Stripe.Checkout.Session) {
 // ── Merch order handler ────────────────────────────────────
 
 async function handleMerchOrder(session: Stripe.Checkout.Session) {
-  const supabase = getSupabaseAdmin()
+  const supabase = getAdminSupabase()
 
   try {
     const fullSession = await getStripe().checkout.sessions.retrieve(session.id)

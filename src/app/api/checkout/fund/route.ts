@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
-import { createClient } from '@supabase/supabase-js'
+import { getAdminSupabase } from '@/lib/admin-api'
 import { z } from 'zod'
 
 const PLATFORM_FEE_PERCENT = 5 // 5% platform fee
@@ -14,13 +14,6 @@ const contributionSchema = z.object({
   message: z.string().trim().max(500).optional().nullable(),
   is_anonymous: z.boolean().optional().default(false),
 })
-
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
 
 /**
  * POST /api/checkout/fund
@@ -41,7 +34,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { fund_id, amount_cents, contributor_name, contributor_email, message, is_anonymous } = parsed.data
-    const supabase = getSupabaseAdmin()
+    const supabase = getAdminSupabase()
 
     // Look up the fund and its owner
     const { data: fund, error: fundError } = await supabase
