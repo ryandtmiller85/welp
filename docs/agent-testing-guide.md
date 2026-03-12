@@ -1,7 +1,7 @@
 # Welp — Agent Testing Guide
 
 ## Staging URL
-`https://welp-staging-[deployment-hash].vercel.app` (will be provided after deploy)
+`https://welp-git-staging-ryans-projects-1cff6bce.vercel.app`
 
 ## Agent Test Credentials
 

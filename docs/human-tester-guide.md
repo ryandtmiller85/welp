@@ -12,7 +12,7 @@ Welcome! You're helping us test **Welp**, a registry for fresh starts (breakups,
 You'll receive your specific tester email (e.g., `tester-1@alliswelp.com`). Use the password above.
 
 ### Staging Site URL
-`(URL will be provided separately)`
+`https://welp-git-staging-ryans-projects-1cff6bce.vercel.app`
 
 You'll see an **amber "Testing Mode" banner** at the top of the page. This confirms you're on the test site.
 
