@@ -112,7 +112,7 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
     merchItemId: 'tee-kept-pots',
     printifyProductId: '69ad19d0b360648baa02132d',
     defaultVariantId: 12124, // Black / M
-    note: 'He Kept the Pots tee, black (rose gold text)',
+    note: 'They Got the Pots tee, black (rose gold text)',
     designFile: 'tee_kept_pots.png',
   },
   {

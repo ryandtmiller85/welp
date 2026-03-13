@@ -182,7 +182,7 @@ const DESIGNS: DesignSpec[] = [
     fileName: 'tee_kept_pots.png',
     ...TEE,
     svgGenerator: () =>
-      svgMultiline(TEE.width, TEE.height, ['He kept', 'the pots.'], '— welp.', ROSE_PINK, 700, 350, 50, 120),
+      svgMultiline(TEE.width, TEE.height, ['They got', 'the pots.'], '— welp.', ROSE_PINK, 700, 350, 50, 120),
   },
   {
     fileName: 'crew_funded.png',

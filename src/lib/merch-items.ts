@@ -364,7 +364,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   // ââ The Petty Collection ââââââââââââââââââââââââââââââââââââââââââââââââââ
   {
     id: 'tee-kept-pots',
-    title: 'He Kept the Pots Tee',
+    title: 'They Got the Pots Tee',
     description:
       'The Kitchen Reset tagline. Rose on black. A whole mood.',
     price: 31.99,
@@ -378,7 +378,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     color: '#111111',
     design: {
       type: 'multi-line',
-      text: 'He kept\nthe pots.',
+      text: 'They got\nthe pots.',
       subtext: '\u2014 welp.',
       textColor: '#fda4af',
     },
