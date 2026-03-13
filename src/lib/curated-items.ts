@@ -84,7 +84,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
     {
       id: 'kitchen-pot-set',
       title: 'T-fal Initiatives Nonstick Cookware Set — 18 Piece',
-      description: 'He kept the pots. These are better anyway.',
+      description: 'They got the pots. These are better anyway.',
       imageUrl: 'https://m.media-amazon.com/images/I/713j2j371bL._AC_SL1500_.jpg',
       price: 159.99,
       retailer: 'Amazon',
@@ -238,7 +238,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
     {
       id: 'living-roku-tv',
       title: 'Roku Express HD Streaming Device',
-      description: 'The Netflix account was his. Time for your own everything.',
+      description: 'The Netflix account was theirs. Time for your own everything.',
       imageUrl: 'https://m.media-amazon.com/images/I/61fqMwHNQQL._AC_SL1500_.jpg',
       price: 31.99,
       retailer: 'Amazon',

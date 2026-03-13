@@ -39,16 +39,16 @@ export const CATEGORY_LABELS: Record<ItemCategory, string> = {
 
 export const CATEGORY_DESCRIPTIONS: Record<ItemCategory, string> = {
   the_basics: 'Toilet paper, paper towels, trash bags. The unsexy essentials.',
-  kitchen_reset: 'He kept the pots. Time for an upgrade anyway.',
+  kitchen_reset: 'They got the pots. Time for an upgrade anyway.',
   bedroom_glowup: 'New sheets. New vibes. New chapter.',
   living_solo: "One couch. One TV. One set of everything, and it's all yours.",
   self_care: "Therapy isn't cheap, but a weighted blanket helps in the meantime.",
   wheels: "Getting around when the shared car isn't shared anymore.",
-  petty_fund: 'Cash toward something that would make your ex mad.',
+  petty_fund: 'Think about yourself for once. Cash toward whatever you want.',
   fresh_start_fund: "First/last month's rent, security deposit, moving costs.",
   treat_yoself: 'Because you deserve something nice right now.',
   pets: 'Because at least the dog still loves you unconditionally.',
-  tech: 'The Netflix account was his. Time for your own everything.',
+  tech: 'The Netflix account was theirs. Time for your own everything.',
   other: "Stuff that doesn't fit neatly into a box. Kind of like your life right now.",
 }
 
