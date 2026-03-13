@@ -44,7 +44,7 @@ export const CATEGORY_DESCRIPTIONS: Record<ItemCategory, string> = {
   living_solo: "One couch. One TV. One set of everything, and it's all yours.",
   self_care: "Therapy isn't cheap, but a weighted blanket helps in the meantime.",
   wheels: "Getting around when the shared car isn't shared anymore.",
-  petty_fund: 'Think about yourself for once. Cash toward whatever you want.',
+  petty_fund: 'Think about yourself for once. The fun stuff you actually want.',
   fresh_start_fund: "First/last month's rent, security deposit, moving costs.",
   treat_yoself: 'Because you deserve something nice right now.',
   pets: 'Because at least the dog still loves you unconditionally.',
