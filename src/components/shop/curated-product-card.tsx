@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -39,40 +40,31 @@ export function CuratedProductCard({
   isAdding = false,
   isAdded = false,
 }: CuratedProductCardProps) {
-  const [imageLoaded, setImageLoaded] = useState(false)
   const [imageError, setImageError] = useState(false)
   const retailerColor = RETAILER_COLORS[item.retailer] || '#64748b'
   const buyUrl = item.affiliateUrl || item.sourceUrl
 
   return (
     <Card hover className="flex flex-col h-full overflow-hidden">
-      {/* Image */}
+      {/* Image — uses Next.js Image to proxy through Vercel CDN (avoids Amazon cross-origin blocking) */}
       <div className="relative aspect-square bg-slate-100 overflow-hidden">
-        {/* Skeleton placeholder — shown while loading or on error */}
-        {(!imageLoaded || imageError) && (
-          <div className={`absolute inset-0 flex flex-col items-center justify-center ${imageError ? '' : 'animate-pulse'}`}>
+        {imageError ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
             <ImageIcon className="w-8 h-8 text-slate-300" />
-            {imageError && (
-              <span className="text-xs text-slate-400 mt-1">Image unavailable</span>
-            )}
+            <span className="text-xs text-slate-400 mt-1">Image unavailable</span>
           </div>
-        )}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        {!imageError && (
-          <img
+        ) : (
+          <Image
             src={item.imageUrl}
             alt={item.title}
-            referrerPolicy="no-referrer"
-            loading="lazy"
-            onLoad={() => setImageLoaded(true)}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-contain p-4"
             onError={() => setImageError(true)}
-            className={`absolute inset-0 w-full h-full object-contain p-4 transition-opacity duration-300 ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
           />
         )}
         {item.badge && (
-          <div className="absolute top-2 left-2">
+          <div className="absolute top-2 left-2 z-10">
             <Badge
               variant="custom"
               className={BADGE_COLORS[item.badge] || 'bg-slate-100 text-slate-700'}
