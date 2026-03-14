@@ -17,29 +17,28 @@ export default function AboutPage() {
 
       <div className="mt-8 space-y-6 text-lg text-slate-700 leading-relaxed">
         <p className="text-xl text-slate-900 font-medium">
-          You&apos;re starting over. We&apos;re not going to ask why.
+          So that happened.
         </p>
 
         <p>
-          Whatever happened, you&apos;re here now. And &ldquo;here&rdquo; probably means you need a
-          few things &mdash; a place to sleep, stuff for the kitchen, maybe a security deposit or
-          just something that makes the new place feel like <em>yours</em>.
+          Maybe you saw it coming. Maybe you didn&apos;t. Either way, you&apos;re here now &mdash;
+          and &ldquo;here&rdquo; means you need stuff. A new apartment needs dishes. A solo life
+          needs its own Netflix password. Moving out costs money. Therapy costs money.
         </p>
 
         <p>
-          The people who care about you are already asking &ldquo;what can I do?&rdquo;
-          Welp gives them an actual answer.
+          Your friends and family are already asking &ldquo;what can I do?&rdquo; &mdash;
+          now you can give them an actual answer.
         </p>
 
         <p>
-          <strong className="text-slate-900">Build a registry with the things you need.</strong>{' '}
-          Add items from any store, set up cash funds for bigger goals like moving costs or
-          therapy, and share one simple link. Your people handle the rest.
+          We&apos;re not here to be sad about it. We&apos;re here to be{' '}
+          <em>real</em> about it. Yeah, this sucks. But you&apos;re going to be fine.
+          And the people who love you want to help you get there.
         </p>
 
         <p>
-          There are registries for engagements and baby showers. There should be one for
-          starting over, too. That&apos;s Welp.
+          <strong className="text-slate-900">That&apos;s Welp. A registry for fresh starts.</strong>
         </p>
       </div>
 
