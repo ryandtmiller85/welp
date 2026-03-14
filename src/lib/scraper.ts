@@ -151,21 +151,16 @@ function extractFallbackData(html: string, sourceUrl: string): Partial<ScrapedPr
 }
 
 /**
- * Amazon-specific extraction: Amazon blocks most scraping, so we extract
- * the ASIN from the URL and build a direct product image URL.
- * Price must be entered manually by the user.
+ * Amazon-specific: Amazon blocks most scraping. We detect Amazon URLs
+ * so the UI can show helpful messaging about entering data manually.
+ * The old images/P/ASIN URL format is no longer reliable.
  */
-function extractAmazonData(url: string): Partial<ScrapedProduct> | null {
-  // Match Amazon ASIN from URL patterns like /dp/B09T5S8K4F or /gp/product/B09T5S8K4F
-  const asinMatch = url.match(/(?:\/dp\/|\/gp\/product\/|\/gp\/aw\/d\/)([A-Z0-9]{10})/)
-  if (!asinMatch) return null
-
-  const asin = asinMatch[1]
-
-  return {
-    // Use Amazon's direct image service — the ASIN maps to a product image
-    imageUrl: `https://m.media-amazon.com/images/P/${asin}.01._SCLZZZZZZZ_SX500_.jpg`,
-    retailer: 'Amazon',
+function isAmazonUrl(url: string): boolean {
+  try {
+    const hostname = new URL(url).hostname
+    return hostname.includes('amazon.com') || hostname.includes('amzn.')
+  } catch {
+    return false
   }
 }
 
@@ -236,10 +231,7 @@ export async function scrapeProductMetadata(url: string): Promise<ScrapedProduct
     }
 
     const retailer = detectRetailer(url)
-
-    // Amazon-specific: extract ASIN-based image directly (Amazon blocks scraping)
-    const isAmazon = urlObj.hostname.includes('amazon.com') || urlObj.hostname.includes('amzn.')
-    const amazonData = isAmazon ? extractAmazonData(url) : null
+    const amazon = isAmazonUrl(url)
 
     // Fetch HTML with timeout
     const html = await fetchWithTimeout(url, 10000)
@@ -250,15 +242,22 @@ export async function scrapeProductMetadata(url: string): Promise<ScrapedProduct
     const fallbackData = extractFallbackData(html, url)
 
     // Merge with priority: schema > og > fallback
-    // For Amazon, prefer ASIN-based image over whatever generic OG image we get
     const scrapedImage = schemaData.imageUrl || ogData.imageUrl || fallbackData.imageUrl || null
     const scrapedPrice = schemaData.priceCents || ogData.priceCents || fallbackData.priceCents || null
+
+    // For Amazon: discard generic OG images and $0.00 prices (Amazon blocks real data)
+    const isGenericAmazonImage = amazon && scrapedImage && (
+      scrapedImage.includes('amazon_logo') ||
+      scrapedImage.includes('og_image') ||
+      scrapedImage.includes('share_image') ||
+      !scrapedImage.includes('/images/I/')
+    )
 
     const merged = {
       title: schemaData.title || ogData.title || fallbackData.title || null,
       description: schemaData.description || ogData.description || fallbackData.description || null,
-      imageUrl: (isAmazon && amazonData?.imageUrl) ? amazonData.imageUrl : scrapedImage,
-      priceCents: (isAmazon && (!scrapedPrice || scrapedPrice === 0)) ? null : scrapedPrice,
+      imageUrl: isGenericAmazonImage ? null : scrapedImage,
+      priceCents: (amazon && (!scrapedPrice || scrapedPrice === 0)) ? null : scrapedPrice,
       retailer: retailer,
       sourceUrl: url,
     }
