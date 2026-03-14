@@ -21,9 +21,14 @@ export default function AboutPage() {
         </p>
 
         <p>
-          Maybe you saw it coming. Maybe you didn&apos;t. Either way, you&apos;re here now &mdash;
-          and &ldquo;here&rdquo; means you could use some help, love, and probably some stuff, too. A new apartment needs dishes. A solo life
-          needs its own Netflix password. Moving costs money. Therapy costs money.
+          When someone gets engaged, there&apos;s a registry. When someone has a baby, there&apos;s a registry.
+          But when someone&apos;s life falls apart? Nothing. You get nothing.
+        </p>
+
+        <p>
+          <strong className="text-slate-900">Welp exists because starting over requires stuff.</strong>{' '}
+          A new apartment needs dishes. A solo life needs its own Netflix password.
+          Moving costs money. Therapy costs money.
         </p>
 
         <p>
