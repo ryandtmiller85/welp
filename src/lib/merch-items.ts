@@ -363,31 +363,6 @@ export const MERCH_ITEMS: MerchItem[] = [
 
   // Ã¢ÂÂÃ¢ÂÂ The Petty Collection Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
   {
-    id: 'tee-kept-pots',
-    title: 'They Kept the Pots Tee',
-    description:
-      'The Kitchen Reset tagline. Rose on black. A whole mood.',
-    price: 31.99,
-    comparePrice: 36.99,
-    category: 'tees',
-    collection: 'petty',
-    buyUrl: '#',
-    printifyProductId: '69b4859956264c5a820d5f9b',
-    imageUrl:
-      'https://images-api.printify.com/mockup/69b4859956264c5a820d5f9b/12125/92570/they-kept-the-pots-tee.jpg?camera_label=front',
-    color: '#111111',
-    design: {
-      type: 'multi-line',
-      text: 'They kept\nthe pots.',
-      subtext: '\u2014 welp.',
-      textColor: '#fda4af',
-    },
-    badge: 'New',
-    variants: BLACK_TEE_SIZES,
-    defaultVariantIndex: 1, // M
-    galleryImages: teeGallery('69b4859956264c5a820d5f9b', 12125, 'they-kept-the-pots-tee'),
-  },
-  {
     id: 'tee-they-kept-pots-black',
     title: 'They Kept the Pots Tee - Dark',
     description:
