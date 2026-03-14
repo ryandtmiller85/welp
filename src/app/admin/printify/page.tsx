@@ -27,7 +27,7 @@ const PRODUCTS: MerchProduct[] = [
   { merchItemId: "crew-spite", title: "Built with Spite Crewneck", description: "Centered chest print on charcoal", designFile: "crew_spite.png", category: "sweatshirts", color: "Charcoal Heather" },
   { merchItemId: "mug-everything-fine", title: "Everything is Fine Mug", description: "Everything is fine. (Terms apply.) Red accent", designFile: "mug_everything_fine.png", category: "mugs", color: "White" },
   // Petty
-  { merchItemId: "tee-kept-pots", title: "They Got the Pots Tee", description: "Rose gold text on black", designFile: "tee_kept_pots.png", category: "tees", color: "Black" },
+  { merchItemId: "tee-kept-pots", title: "They Kept the Pots Tee", description: "Rose gold text on black", designFile: "tee_kept_pots.png", category: "tees", color: "Black" },
   { merchItemId: "tee-everything-fine", title: "Everything is Fine Tee", description: "Everything is fine. (Terms apply.) on white", designFile: "tee_everything_fine.png", category: "tees", color: "White" },
 ]
 

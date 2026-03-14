@@ -84,7 +84,7 @@ export const CURATED_ITEMS: Partial<Record<ItemCategory, CuratedItem[]>> = {
     {
       id: 'kitchen-pot-set',
       title: 'T-fal Initiatives Nonstick Cookware Set — 18 Piece',
-      description: 'They got the pots. These are better anyway.',
+      description: 'They kept the pots. These are better anyway.',
       imageUrl: 'https://m.media-amazon.com/images/I/713j2j371bL._AC_SL1500_.jpg',
       price: 159.99,
       retailer: 'Amazon',

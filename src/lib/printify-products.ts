@@ -108,9 +108,9 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
   // —— The Petty Collection ——————————————————————————————————————————————————
   {
     merchItemId: 'tee-kept-pots',
-    printifyProductId: '69ad19d0b360648baa02132d',
+    printifyProductId: '69b4859956264c5a820d5f9b',
     defaultVariantId: 12124, // Black / M
-    note: 'They Got the Pots tee, black (rose gold text)',
+    note: 'They Kept the Pots tee, black (rose gold text)',
     designFile: 'tee_kept_pots.png',
   },
   {

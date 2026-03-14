@@ -39,7 +39,7 @@ export const CATEGORY_LABELS: Record<ItemCategory, string> = {
 
 export const CATEGORY_DESCRIPTIONS: Record<ItemCategory, string> = {
   the_basics: 'Toilet paper, paper towels, trash bags. The unsexy essentials.',
-  kitchen_reset: 'They got the pots. Time for an upgrade anyway.',
+  kitchen_reset: 'They kept the pots. Time for an upgrade anyway.',
   bedroom_glowup: 'New sheets. New vibes. New chapter.',
   living_solo: "One couch. One TV. One set of everything, and it's all yours.",
   self_care: "Therapy isn't cheap, but a weighted blanket helps in the meantime.",
