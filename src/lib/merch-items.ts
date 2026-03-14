@@ -255,7 +255,32 @@ export const MERCH_ITEMS: MerchItem[] = [
     },
     variants: [
       { label: '3" ÃÂ 3"', variantId: 45750 },
-      { label: '4" ÃÂ 4"', variantId: 45752 },
+      {
+      id: 'tee-kept-pots',
+      title: 'They Got the Pots Tee',
+      description:
+        'The Kitchen Reset tagline. Rose on black. A whole mood.',
+      price: 31.99,
+      comparePrice: 36.99,
+      category: 'tees',
+      collection: 'petty',
+      buyUrl: '#',
+      printifyProductId: '69ad19d0b360648baa02132d',
+      imageUrl:
+        'https://images-api.printify.com/mockup/69ad19d0b360648baa02132d/12125/92570/he-kept-the-pots-tee.jpg?camera_label=front',
+      color: '#111111',
+      design: {
+        type: 'multi-line',
+        text: 'They got\nthe pots.',
+        subtext: '\u2014 welp.',
+        textColor: '#fda4af',
+      },
+      badge: 'New',
+      variants: BLACK_TEE_SIZES,
+      defaultVariantIndex: 1, // M
+      galleryImages: teeGallery('69ad19d0b360648baa02132d', 12125, 'he-kept-the-pots-tee'),
+    },
+    { label: '4" ÃÂ 4"', variantId: 45752 },
     ],
     defaultVariantIndex: 0,
   },
