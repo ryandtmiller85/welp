@@ -17,10 +17,23 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
+    setFieldErrors({})
+
+    const errors: Record<string, string> = {}
+    if (!email) errors.email = 'Email is required'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = 'Please enter a valid email address'
+    if (!password) errors.password = 'Password is required'
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -97,8 +110,9 @@ export default function LoginPage() {
                 label="Email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => { const { email: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
+                error={fieldErrors.email}
                 required
               />
 
@@ -108,8 +122,9 @@ export default function LoginPage() {
                 label="Password"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => { const { password: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
+                error={fieldErrors.password}
                 required
               />
 

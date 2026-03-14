@@ -18,36 +18,47 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [emailSent, setEmailSent] = useState(false)
   const [ageConfirmed, setAgeConfirmed] = useState(false)
 
   const validateForm = (): boolean => {
-    if (!email || !password || !confirmPassword) {
-      setError('Please fill in all fields')
-      return false
+    const errors: Record<string, string> = {}
+
+    if (!email) {
+      errors.email = 'Email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = 'Please enter a valid email address'
     }
 
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters')
-      return false
+    if (!password) {
+      errors.password = 'Password is required'
+    } else if (password.length < 8) {
+      errors.password = 'Password must be at least 8 characters'
     }
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match')
-      return false
+    if (!confirmPassword) {
+      errors.confirmPassword = 'Please confirm your password'
+    } else if (password !== confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match'
     }
 
     if (!ageConfirmed) {
-      setError('You must confirm you are 18 or older')
-      return false
+      errors.age = 'You must confirm you are 18 or older'
     }
 
+    setFieldErrors(errors)
+    if (Object.keys(errors).length > 0) {
+      setError(null) // Clear banner error when showing field errors
+      return false
+    }
     return true
   }
 
   const handleEmailSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
+    setFieldErrors({})
 
     if (!validateForm()) {
       return
@@ -202,8 +213,9 @@ export default function SignupPage() {
                 label="Email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => { const { email: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
+                error={fieldErrors.email}
                 required
               />
 
@@ -213,8 +225,9 @@ export default function SignupPage() {
                 label="Password"
                 placeholder="At least 8 characters"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => { const { password: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
+                error={fieldErrors.password}
                 required
               />
 
@@ -224,20 +237,24 @@ export default function SignupPage() {
                 label="Confirm Password"
                 placeholder="Confirm your password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => { setConfirmPassword(e.target.value); setFieldErrors(prev => { const { confirmPassword: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
+                error={fieldErrors.confirmPassword}
                 required
               />
 
-              <label className="flex items-start gap-2 text-sm text-slate-600 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={ageConfirmed}
-                  onChange={(e) => setAgeConfirmed(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-rose-500"
-                />
-                <span>I confirm that I am at least 18 years old</span>
-              </label>
+              <div>
+                <label className="flex items-start gap-2 text-sm text-slate-600 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={ageConfirmed}
+                    onChange={(e) => { setAgeConfirmed(e.target.checked); setFieldErrors(prev => { const { age: _, ...rest } = prev; return rest }) }}
+                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-rose-500"
+                  />
+                  <span>I confirm that I am at least 18 years old</span>
+                </label>
+                {fieldErrors.age && <p className="text-sm text-red-600 mt-1">{fieldErrors.age}</p>}
+              </div>
 
               <Button
                 type="submit"
