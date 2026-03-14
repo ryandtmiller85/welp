@@ -255,6 +255,9 @@ export default function AddItemPage() {
         ? Math.round(parseFloat(marketplaceFormData.price) * 100)
         : null
       if (marketplaceFormData.price && isNaN(priceValue || 0)) throw new Error('Invalid price format')
+      if (priceValue !== null && (priceValue < 1 || priceValue > 1_000_000)) {
+        throw new Error('Price must be between $0.01 and $10,000.00')
+      }
 
       const affiliateUrl = constructAffiliateUrl(marketplaceFormData.sourceUrl)
 
@@ -357,6 +360,9 @@ export default function AddItemPage() {
       const priceValue = formData.price ? Math.round(parseFloat(formData.price) * 100) : null
       if (formData.price && isNaN(priceValue || 0)) {
         throw new Error('Invalid price format')
+      }
+      if (priceValue !== null && (priceValue < 1 || priceValue > 1_000_000)) {
+        throw new Error('Price must be between $0.01 and $10,000.00')
       }
 
       // Auto-construct affiliate URL for the Paste URL tab

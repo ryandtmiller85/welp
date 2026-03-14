@@ -35,7 +35,7 @@ const optionalSafeString = (maxLength: number) =>
 
 const safeUrl = z.string().url().max(2048).optional().nullable()
 
-const safePriceCents = z.number().int().min(0).max(99_999_999).optional().nullable()
+const safePriceCents = z.number().int().min(1).max(1_000_000).optional().nullable() // $0.01 to $10,000.00
 
 // ============================================
 // API Route Schemas

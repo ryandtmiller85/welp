@@ -101,6 +101,23 @@ export default function EditProfilePage() {
     setSaving(true)
     setMessage(null)
 
+    // Client-side validation
+    if (formData.display_name && formData.display_name.length > 80) {
+      setMessage({ type: 'error', text: 'Display name must be 80 characters or fewer' })
+      setSaving(false)
+      return
+    }
+    if (formData.alias && formData.alias.length > 80) {
+      setMessage({ type: 'error', text: 'Alias must be 80 characters or fewer' })
+      setSaving(false)
+      return
+    }
+    if (formData.story_text && formData.story_text.length > 5000) {
+      setMessage({ type: 'error', text: 'Story must be 5000 characters or fewer' })
+      setSaving(false)
+      return
+    }
+
     try {
       const {
         data: { session },
@@ -189,7 +206,8 @@ export default function EditProfilePage() {
                 placeholder="Jane Doe"
                 value={formData.display_name || ''}
                 onChange={handleChange}
-                hint="How you'd like to be known (required for public profile)"
+                maxLength={80}
+                hint={`How you'd like to be known (${(formData.display_name || '').length}/80)`}
               />
 
               {/* Alias */}

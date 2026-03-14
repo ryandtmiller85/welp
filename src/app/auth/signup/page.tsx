@@ -65,6 +65,13 @@ export default function SignupPage() {
       })
 
       if (signUpError) {
+        // Don't reveal whether an account exists — normalize enumeration-prone messages
+        if (signUpError.message.toLowerCase().includes('already registered') ||
+            signUpError.message.toLowerCase().includes('already exists')) {
+          setEmailSent(true) // Show the same "check your email" screen
+          setLoading(false)
+          return
+        }
         setError(signUpError.message)
         setLoading(false)
         return

@@ -169,7 +169,7 @@ export default async function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">
+              <h1 className="text-3xl font-bold text-slate-900 truncate max-w-xl">
                 Hey, {profile.display_name || user.email}
               </h1>
               <p className="text-slate-600 mt-1">Welcome to your registry dashboard</p>

@@ -157,7 +157,7 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
               {/* Profile Info */}
               <div className="flex-1 flex flex-col justify-center">
                 <div>
-                  <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">
+                  <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight break-words">
                     {displayName}
                   </h1>
 
