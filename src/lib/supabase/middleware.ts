@@ -23,8 +23,8 @@ export async function updateSession(request: NextRequest) {
       response.cookies.set(cookie.name, cookie.value, {
         path: '/',
         sameSite: 'lax',
-        httpOnly: true,
-        secure: true,
+        httpOnly: false, // Must be false — browser Supabase client reads via document.cookie
+        secure: process.env.NODE_ENV === 'production',
         maxAge: 30 * 24 * 60 * 60, // 30 days
       })
     }

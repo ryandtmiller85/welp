@@ -1,9 +1,10 @@
 'use client'
 
+import { useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ExternalLink, Plus, Check, Loader2 } from 'lucide-react'
+import { ExternalLink, Plus, Check, Loader2, ImageIcon } from 'lucide-react'
 import { trackClick } from '@/lib/track'
 import type { CuratedItem } from '@/lib/curated-items'
 
@@ -38,20 +39,30 @@ export function CuratedProductCard({
   isAdding = false,
   isAdded = false,
 }: CuratedProductCardProps) {
+  const [imageLoaded, setImageLoaded] = useState(false)
   const retailerColor = RETAILER_COLORS[item.retailer] || '#64748b'
   const buyUrl = item.affiliateUrl || item.sourceUrl
 
   return (
     <Card hover className="flex flex-col h-full overflow-hidden">
       {/* Image */}
-      <div className="relative aspect-square bg-slate-50 overflow-hidden">
+      <div className="relative aspect-square bg-slate-100 overflow-hidden">
+        {/* Skeleton placeholder */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center animate-pulse">
+            <ImageIcon className="w-8 h-8 text-slate-300" />
+          </div>
+        )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={item.imageUrl}
           alt={item.title}
           referrerPolicy="no-referrer"
           loading="lazy"
-          className="absolute inset-0 w-full h-full object-contain p-4"
+          onLoad={() => setImageLoaded(true)}
+          className={`absolute inset-0 w-full h-full object-contain p-4 transition-opacity duration-300 ${
+            imageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
         />
         {item.badge && (
           <div className="absolute top-2 left-2">
