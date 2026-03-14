@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------
 // Printify product mapping for welp. merch
 //
-// Maps our merch catalog item IDs â Printify product + variant IDs.
-// All 12 products are live in Printify with working mockup images.
+// Maps our merch catalog item IDs → Printify product + variant IDs.
+// All 15 products are live in Printify with working mockup images.
 //
 // Shop ID: 26575604
 // ---------------------------------------------------------------------------
@@ -23,10 +23,10 @@ export interface PrintifyProductMapping {
 }
 
 /**
- * Product mapping table â 12 products synced with Printify.
+ * Product mapping table — 15 products synced with Printify.
  */
 export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
-  // ââ The Essentials ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // —— The Essentials —————————————————————————————————————————————————————
   {
     merchItemId: 'tee-og-black',
     printifyProductId: '69ad0379581a48c85001c2b0',
@@ -65,12 +65,11 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
   {
     merchItemId: 'sticker-welp',
     printifyProductId: '69ad04b2a028393ce202e6c4',
-    defaultVariantId: 45750, // 3" Ã 3" / White
+    defaultVariantId: 45750, // 3″ × 3″ / White
     note: 'welp. kiss-cut sticker',
     designFile: 'sticker_welp_rose.png',
   },
-
-  // ââ The Statements ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // —— The Statements —————————————————————————————————————————————————————
   {
     merchItemId: 'tee-definition',
     printifyProductId: '69ae058c63b683ea0d0cf4c6',
@@ -106,14 +105,27 @@ export const PRINTIFY_PRODUCTS: PrintifyProductMapping[] = [
     note: 'welp. Definition Tote, cream + black variants',
     designFile: 'tote_definition.png',
   },
-
-  // ââ The Petty Collection ââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // —— The Petty Collection ——————————————————————————————————————————————————
   {
     merchItemId: 'tee-kept-pots',
     printifyProductId: '69ad19d0b360648baa02132d',
     defaultVariantId: 12124, // Black / M
     note: 'They Got the Pots tee, black (rose gold text)',
     designFile: 'tee_kept_pots.png',
+  },
+  {
+    merchItemId: 'tee-they-kept-pots-black',
+    printifyProductId: '69b4859956264c5a820d5f9b',
+    defaultVariantId: 12125, // Black / M
+    note: 'They Kept the Pots tee, black (rose text)',
+    designFile: 'they-kept-the-pots.png',
+  },
+  {
+    merchItemId: 'tee-they-kept-pots-white',
+    printifyProductId: '69b4859956264c5a820d5f9b',
+    defaultVariantId: 12101, // White / M
+    note: 'They Kept the Pots tee, white (rose text)',
+    designFile: 'they-kept-the-pots.png',
   },
   {
     merchItemId: 'tee-everything-fine',
