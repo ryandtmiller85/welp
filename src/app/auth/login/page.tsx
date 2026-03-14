@@ -113,7 +113,6 @@ export default function LoginPage() {
                 onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => { const { email: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
                 error={fieldErrors.email}
-                required
               />
 
               <Input
@@ -125,7 +124,6 @@ export default function LoginPage() {
                 onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => { const { password: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
                 error={fieldErrors.password}
-                required
               />
 
               <div className="flex justify-end">

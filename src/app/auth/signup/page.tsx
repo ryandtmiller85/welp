@@ -216,7 +216,6 @@ export default function SignupPage() {
                 onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => { const { email: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
                 error={fieldErrors.email}
-                required
               />
 
               <Input
@@ -228,7 +227,6 @@ export default function SignupPage() {
                 onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => { const { password: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
                 error={fieldErrors.password}
-                required
               />
 
               <Input
@@ -240,7 +238,6 @@ export default function SignupPage() {
                 onChange={(e) => { setConfirmPassword(e.target.value); setFieldErrors(prev => { const { confirmPassword: _, ...rest } = prev; return rest }) }}
                 disabled={loading}
                 error={fieldErrors.confirmPassword}
-                required
               />
 
               <div>
