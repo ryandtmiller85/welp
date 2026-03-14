@@ -5,9 +5,28 @@ import { useState } from 'react'
 export function ShareButton({ displayName }: { displayName: string }) {
   const [copied, setCopied] = useState(false)
 
+  const copyToClipboard = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url)
+    } catch {
+      const textArea = document.createElement('textarea')
+      textArea.value = url
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+    }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   const handleShare = async () => {
     const url = typeof window !== 'undefined' ? window.location.href : ''
 
+    // Always copy to clipboard first — gives immediate feedback
+    await copyToClipboard(url)
+
+    // Then try native share as a bonus (non-blocking)
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
@@ -15,22 +34,8 @@ export function ShareButton({ displayName }: { displayName: string }) {
           url,
         })
       } catch {
-        // User cancelled share dialog — that's fine
+        // User cancelled — that's fine, link is already copied
       }
-    } else if (typeof navigator !== 'undefined') {
-      try {
-        await navigator.clipboard.writeText(url)
-      } catch {
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea')
-        textArea.value = url
-        document.body.appendChild(textArea)
-        textArea.select()
-        document.execCommand('copy')
-        document.body.removeChild(textArea)
-      }
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
     }
   }
 

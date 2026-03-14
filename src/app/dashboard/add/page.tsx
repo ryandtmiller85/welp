@@ -708,13 +708,22 @@ export default function AddItemPage() {
                   <div className="border-t pt-6 space-y-4">
                     <h3 className="font-semibold text-slate-900">Preview & Edit</h3>
 
-                    {marketplaceScrapedData.imageUrl && (
+                    {marketplaceFormData.imageUrl && (
                       <div className="bg-slate-100 rounded-lg overflow-hidden">
                         <img
-                          src={marketplaceScrapedData.imageUrl}
-                          alt={marketplaceScrapedData.title || 'Product'}
+                          src={marketplaceFormData.imageUrl}
+                          alt={marketplaceFormData.title || 'Product'}
+                          referrerPolicy="no-referrer"
                           className="w-full h-48 object-contain p-2"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).style.display = 'none'
+                          }}
                         />
+                      </div>
+                    )}
+                    {!marketplaceFormData.imageUrl && marketplaceScrapedData.retailer === 'Amazon' && (
+                      <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+                        Amazon blocks image scraping. You can paste an image URL manually below, or skip it — your supporters will still see the product title and link.
                       </div>
                     )}
 
@@ -726,7 +735,8 @@ export default function AddItemPage() {
 
                     <Input label="Title" value={marketplaceFormData.title} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, title: e.target.value }))} id="mp-title" />
                     <Textarea label="Description" value={marketplaceFormData.description} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, description: e.target.value }))} id="mp-desc" placeholder="Product description (optional)" />
-                    <Input label="Price (USD)" type="number" step="0.01" value={marketplaceFormData.price} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, price: e.target.value }))} id="mp-price" placeholder="0.00" />
+                    <Input label="Image URL" value={marketplaceFormData.imageUrl} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, imageUrl: e.target.value }))} id="mp-image" placeholder="https://... (paste product image URL)" />
+                    <Input label="Price (USD)" type="number" step="0.01" value={marketplaceFormData.price} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, price: e.target.value }))} id="mp-price" placeholder={marketplaceScrapedData?.retailer === 'Amazon' ? 'Amazon blocks price scraping — enter manually' : '0.00'} />
 
                     {marketplaceScrapedData.retailer && (
                       <div className="p-3 bg-slate-100 rounded-lg text-sm text-slate-700">
@@ -796,17 +806,22 @@ export default function AddItemPage() {
                 <div className="border-t pt-6 space-y-4">
                   <h3 className="font-semibold text-slate-900">Preview & Edit</h3>
 
-                  {scrapedData.imageUrl && (
+                  {formData.imageUrl && (
                     <div className="bg-slate-100 rounded-lg overflow-hidden">
                       <img
-                        src={scrapedData.imageUrl}
-                        alt={scrapedData.title || 'Product'}
-                        className="w-full h-48 object-cover"
+                        src={formData.imageUrl}
+                        alt={formData.title || 'Product'}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-48 object-contain p-2"
                         onError={(e) => {
-                          ;(e.currentTarget as HTMLImageElement).src =
-                            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23e2e8f0" width="200" height="200"/%3E%3C/svg%3E'
+                          (e.currentTarget as HTMLImageElement).style.display = 'none'
                         }}
                       />
+                    </div>
+                  )}
+                  {!formData.imageUrl && scrapedData?.retailer === 'Amazon' && (
+                    <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+                      Amazon blocks image scraping. You can paste an image URL in the Image URL field below.
                     </div>
                   )}
 

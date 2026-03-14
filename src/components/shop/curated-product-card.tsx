@@ -40,6 +40,7 @@ export function CuratedProductCard({
   isAdded = false,
 }: CuratedProductCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [imageError, setImageError] = useState(false)
   const retailerColor = RETAILER_COLORS[item.retailer] || '#64748b'
   const buyUrl = item.affiliateUrl || item.sourceUrl
 
@@ -47,23 +48,29 @@ export function CuratedProductCard({
     <Card hover className="flex flex-col h-full overflow-hidden">
       {/* Image */}
       <div className="relative aspect-square bg-slate-100 overflow-hidden">
-        {/* Skeleton placeholder */}
-        {!imageLoaded && (
-          <div className="absolute inset-0 flex items-center justify-center animate-pulse">
+        {/* Skeleton placeholder — shown while loading or on error */}
+        {(!imageLoaded || imageError) && (
+          <div className={`absolute inset-0 flex flex-col items-center justify-center ${imageError ? '' : 'animate-pulse'}`}>
             <ImageIcon className="w-8 h-8 text-slate-300" />
+            {imageError && (
+              <span className="text-xs text-slate-400 mt-1">Image unavailable</span>
+            )}
           </div>
         )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={item.imageUrl}
-          alt={item.title}
-          referrerPolicy="no-referrer"
-          loading="lazy"
-          onLoad={() => setImageLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-contain p-4 transition-opacity duration-300 ${
-            imageLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
+        {!imageError && (
+          <img
+            src={item.imageUrl}
+            alt={item.title}
+            referrerPolicy="no-referrer"
+            loading="lazy"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageError(true)}
+            className={`absolute inset-0 w-full h-full object-contain p-4 transition-opacity duration-300 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
         {item.badge && (
           <div className="absolute top-2 left-2">
             <Badge
