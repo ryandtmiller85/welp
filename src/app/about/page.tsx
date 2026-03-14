@@ -16,54 +16,50 @@ export default function AboutPage() {
       </h1>
 
       <div className="mt-8 space-y-6 text-lg text-slate-700 leading-relaxed">
-        <p>
-          When someone gets engaged, there&apos;s a registry. When someone has a baby, there&apos;s a
-          registry. But when someone&apos;s life falls apart? When they walk in on their partner
-          cheating, or the wedding gets canceled, or they need to start completely over?
+        <p className="text-xl text-slate-900 font-medium">
+          You&apos;re starting over. We&apos;re not going to ask why.
         </p>
 
         <p>
-          Nothing. You get nothing. Maybe a GoFundMe if it&apos;s bad enough. Maybe some casseroles
-          from your mom.
+          Whatever happened, you&apos;re here now. And &ldquo;here&rdquo; probably means you need a
+          few things &mdash; a place to sleep, stuff for the kitchen, maybe a security deposit or
+          just something that makes the new place feel like <em>yours</em>.
         </p>
 
         <p>
-          <strong className="text-slate-900">Welp exists because starting over requires stuff.</strong>{' '}
-          A new apartment needs dishes. A solo life needs its own Netflix password. Moving out
-          costs money. Therapy costs money. And your friends and family are already asking
-          &ldquo;what can I do?&rdquo; &mdash; now you can give them an actual answer.
+          The people who care about you are already asking &ldquo;what can I do?&rdquo;
+          Welp gives them an actual answer.
         </p>
 
         <p>
-          We&apos;re not here to be sad about it. We&apos;re here to be{' '}
-          <em>real</em> about it. Yeah, this sucks. But you&apos;re going to be fine. And
-          the people who love you want to help you get there.
+          <strong className="text-slate-900">Build a registry with the things you need.</strong>{' '}
+          Add items from any store, set up cash funds for bigger goals like moving costs or
+          therapy, and share one simple link. Your people handle the rest.
         </p>
 
         <p>
-          That&apos;s Welp. A registry for fresh starts.
+          There are registries for engagements and baby showers. There should be one for
+          starting over, too. That&apos;s Welp.
         </p>
       </div>
 
       <div className="mt-12 p-8 bg-rose-50 rounded-2xl border border-rose-100">
         <div className="flex items-center gap-3 mb-4">
           <Heart className="w-6 h-6 text-rose-500 fill-rose-500" />
-          <h2 className="text-xl font-bold text-slate-900">Who it&apos;s for</h2>
+          <h2 className="text-xl font-bold text-slate-900">Welp is for</h2>
         </div>
         <div className="space-y-3 text-slate-700">
           <p>
-            <strong>Going through a breakup</strong> and need to furnish a new place from scratch.
+            <strong>Fresh starts.</strong> Breakups, divorce, canceled weddings &mdash;
+            whatever the reason, you deserve support while you rebuild.
           </p>
           <p>
-            <strong>Getting divorced</strong> and splitting everything means starting with nothing.
+            <strong>Big transitions.</strong> Job loss, medical setbacks, housing changes.
+            Life doesn&apos;t come with a safety net, but your community can be one.
           </p>
           <p>
-            <strong>Canceled a wedding</strong> and need help picking up the pieces (and returning the gifts).
-          </p>
-          <p>
-            <strong>Any fresh start, really.</strong> Job loss, medical crisis, house fire,
-            or just a chapter that needs closing. If you need things and people want to help,
-            Welp is for you.
+            <strong>Anyone starting from scratch.</strong> If you need things and the people
+            around you want to help, this is for you.
           </p>
         </div>
       </div>
