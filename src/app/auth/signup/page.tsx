@@ -200,7 +200,7 @@ export default function SignupPage() {
           </CardHeader>
 
           <CardContent>
-            <form onSubmit={handleEmailSignup} className="space-y-4">
+            <form onSubmit={handleEmailSignup} className="space-y-4" noValidate>
               {error && (
                 <div className="p-3 rounded-lg bg-red-50 border border-red-200">
                   <p className="text-sm text-red-700">{error}</p>
