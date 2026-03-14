@@ -23,7 +23,7 @@ export default function AboutPage() {
         <p>
           Maybe you saw it coming. Maybe you didn&apos;t. Either way, you&apos;re here now &mdash;
           and &ldquo;here&rdquo; means you could use some help, love, and probably some stuff, too. A new apartment needs dishes. A solo life
-          needs its own Netflix password. Moving out costs money. Therapy costs money.
+          needs its own Netflix password. Moving costs money. Therapy costs money.
         </p>
 
         <p>
