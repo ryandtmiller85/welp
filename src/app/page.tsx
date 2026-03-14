@@ -66,17 +66,19 @@ export default function LandingPage() {
               Your friends want to help &mdash; let them.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
-              <Link href="/auth/signup">
-                <Button size="lg" variant="primary">
-                  Start Your Registry
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
+              <Link
+                href="/auth/signup"
+                className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm px-8 py-3 text-base"
+              >
+                Start Your Registry
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
-              <Link href="/create-for">
-                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                  <Heart className="w-5 h-5 mr-2" />
-                  Create for Someone Else
-                </Button>
+              <Link
+                href="/create-for"
+                className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 border-2 border-white/30 text-white hover:bg-white/10 focus:ring-slate-400 px-8 py-3 text-base"
+              >
+                <Heart className="w-5 h-5 mr-2" />
+                Create for Someone Else
               </Link>
             </div>
           </div>
@@ -225,11 +227,12 @@ export default function LandingPage() {
             Your fresh start is just a few clicks away. Create your registry, share it with friends, and let the support roll in.
           </p>
           <div className="mt-10">
-            <Link href="/auth/signup">
-              <Button size="lg" variant="primary">
-                Start Your Registry
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+            <Link
+              href="/auth/signup"
+              className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm px-8 py-3 text-base"
+            >
+              Start Your Registry
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
           </div>
         </div>

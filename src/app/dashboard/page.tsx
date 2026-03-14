@@ -175,11 +175,11 @@ export default async function DashboardPage() {
               <p className="text-slate-600 mt-1">Welcome to your registry dashboard</p>
             </div>
             <div className="flex gap-2">
-              <Link href="/auth/logout">
+              <a href="/auth/logout">
                 <Button variant="ghost" size="sm">
                   Sign Out
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
