@@ -19,6 +19,12 @@ export const metadata: Metadata = {
     description:
       "Because starting over shouldn't mean starting from scratch.",
     type: 'website',
+    siteName: 'Welp',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Welp — Registry for Fresh Starts',
+    description: "Because starting over shouldn't mean starting from scratch.",
   },
 }
 
