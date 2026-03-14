@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+
 import { Menu, X } from 'lucide-react'
 
 interface HeaderProps {
@@ -65,13 +65,17 @@ export function Header({ initialUser }: HeaderProps) {
               </Link>
             ) : (
               <div className="flex items-center gap-3">
-                <Link href="/auth/login">
-                  <Button variant="ghost" size="sm">
-                    Log In
-                  </Button>
+                <Link
+                  href="/auth/login"
+                  className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 text-slate-600 hover:bg-slate-100 focus:ring-slate-400 px-3 py-1.5 text-sm"
+                >
+                  Log In
                 </Link>
-                <Link href="/auth/signup">
-                  <Button size="sm">Start Your Registry</Button>
+                <Link
+                  href="/auth/signup"
+                  className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm px-3 py-1.5 text-sm"
+                >
+                  Start Your Registry
                 </Link>
               </div>
             )}
@@ -127,11 +131,19 @@ export function Header({ initialUser }: HeaderProps) {
               </Link>
             ) : (
               <div className="flex gap-3 px-3 pt-2">
-                <Link href="/auth/login" onClick={() => setMenuOpen(false)}>
-                  <Button variant="outline" size="sm">Log In</Button>
+                <Link
+                  href="/auth/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 border-2 border-slate-300 text-slate-700 hover:bg-slate-50 focus:ring-slate-400 px-3 py-1.5 text-sm"
+                >
+                  Log In
                 </Link>
-                <Link href="/auth/signup" onClick={() => setMenuOpen(false)}>
-                  <Button size="sm">Start Your Registry</Button>
+                <Link
+                  href="/auth/signup"
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm px-3 py-1.5 text-sm"
+                >
+                  Start Your Registry
                 </Link>
               </div>
             )}
