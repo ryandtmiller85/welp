@@ -3,11 +3,15 @@
 import { useState, useEffect } from 'react'
 
 export function ShareRegistry({ slug }: { slug: string }) {
-  const [registryUrl, setRegistryUrl] = useState('')
+  const [registryUrl, setRegistryUrl] = useState(() =>
+    typeof window !== 'undefined' ? `${window.location.origin}/${slug}` : ''
+  )
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    setRegistryUrl(`${window.location.origin}/${slug}`)
+    // Always sync when slug changes or on first client render
+    const url = `${window.location.origin}/${slug}`
+    if (url !== registryUrl) setRegistryUrl(url)
   }, [slug])
 
   const handleCopy = async () => {
@@ -41,13 +45,18 @@ export function ShareRegistry({ slug }: { slug: string }) {
           type="text"
           readOnly
           value={registryUrl}
+          placeholder="Loading your registry link..."
           className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-700 font-mono"
         />
         <button
           onClick={handleCopy}
-          className="px-5 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-200 flex items-center gap-2 whitespace-nowrap"
+          className={`px-5 py-3 font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 whitespace-nowrap ${
+            copied
+              ? 'bg-emerald-500 text-white shadow-lg'
+              : 'bg-gradient-to-r from-rose-500 to-pink-500 text-white hover:shadow-lg'
+          }`}
         >
-          {copied ? '✓ Copied' : '📋 Copy'}
+          {copied ? '✓ Copied!' : '📋 Copy'}
         </button>
       </div>
     </div>

@@ -150,6 +150,25 @@ function extractFallbackData(html: string, sourceUrl: string): Partial<ScrapedPr
   return result
 }
 
+/**
+ * Amazon-specific extraction: Amazon blocks most scraping, so we extract
+ * the ASIN from the URL and build a direct product image URL.
+ * Price must be entered manually by the user.
+ */
+function extractAmazonData(url: string): Partial<ScrapedProduct> | null {
+  // Match Amazon ASIN from URL patterns like /dp/B09T5S8K4F or /gp/product/B09T5S8K4F
+  const asinMatch = url.match(/(?:\/dp\/|\/gp\/product\/|\/gp\/aw\/d\/)([A-Z0-9]{10})/)
+  if (!asinMatch) return null
+
+  const asin = asinMatch[1]
+
+  return {
+    // Use Amazon's direct image service — the ASIN maps to a product image
+    imageUrl: `https://m.media-amazon.com/images/P/${asin}.01._SCLZZZZZZZ_SX500_.jpg`,
+    retailer: 'Amazon',
+  }
+}
+
 async function fetchWithTimeout(url: string, timeoutMs: number = 10000): Promise<string> {
   // SSRF protection: block private IPs, cloud metadata, localhost
   const ssrfCheck = isUrlSafeToFetch(url)
@@ -165,7 +184,9 @@ async function fetchWithTimeout(url: string, timeoutMs: number = 10000): Promise
       signal: controller.signal,
       redirect: 'manual', // Don't follow redirects automatically (prevents SSRF via redirect)
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
       },
     })
 
@@ -214,6 +235,12 @@ export async function scrapeProductMetadata(url: string): Promise<ScrapedProduct
       throw new Error('Invalid URL protocol')
     }
 
+    const retailer = detectRetailer(url)
+
+    // Amazon-specific: extract ASIN-based image directly (Amazon blocks scraping)
+    const isAmazon = urlObj.hostname.includes('amazon.com') || urlObj.hostname.includes('amzn.')
+    const amazonData = isAmazon ? extractAmazonData(url) : null
+
     // Fetch HTML with timeout
     const html = await fetchWithTimeout(url, 10000)
 
@@ -223,12 +250,16 @@ export async function scrapeProductMetadata(url: string): Promise<ScrapedProduct
     const fallbackData = extractFallbackData(html, url)
 
     // Merge with priority: schema > og > fallback
+    // For Amazon, prefer ASIN-based image over whatever generic OG image we get
+    const scrapedImage = schemaData.imageUrl || ogData.imageUrl || fallbackData.imageUrl || null
+    const scrapedPrice = schemaData.priceCents || ogData.priceCents || fallbackData.priceCents || null
+
     const merged = {
       title: schemaData.title || ogData.title || fallbackData.title || null,
       description: schemaData.description || ogData.description || fallbackData.description || null,
-      imageUrl: schemaData.imageUrl || ogData.imageUrl || fallbackData.imageUrl || null,
-      priceCents: schemaData.priceCents || ogData.priceCents || fallbackData.priceCents || null,
-      retailer: detectRetailer(url),
+      imageUrl: (isAmazon && amazonData?.imageUrl) ? amazonData.imageUrl : scrapedImage,
+      priceCents: (isAmazon && (!scrapedPrice || scrapedPrice === 0)) ? null : scrapedPrice,
+      retailer: retailer,
       sourceUrl: url,
     }
 

@@ -1,27 +1,51 @@
 'use client'
 
+import { useState } from 'react'
+
 export function ShareButton({ displayName }: { displayName: string }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleShare = async () => {
+    const url = typeof window !== 'undefined' ? window.location.href : ''
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: `${displayName}'s Registry`,
+          url,
+        })
+      } catch {
+        // User cancelled share dialog — that's fine
+      }
+    } else if (typeof navigator !== 'undefined') {
+      try {
+        await navigator.clipboard.writeText(url)
+      } catch {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea')
+        textArea.value = url
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+      }
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
   return (
     <div className="flex-shrink-0">
       <button
-        onClick={() => {
-          const url = typeof window !== 'undefined' ? window.location.href : ''
-          if (typeof navigator !== 'undefined' && navigator.share) {
-            navigator.share({
-              title: `${displayName}'s Registry`,
-              url,
-            })
-          } else {
-            if (typeof navigator !== 'undefined') {
-              navigator.clipboard.writeText(url)
-            }
-            alert('Link copied to clipboard!')
-          }
-        }}
-        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg hover:from-rose-600 hover:to-pink-600 transition-all duration-200 whitespace-nowrap"
+        onClick={handleShare}
+        className={`inline-flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-lg transition-all duration-200 whitespace-nowrap ${
+          copied
+            ? 'bg-emerald-500 text-white shadow-lg'
+            : 'bg-gradient-to-r from-rose-500 to-pink-500 text-white hover:shadow-lg hover:from-rose-600 hover:to-pink-600'
+        }`}
       >
-        <span>Share</span>
-        <span>🔗</span>
+        <span>{copied ? '✓ Link Copied!' : 'Share'}</span>
+        {!copied && <span>🔗</span>}
       </button>
     </div>
   )
