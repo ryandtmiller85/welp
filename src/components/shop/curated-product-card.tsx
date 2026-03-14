@@ -60,6 +60,7 @@ export function CuratedProductCard({
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             className="object-contain p-4"
+            loading="eager"
             onError={() => setImageError(true)}
           />
         )}
