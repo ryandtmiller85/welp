@@ -34,6 +34,7 @@ export default function EditProfilePage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const [formData, setFormData] = useState<Partial<Profile>>({
     display_name: '',
@@ -94,26 +95,33 @@ export default function EditProfilePage() {
       ...prev,
       [name]: finalValue,
     }))
+    // Clear field error when user starts typing
+    setFieldErrors((prev) => { const { [name]: _, ...rest } = prev; return rest })
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSaving(true)
     setMessage(null)
+    setFieldErrors({})
 
-    // Client-side validation
+    // Client-side field validation
+    const errors: Record<string, string> = {}
     if (formData.display_name && formData.display_name.length > 80) {
-      setMessage({ type: 'error', text: 'Display name must be 80 characters or fewer' })
-      setSaving(false)
-      return
+      errors.display_name = 'Display name must be 80 characters or fewer'
     }
     if (formData.alias && formData.alias.length > 80) {
-      setMessage({ type: 'error', text: 'Alias must be 80 characters or fewer' })
-      setSaving(false)
-      return
+      errors.alias = 'Alias must be 80 characters or fewer'
     }
     if (formData.story_text && formData.story_text.length > 5000) {
-      setMessage({ type: 'error', text: 'Story must be 5000 characters or fewer' })
+      errors.story_text = 'Story must be 5,000 characters or fewer'
+    }
+    if (formData.slug && !/^[a-z0-9-]+$/.test(formData.slug)) {
+      errors.slug = 'URL slug can only contain lowercase letters, numbers, and hyphens'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
       setSaving(false)
       return
     }
@@ -207,6 +215,7 @@ export default function EditProfilePage() {
                 value={formData.display_name || ''}
                 onChange={handleChange}
                 maxLength={80}
+                error={fieldErrors.display_name}
                 hint={`How you'd like to be known (${(formData.display_name || '').length}/80)`}
               />
 
@@ -218,6 +227,7 @@ export default function EditProfilePage() {
                 placeholder="Just Jane"
                 value={formData.alias || ''}
                 onChange={handleChange}
+                error={fieldErrors.alias}
                 hint="A nickname or alternative name"
               />
 
@@ -229,6 +239,7 @@ export default function EditProfilePage() {
                 placeholder="jane-doe"
                 value={formData.slug || ''}
                 onChange={handleChange}
+                error={fieldErrors.slug}
                 hint="Your unique URL: yoursite.com/jane-doe"
               />
 
@@ -239,6 +250,7 @@ export default function EditProfilePage() {
                 label="Your Story"
                 placeholder="Share what happened and what you need help with. Be honest - people want to help when they understand your situation."
                 value={formData.story_text || ''}
+                error={fieldErrors.story_text}
                 onChange={handleChange}
                 hint="This helps supporters understand your situation (required for public profile)"
               />

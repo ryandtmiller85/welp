@@ -132,6 +132,8 @@ export default function AddItemPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [mpFieldErrors, setMpFieldErrors] = useState<Record<string, string>>({})
 
   // ── Catalog handlers ──────────────────────────────────────────────────
 
@@ -243,8 +245,19 @@ export default function AddItemPage() {
 
   async function handleMarketplaceSubmit() {
     setSubmitError('')
-    if (!marketplaceFormData.title.trim()) {
-      setSubmitError('Title is required')
+    setMpFieldErrors({})
+
+    // Field-level validation
+    const errors: Record<string, string> = {}
+    if (!marketplaceFormData.title.trim()) errors.title = 'Title is required'
+    if (marketplaceFormData.price) {
+      const parsed = parseFloat(marketplaceFormData.price)
+      if (isNaN(parsed)) errors.price = 'Please enter a valid price'
+      else if (parsed < 0.01 || parsed > 10000) errors.price = 'Price must be between $0.01 and $10,000.00'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setMpFieldErrors(errors)
       return
     }
 
@@ -344,13 +357,30 @@ export default function AddItemPage() {
 
   const handleFormChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+    setFieldErrors((prev) => { const { [field]: _, ...rest } = prev; return rest })
   }
 
   const handleSubmit = async () => {
     setSubmitError('')
+    setFieldErrors({})
 
-    if (!formData.title.trim()) {
-      setSubmitError('Title is required')
+    // Field-level validation
+    const errors: Record<string, string> = {}
+    if (!formData.title.trim()) errors.title = 'Title is required'
+    if (formData.price) {
+      const parsed = parseFloat(formData.price)
+      if (isNaN(parsed)) errors.price = 'Please enter a valid price'
+      else if (parsed < 0.01 || parsed > 10000) errors.price = 'Price must be between $0.01 and $10,000.00'
+    }
+    if (formData.sourceUrl && !/^https?:\/\/.+/.test(formData.sourceUrl)) {
+      errors.sourceUrl = 'Please enter a valid URL (starting with http:// or https://)'
+    }
+    if (formData.imageUrl && !/^https?:\/\/.+/.test(formData.imageUrl)) {
+      errors.imageUrl = 'Please enter a valid image URL'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
       return
     }
 
@@ -424,6 +454,7 @@ export default function AddItemPage() {
     setScrapedData(null)
     setUrlInput('')
     setSubmitError('')
+    setFieldErrors({})
   }
 
   // ── Success screen ────────────────────────────────────────────────────
@@ -739,10 +770,10 @@ export default function AddItemPage() {
                       </div>
                     )}
 
-                    <Input label="Title" value={marketplaceFormData.title} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, title: e.target.value }))} id="mp-title" />
+                    <Input label="Title" value={marketplaceFormData.title} onChange={(e) => { setMarketplaceFormData(prev => ({ ...prev, title: e.target.value })); setMpFieldErrors(prev => { const { title: _, ...rest } = prev; return rest }) }} id="mp-title" error={mpFieldErrors.title} />
                     <Textarea label="Description" value={marketplaceFormData.description} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, description: e.target.value }))} id="mp-desc" placeholder="Product description (optional)" />
                     <Input label="Image URL" value={marketplaceFormData.imageUrl} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, imageUrl: e.target.value }))} id="mp-image" placeholder="https://... (paste product image URL)" />
-                    <Input label="Price (USD)" type="number" step="0.01" value={marketplaceFormData.price} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, price: e.target.value }))} id="mp-price" placeholder={marketplaceScrapedData?.retailer === 'Amazon' ? 'Amazon blocks price scraping — enter manually' : '0.00'} />
+                    <Input label="Price (USD)" type="number" step="0.01" value={marketplaceFormData.price} onChange={(e) => { setMarketplaceFormData(prev => ({ ...prev, price: e.target.value })); setMpFieldErrors(prev => { const { price: _, ...rest } = prev; return rest }) }} id="mp-price" placeholder={marketplaceScrapedData?.retailer === 'Amazon' ? 'Amazon blocks price scraping — enter manually' : '0.00'} error={mpFieldErrors.price} />
 
                     {marketplaceScrapedData.retailer && (
                       <div className="p-3 bg-slate-100 rounded-lg text-sm text-slate-700">
@@ -837,10 +868,10 @@ export default function AddItemPage() {
                     </div>
                   )}
 
-                  <Input label="Title" value={formData.title} onChange={(e) => handleFormChange('title', e.target.value)} id="title-url" />
+                  <Input label="Title" value={formData.title} onChange={(e) => handleFormChange('title', e.target.value)} id="title-url" error={fieldErrors.title} />
                   <Textarea label="Description" value={formData.description} onChange={(e) => handleFormChange('description', e.target.value)} id="description-url" placeholder="Product description (optional)" />
-                  <Input label="Image URL" value={formData.imageUrl} onChange={(e) => handleFormChange('imageUrl', e.target.value)} id="image-url" placeholder="https://..." />
-                  <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-url" placeholder="0.00" />
+                  <Input label="Image URL" value={formData.imageUrl} onChange={(e) => handleFormChange('imageUrl', e.target.value)} id="image-url" placeholder="https://..." error={fieldErrors.imageUrl} />
+                  <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-url" placeholder="0.00" error={fieldErrors.price} />
 
                   {scrapedData.retailer && (
                     <div className="p-3 bg-slate-100 rounded-lg text-sm text-slate-700">
@@ -874,11 +905,11 @@ export default function AddItemPage() {
               <h2 className="text-lg font-semibold text-slate-900">Add Item Manually</h2>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Input label="Title" value={formData.title} onChange={(e) => handleFormChange('title', e.target.value)} id="title-manual" placeholder="Item name" required />
+              <Input label="Title" value={formData.title} onChange={(e) => handleFormChange('title', e.target.value)} id="title-manual" placeholder="Item name" error={fieldErrors.title} required />
               <Textarea label="Description" value={formData.description} onChange={(e) => handleFormChange('description', e.target.value)} id="description-manual" placeholder="Product description (optional)" />
-              <Input label="Image URL" value={formData.imageUrl} onChange={(e) => handleFormChange('imageUrl', e.target.value)} id="image-manual" placeholder="https://... (optional)" />
-              <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-manual" placeholder="0.00 (optional)" />
-              <Input label="Source URL" type="url" value={formData.sourceUrl} onChange={(e) => handleFormChange('sourceUrl', e.target.value)} id="source-manual" placeholder="https://... (optional)" />
+              <Input label="Image URL" value={formData.imageUrl} onChange={(e) => handleFormChange('imageUrl', e.target.value)} id="image-manual" placeholder="https://... (optional)" error={fieldErrors.imageUrl} />
+              <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-manual" placeholder="0.00 (optional)" error={fieldErrors.price} />
+              <Input label="Source URL" type="url" value={formData.sourceUrl} onChange={(e) => handleFormChange('sourceUrl', e.target.value)} id="source-manual" placeholder="https://... (optional)" error={fieldErrors.sourceUrl} />
               <Select label="Category" value={formData.category} onChange={(e) => handleFormChange('category', e.target.value as ItemCategory)} options={ALL_CATEGORIES.map((c) => ({ value: c.value, label: c.label }))} id="category-manual" />
               <Select label="Priority" value={formData.priority} onChange={(e) => handleFormChange('priority', e.target.value as ItemPriority)} options={PRIORITIES.map((p) => ({ value: p.value, label: p.label }))} id="priority-manual" />
               <Textarea label="Custom Note" value={formData.customNote} onChange={(e) => handleFormChange('customNote', e.target.value)} id="note-manual" placeholder="Any additional notes (optional)" />
