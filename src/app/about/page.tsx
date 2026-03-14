@@ -17,7 +17,7 @@ export default function AboutPage() {
 
       <div className="mt-8 space-y-6 text-lg text-slate-700 leading-relaxed">
         <p className="text-xl text-slate-900 font-medium">
-          So that happened.
+          It&apos;s time to start over.
         </p>
 
         <p>
