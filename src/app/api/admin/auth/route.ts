@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdminCookieName } from '@/lib/admin-auth'
+import { checkRateLimit, getRateLimitId, rateLimitResponse } from '@/lib/rate-limit'
+
+const ADMIN_AUTH_RATE_LIMIT = { maxRequests: 5, windowMs: 5 * 60_000 } // 5 attempts per 5 minutes
 
 // POST /api/admin/auth — login with admin secret, set session cookie
 export async function POST(req: NextRequest) {
+  // Rate limit by IP to prevent brute-force
+  const rl = checkRateLimit(`admin-auth:${getRateLimitId(req)}`, ADMIN_AUTH_RATE_LIMIT)
+  if (!rl.allowed) return rateLimitResponse(rl.resetMs)
+
   const { secret } = await req.json()
   const adminSecret = process.env.ADMIN_SECRET
 

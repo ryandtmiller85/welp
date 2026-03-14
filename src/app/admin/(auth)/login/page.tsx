@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
       if (res.ok) {
         router.push('/admin')
       } else {
-        setError('Invalid admin secret')
+        setError('Invalid credentials')
       }
     } catch {
       setError('Something went wrong')
@@ -38,7 +38,6 @@ export default function AdminLoginPage() {
       <form onSubmit={handleLogin} className="bg-slate-900 border border-slate-800 rounded-xl p-8 w-96 shadow-2xl">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-black text-white tracking-tight">welp.</h1>
-          <p className="text-sm text-slate-400 mt-1">Admin Portal</p>
         </div>
 
         {error && (
@@ -51,7 +50,7 @@ export default function AdminLoginPage() {
           type="password"
           value={secret}
           onChange={(e) => setSecret(e.target.value)}
-          placeholder="Enter admin secret"
+          placeholder="Enter access key"
           className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-rose-500 mb-4"
           autoFocus
         />
