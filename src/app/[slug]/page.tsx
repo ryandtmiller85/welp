@@ -188,8 +188,15 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
                 </div>
               </div>
 
-              {/* Share Button */}
-              <ShareButton displayName={displayName} />
+              {/* Share Button + Privacy Note */}
+              <div className="flex flex-col items-end gap-2">
+                <ShareButton displayName={displayName} />
+                {profile.privacy_level === 'link_only' && (
+                  <p className="text-xs text-slate-400 flex items-center gap-1">
+                    <span>🔒</span> Only people with this link can see this registry
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Proxy Banner */}
