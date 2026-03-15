@@ -81,20 +81,28 @@ export default async function BrowsePage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20">
+        <div className="text-center py-20 max-w-lg mx-auto">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 mb-6">
             <Search className="w-8 h-8" />
           </div>
           <h3 className="text-xl font-semibold text-slate-900">No public registries yet</h3>
           <p className="mt-2 text-slate-600">
-            Be the first to create one and share your story.
+            Public registries will appear here when users opt in. Most registries are shared privately via link — if someone sent you a link to their registry, follow that link directly.
           </p>
-          <Link
-            href="/auth/signup"
-            className="inline-block mt-6 px-6 py-2.5 bg-rose-600 text-white rounded-lg font-medium hover:bg-rose-700 transition-colors"
-          >
-            Create Your Registry
-          </Link>
+          <div className="flex gap-3 justify-center mt-6">
+            <Link
+              href="/auth/signup"
+              className="inline-block px-6 py-2.5 bg-rose-600 text-white rounded-lg font-medium hover:bg-rose-700 transition-colors"
+            >
+              Create Your Registry
+            </Link>
+            <Link
+              href="/about"
+              className="inline-block px-6 py-2.5 border-2 border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-colors"
+            >
+              Learn More
+            </Link>
+          </div>
         </div>
       )}
     </div>

@@ -41,8 +41,10 @@ export function CuratedProductCard({
   isAdded = false,
 }: CuratedProductCardProps) {
   const [imageError, setImageError] = useState(false)
+  const [localClicked, setLocalClicked] = useState(false)
   const retailerColor = RETAILER_COLORS[item.retailer] || '#64748b'
   const buyUrl = item.affiliateUrl || item.sourceUrl
+  const isDisabled = isAdding || isAdded || localClicked
 
   return (
     <Card hover className="flex flex-col h-full overflow-hidden">
@@ -108,8 +110,13 @@ export function CuratedProductCard({
             variant={isAdded ? 'outline' : 'primary'}
             size="sm"
             className="flex-1 gap-1.5"
-            onClick={() => onAddToRegistry(item)}
-            disabled={isAdding || isAdded}
+            onClick={() => {
+              setLocalClicked(true)
+              onAddToRegistry(item)
+              // Reset local guard after parent state propagates
+              setTimeout(() => setLocalClicked(false), 500)
+            }}
+            disabled={isDisabled}
           >
             {isAdding ? (
               <>

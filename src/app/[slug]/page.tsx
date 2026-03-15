@@ -167,7 +167,7 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
 
                   {/* Badges */}
                   <div className="mt-6 flex flex-wrap gap-3">
-                    <Badge variant="info" className="text-base px-4 py-2 flex items-center gap-2">
+                    <Badge variant="default" className="text-sm px-3 py-1.5 flex items-center gap-2">
                       <span>{eventEmoji}</span>
                       <span>{eventLabel}</span>
                     </Badge>
@@ -277,7 +277,7 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
         {/* Affiliate Disclosure — required by FTC + Amazon Associates ToS */}
         {hasAffiliateLinks && (
           <p className="text-xs text-slate-400 mb-4">
-            Some links on this page are affiliate links. Welp may earn a small commission at no extra cost to you.
+            Some product links help support Welp through small affiliate commissions — you pay the same price either way.
             As an Amazon Associate, Welp earns from qualifying purchases.
           </p>
         )}
