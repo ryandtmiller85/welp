@@ -52,6 +52,7 @@ const ALL_CATEGORIES: { value: ItemCategory; label: string }[] = [
   { value: 'treat_yoself', label: CATEGORY_LABELS.treat_yoself },
   { value: 'pets', label: CATEGORY_LABELS.pets },
   { value: 'tech', label: CATEGORY_LABELS.tech },
+  { value: 'for_the_kids', label: CATEGORY_LABELS.for_the_kids },
   { value: 'other', label: CATEGORY_LABELS.other },
 ]
 
@@ -945,7 +946,7 @@ export default function AddItemPage() {
               <Textarea label="Description" value={formData.description} onChange={(e) => handleFormChange('description', e.target.value)} id="description-manual" placeholder="Product description (optional)" />
               <Input label="Image URL" value={formData.imageUrl} onChange={(e) => handleFormChange('imageUrl', e.target.value)} id="image-manual" placeholder="https://... (optional)" error={fieldErrors.imageUrl} />
               <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-manual" placeholder="0.00 (optional)" error={fieldErrors.price} />
-              <Input label="Source URL" type="url" value={formData.sourceUrl} onChange={(e) => handleFormChange('sourceUrl', e.target.value)} id="source-manual" placeholder="https://... (optional)" error={fieldErrors.sourceUrl} />
+              <Input label="Buy Link (URL)" type="url" value={formData.sourceUrl} onChange={(e) => handleFormChange('sourceUrl', e.target.value)} id="source-manual" placeholder="https://www.amazon.com/... (where supporters can buy this)" error={fieldErrors.sourceUrl} />
               <Select label="Category" value={formData.category} onChange={(e) => handleFormChange('category', e.target.value as ItemCategory)} options={ALL_CATEGORIES.map((c) => ({ value: c.value, label: c.label }))} id="category-manual" />
               <Select label="Priority" value={formData.priority} onChange={(e) => handleFormChange('priority', e.target.value as ItemPriority)} options={PRIORITIES.map((p) => ({ value: p.value, label: p.label }))} id="priority-manual" />
               <Textarea label="Custom Note" value={formData.customNote} onChange={(e) => handleFormChange('customNote', e.target.value)} id="note-manual" placeholder="Any additional notes (optional)" />
