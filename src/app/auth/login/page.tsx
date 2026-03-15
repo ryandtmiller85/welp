@@ -37,9 +37,9 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      // Sign out any existing session first to prevent session bleed
-      await supabase.auth.signOut()
-
+      // Note: signInWithPassword() replaces the active session automatically.
+      // Do NOT call signOut() here — it destroys auth cookies browser-wide,
+      // which kills sessions in other open windows/tabs for the same user.
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
