@@ -20,6 +20,8 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [addingToRegistry, setAddingToRegistry] = useState(false)
+  const [addedToRegistry, setAddedToRegistry] = useState(false)
 
   // Reset loading state on page visibility (bfcache fix)
   useEffect(() => {
@@ -280,6 +282,55 @@ export default function ProductDetailPage() {
               ) : (
                 `Buy Now — $${(item.price * quantity).toFixed(2)}`
               )}
+            </button>
+
+            {/* Add to Registry button */}
+            <button
+              onClick={async () => {
+                setAddingToRegistry(true)
+                setError('')
+                try {
+                  const res = await fetch('/api/registry', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      title: item.title,
+                      description: item.description,
+                      imageUrl: item.imageUrl || null,
+                      sourceUrl: item.buyUrl || `${window.location.origin}/merch/${item.id}`,
+                      priceCents: Math.round(item.price * 100),
+                      category: 'treat_yoself',
+                      priority: 'want',
+                      retailer: 'Welp Merch',
+                    }),
+                  })
+                  if (!res.ok) {
+                    const data = await res.json()
+                    if (res.status === 401) {
+                      setError('Sign in to add merch to your registry')
+                      return
+                    }
+                    throw new Error(data.error || 'Failed to add')
+                  }
+                  setAddedToRegistry(true)
+                } catch (err: any) {
+                  setError(err.message || 'Failed to add to registry')
+                } finally {
+                  setAddingToRegistry(false)
+                }
+              }}
+              disabled={addingToRegistry || addedToRegistry}
+              className={`w-full px-6 py-3 rounded-xl font-semibold text-sm transition-all ${
+                addedToRegistry
+                  ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                  : 'bg-white text-slate-700 border border-slate-200 hover:border-rose-300 hover:text-rose-600'
+              } disabled:cursor-not-allowed`}
+            >
+              {addedToRegistry
+                ? '✓ Added to Registry'
+                : addingToRegistry
+                  ? 'Adding...'
+                  : 'Add to My Registry'}
             </button>
 
             {/* Shipping note */}

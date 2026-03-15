@@ -204,9 +204,25 @@ export default function AddItemPage() {
     }
   }
 
+  // Welp-flavored quips for after adding items
+  const SUCCESS_QUIPS = [
+    'Look at you, rebuilding like a boss.',
+    'Added. Your future self says thanks.',
+    'One more step toward the life you deserve.',
+    'Registry glow-up in progress.',
+    'That\'s going on the list. The good list.',
+    'Your people are going to love helping with this one.',
+    'Fresh start energy: activated.',
+  ]
+
+  function getRandomQuip() {
+    return SUCCESS_QUIPS[Math.floor(Math.random() * SUCCESS_QUIPS.length)]
+  }
+
   function showToast(message: string, type: 'success' | 'error') {
-    setToast({ message, type })
-    setTimeout(() => setToast(null), 3000)
+    const display = type === 'success' ? `${message} ${getRandomQuip()}` : message
+    setToast({ message: display, type })
+    setTimeout(() => setToast(null), 4000)
   }
 
   // ── Marketplace search handlers ─────────────────────────────────────
@@ -498,7 +514,22 @@ export default function AddItemPage() {
             <CardContent className="pt-6 text-center">
               <div className="text-4xl mb-4">✓</div>
               <h2 className="text-2xl font-bold text-slate-900 mb-2">Item Added!</h2>
-              <p className="text-slate-600 mb-6">Your item has been added to your registry.</p>
+              <p className="text-slate-600 mb-6">
+                {getRandomQuip()}
+              </p>
+
+              {/* Cash fund nudge */}
+              <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-lg text-sm text-slate-700">
+                <p className="font-medium text-rose-800 mb-1">Need help covering bigger expenses?</p>
+                <p>
+                  Set up a{' '}
+                  <a href="/dashboard/funds/new" className="text-rose-600 font-semibold underline hover:text-rose-700">
+                    Cash Fund
+                  </a>
+                  {' '}— let people chip in toward rent, deposits, or anything that doesn't come in a box.
+                </p>
+              </div>
+
               <div className="flex gap-3 justify-center">
                 <Button
                   variant="primary"

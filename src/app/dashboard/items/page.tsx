@@ -1,13 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { formatCents } from '@/lib/utils'
-import { CATEGORY_LABELS, PRIORITY_LABELS, PRIORITY_COLORS } from '@/lib/constants'
-import type { RegistryItem, ItemCategory, ItemPriority } from '@/lib/types/database'
-import { ArrowLeft, Plus, Package, ShoppingBag, ExternalLink } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import type { RegistryItem } from '@/lib/types/database'
+import { ArrowLeft, Plus, Package, ShoppingBag } from 'lucide-react'
+import { ReorderableItems } from './reorderable-items'
+
+export const dynamic = 'force-dynamic'
 
 export default async function ItemsPage() {
   const supabase = await createClient()
@@ -22,13 +22,6 @@ export default async function ItemsPage() {
     .order('sort_order', { ascending: true })
 
   const allItems = (items || []) as RegistryItem[]
-
-  const statusConfig: Record<string, { label: string; variant: 'default' | 'success' | 'warning' }> = {
-    available: { label: 'Available', variant: 'default' },
-    claimed: { label: 'Claimed', variant: 'success' },
-    partially_funded: { label: 'Partial', variant: 'warning' },
-    fulfilled: { label: 'Fulfilled', variant: 'success' },
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-slate-50 to-slate-100">
@@ -64,81 +57,7 @@ export default async function ItemsPage() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {allItems.length > 0 ? (
-          <div className="space-y-3">
-            {allItems.map((item) => {
-              const status = statusConfig[item.status] || statusConfig.available
-              const priorityColor = PRIORITY_COLORS[item.priority] || ''
-
-              return (
-                <Card key={item.id} hover>
-                  <CardContent className="py-4">
-                    <div className="flex items-center gap-4">
-                      {/* Image Thumbnail */}
-                      <div className="w-16 h-16 flex-shrink-0 rounded-lg bg-slate-100 overflow-hidden">
-                        {item.image_url ? (
-                          <img
-                            src={item.image_url}
-                            alt={item.title}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Package className="w-6 h-6 text-slate-300" />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Item Info */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-slate-900 truncate">{item.title}</h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-sm text-slate-600">
-                            {item.price_cents ? formatCents(item.price_cents) : 'Price TBD'}
-                          </span>
-                          {item.retailer && (
-                            <span className="text-sm text-slate-400">· {item.retailer}</span>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2 mt-2">
-                          <Badge variant="custom" className={`text-xs ${priorityColor}`}>
-                            {PRIORITY_LABELS[item.priority]}
-                          </Badge>
-                          <span className="text-xs text-slate-400">
-                            {CATEGORY_LABELS[item.category]}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Status + Actions */}
-                      <div className="flex items-center gap-3 flex-shrink-0">
-                        <Badge variant={status.variant}>{status.label}</Badge>
-                        {item.source_url && (
-                          <a href={item.source_url} target="_blank" rel="noopener noreferrer">
-                            <Button variant="ghost" size="sm">
-                              <ExternalLink className="w-4 h-4" />
-                            </Button>
-                          </a>
-                        )}
-                        <Link href={`/dashboard/items/${item.id}`}>
-                          <Button variant="outline" size="sm">
-                            Edit
-                          </Button>
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Claimed info */}
-                    {item.claimed_by_name && (
-                      <p className="text-xs text-slate-400 mt-2 ml-20">
-                        Claimed by {item.claimed_by_name}
-                        {item.claimed_at && ` on ${new Date(item.claimed_at).toLocaleDateString()}`}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
+          <ReorderableItems initialItems={allItems} />
         ) : (
           <Card className="border-2 border-dashed border-slate-300 bg-slate-50/50">
             <CardContent className="py-16 text-center">

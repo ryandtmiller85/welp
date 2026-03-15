@@ -11,7 +11,7 @@ import { CopyButton } from '@/components/ui/copy-button'
 import { ShareRegistry } from './share-registry'
 import { formatCents, progressPercent } from '@/lib/utils'
 import type { Profile, RegistryItem, CashFund, Encouragement } from '@/lib/types/database'
-import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart, MessageCircleHeart, Users, Banknote } from 'lucide-react'
+import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart, MessageCircleHeart, Users, Banknote, Eye } from 'lucide-react'
 import { ProxyRegistryCard } from '@/components/proxy/proxy-registry-card'
 
 async function getDashboardData() {
@@ -177,6 +177,12 @@ export default async function DashboardPage() {
               <p className="text-slate-600 mt-1">Welcome to your registry dashboard</p>
             </div>
             <div className="flex gap-2">
+              <a href={`/${profile.slug}`} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <Eye className="w-4 h-4" />
+                  Preview
+                </Button>
+              </a>
               <a href="/auth/logout">
                 <Button variant="ghost" size="sm">
                   Sign Out
