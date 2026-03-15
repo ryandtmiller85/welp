@@ -38,7 +38,7 @@ export default function AboutPage() {
 
         <p>
           We&apos;re not here to be sad about it. We&apos;re here to be{' '}
-          <em>real</em> about it. Yeah, this sucks. But you&apos;re going to be fine.
+          <em>real</em> about it. Yeah, this sucks. But you&apos;ll get through it.
           And the people who love you want to help you get there.
         </p>
 

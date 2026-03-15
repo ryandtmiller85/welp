@@ -47,7 +47,7 @@ export const CATEGORY_DESCRIPTIONS: Record<ItemCategory, string> = {
   petty_fund: 'Think about yourself for once. The fun stuff you actually want.',
   fresh_start_fund: "First/last month's rent, security deposit, moving costs.",
   treat_yoself: 'Because you deserve something nice right now.',
-  pets: 'Because at least the dog still loves you unconditionally.',
+  pets: 'Because the dog still loves you unconditionally.',
   tech: 'The Netflix account was theirs. Time for your own everything.',
   other: "Stuff that doesn't fit neatly into a box. Kind of like your life right now.",
 }
