@@ -8,6 +8,7 @@ import { EVENT_LABELS, PRIVACY_LABELS } from '@/lib/constants'
 import { Input, Textarea, Select } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
+import { ImageUpload } from '@/components/ui/image-upload'
 import Link from 'next/link'
 
 const EVENT_OPTIONS: { value: EventType; label: string }[] = [
@@ -344,32 +345,27 @@ export default function EditProfilePage() {
                 options={PRIVACY_OPTIONS}
               />
 
-              {/* Photo Upload Placeholder */}
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-slate-700">
-                  Profile Photo
-                </label>
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center bg-slate-50">
-                  <div className="text-2xl mb-2">📸</div>
-                  <p className="text-sm text-slate-600 font-medium mb-1">Photo upload coming soon</p>
-                  <p className="text-xs text-slate-500">
-                    We're working on photo uploads. For now, you can use an avatar.
-                  </p>
-                </div>
-              </div>
+              {/* Profile Photo Upload */}
+              <ImageUpload
+                label="Profile Photo"
+                value={formData.profile_photo_url || null}
+                onChange={(url) => setFormData((prev) => ({ ...prev, profile_photo_url: url }))}
+                folder="profiles"
+                shape="circle"
+                previewSize="w-32 h-32"
+                hint="Square image works best. Shows on your registry page."
+              />
 
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-slate-700">
-                  Cover Photo
-                </label>
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center bg-slate-50">
-                  <div className="text-2xl mb-2">🖼️</div>
-                  <p className="text-sm text-slate-600 font-medium mb-1">Cover photo upload coming soon</p>
-                  <p className="text-xs text-slate-500">
-                    Help personalize your registry page with a cover image.
-                  </p>
-                </div>
-              </div>
+              {/* Cover Photo Upload */}
+              <ImageUpload
+                label="Cover Photo"
+                value={formData.cover_photo_url || null}
+                onChange={(url) => setFormData((prev) => ({ ...prev, cover_photo_url: url }))}
+                folder="covers"
+                shape="rounded"
+                previewSize="w-full h-40"
+                hint="Wide landscape image (at least 1200px wide). Shown at the top of your registry page."
+              />
             </CardContent>
 
             <CardFooter className="flex gap-3">
