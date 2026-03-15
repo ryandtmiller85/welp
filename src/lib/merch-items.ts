@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------
-// Merch catalog Ã¢ÂÂ welp. branded swag
+// Merch catalog — welp. branded swag
 //
 // Synced with Printify shop (15 products). Every item has a real mockup URL.
-// Variant data sourced from Printify API Ã¢ÂÂ size IDs are Printify variant IDs.
+// Variant data sourced from Printify API — size IDs are Printify variant IDs.
 // ---------------------------------------------------------------------------
 
 export interface SizeVariant {
@@ -75,7 +75,7 @@ const CREWNECK_SIZES: SizeVariant[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// Gallery image helpers Ã¢ÂÂ Printify mockup URLs with correct subvariant IDs
+// Gallery image helpers — Printify mockup URLs with correct subvariant IDs
 // ---------------------------------------------------------------------------
 
 function teeGallery(productId: string, variantId: number, slug: string) {
@@ -109,7 +109,7 @@ function mugGallery(productId: string, variantId: number, slug: string) {
 }
 
 export const MERCH_ITEMS: MerchItem[] = [
-  // Ã¢ÂÂÃ¢ÂÂ The Essentials Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+  // —— The Essentials ————————————————————————————————————————————————————————
   {
     id: 'tee-og-black',
     title: 'welp. Wordmark Tee - Dark',
@@ -254,13 +254,13 @@ export const MERCH_ITEMS: MerchItem[] = [
       fontSize: '18px',
     },
     variants: [
-      { label: '3" ÃÂ 3"', variantId: 45750 },
-      { label: '4" ÃÂ 4"', variantId: 45752 },
+      { label: '3" × 3"', variantId: 45750 },
+      { label: '4" × 4"', variantId: 45752 },
     ],
     defaultVariantIndex: 0,
   },
 
-  // Ã¢ÂÂÃ¢ÂÂ The Statements Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+  // —— The Statements ————————————————————————————————————————————————————————
   {
     id: 'tee-definition',
     title: 'welp. Definition Tee',
@@ -361,7 +361,7 @@ export const MERCH_ITEMS: MerchItem[] = [
     galleryImages: mugGallery('69ae2583b347233985055a72', 71305, 'everything-is-fine-mug'),
   },
 
-  // Ã¢ÂÂÃ¢ÂÂ The Petty Collection Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+  // —— The Petty Collection ——————————————————————————————————————————————————
   {
     id: 'tee-they-kept-pots-black',
     title: 'They Kept the Pots Tee - Dark',
@@ -441,7 +441,7 @@ export const MERCH_ITEMS: MerchItem[] = [
   {
     id: 'tote-definition',
     title: 'welp. Definition Tote',
-    description: 'The dictionary definition of welp â on a tote. Available in cream or black.',
+    description: 'The dictionary definition of welp — on a tote. Available in cream or black.',
     price: 24.99,
     comparePrice: 29.99,
     category: 'totes',
