@@ -37,6 +37,9 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
+      // Sign out any existing session first to prevent session bleed
+      await supabase.auth.signOut()
+
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,

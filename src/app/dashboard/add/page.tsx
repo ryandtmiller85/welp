@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input, Textarea, Select } from '@/components/ui/input'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -8,6 +8,7 @@ import { CuratedProductCard } from '@/components/shop/curated-product-card'
 import { CURATED_ITEMS, type CuratedItem } from '@/lib/curated-items'
 import { CATEGORY_LABELS, CATEGORY_DESCRIPTIONS, PRIORITY_LABELS } from '@/lib/constants'
 import { constructAffiliateUrl } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 import type { ItemCategory, ItemPriority } from '@/lib/types/database'
 import Link from 'next/link'
 import {
@@ -90,6 +91,28 @@ export default function AddItemPage() {
   const [activeTab, setActiveTab] = useState<'catalog' | 'url' | 'manual'>('catalog')
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(null)
   const [showMarketplaceSearch, setShowMarketplaceSearch] = useState(false)
+  const [userSlug, setUserSlug] = useState<string | null>(null)
+
+  // Fetch user's profile slug for "View Registry" link
+  useEffect(() => {
+    async function fetchSlug() {
+      try {
+        const supabase = createClient()
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('slug')
+            .eq('id', session.user.id)
+            .single()
+          if (profile?.slug) setUserSlug(profile.slug)
+        }
+      } catch {
+        // Non-critical — fallback to dashboard link
+      }
+    }
+    fetchSlug()
+  }, [])
 
   // Marketplace search state
   const [marketplaceQuery, setMarketplaceQuery] = useState('')
@@ -459,6 +482,13 @@ export default function AddItemPage() {
 
   // ── Success screen ────────────────────────────────────────────────────
 
+  // Scroll to top when success screen appears
+  useEffect(() => {
+    if (submitSuccess) {
+      window.scrollTo(0, 0)
+    }
+  }, [submitSuccess])
+
   if (submitSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-8 px-4">
@@ -478,8 +508,14 @@ export default function AddItemPage() {
                 >
                   Add Another Item
                 </Button>
-                <Button variant="secondary" onClick={() => (window.location.href = '/dashboard')}>
+                <Button
+                  variant="secondary"
+                  onClick={() => (window.location.href = userSlug ? `/${userSlug}` : '/dashboard')}
+                >
                   View Registry
+                </Button>
+                <Button variant="outline" onClick={() => (window.location.href = '/dashboard')}>
+                  Back to Dashboard
                 </Button>
               </div>
             </CardContent>
