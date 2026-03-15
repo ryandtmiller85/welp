@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input, Textarea, Select } from '@/components/ui/input'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { CuratedProductCard } from '@/components/shop/curated-product-card'
+import { ImageUpload } from '@/components/ui/image-upload'
 import { CURATED_ITEMS, type CuratedItem } from '@/lib/curated-items'
 import { CATEGORY_LABELS, CATEGORY_DESCRIPTIONS, PRIORITY_LABELS } from '@/lib/constants'
 import { constructAffiliateUrl } from '@/lib/utils'
@@ -26,6 +27,7 @@ import {
   Search,
   ExternalLink,
   Loader2,
+  Baby,
 } from 'lucide-react'
 
 // Categories that have curated items
@@ -35,6 +37,7 @@ const CATALOG_CATEGORIES: { key: ItemCategory; icon: React.ReactNode }[] = [
   { key: 'bedroom_glowup', icon: <Bed className="w-6 h-6" /> },
   { key: 'living_solo', icon: <Sofa className="w-6 h-6" /> },
   { key: 'self_care', icon: <Coffee className="w-6 h-6" /> },
+  { key: 'for_the_kids', icon: <Baby className="w-6 h-6" /> },
   { key: 'petty_fund', icon: <Flame className="w-6 h-6" /> },
   { key: 'treat_yoself', icon: <Sparkles className="w-6 h-6" /> },
   { key: 'pets', icon: <PawPrint className="w-6 h-6" /> },
@@ -975,7 +978,22 @@ export default function AddItemPage() {
             <CardContent className="space-y-4">
               <Input label="Title" value={formData.title} onChange={(e) => handleFormChange('title', e.target.value)} id="title-manual" placeholder="Item name" error={fieldErrors.title} required />
               <Textarea label="Description" value={formData.description} onChange={(e) => handleFormChange('description', e.target.value)} id="description-manual" placeholder="Product description (optional)" />
-              <Input label="Image URL" value={formData.imageUrl} onChange={(e) => handleFormChange('imageUrl', e.target.value)} id="image-manual" placeholder="https://... (optional)" error={fieldErrors.imageUrl} />
+
+              {/* Image: upload or paste URL */}
+              <div className="space-y-3">
+                <ImageUpload
+                  label="Item Photo"
+                  value={formData.imageUrl || null}
+                  onChange={(url) => handleFormChange('imageUrl', url || '')}
+                  folder="items"
+                  shape="rounded"
+                  previewSize="w-32 h-32"
+                  hint="Upload a photo, or paste an image URL below instead."
+                />
+                {!formData.imageUrl && (
+                  <Input label="Or paste Image URL" value={formData.imageUrl} onChange={(e) => handleFormChange('imageUrl', e.target.value)} id="image-manual" placeholder="https://... (optional)" error={fieldErrors.imageUrl} />
+                )}
+              </div>
               <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-manual" placeholder="0.00 (optional)" error={fieldErrors.price} />
               <Input label="Buy Link (URL)" type="url" value={formData.sourceUrl} onChange={(e) => handleFormChange('sourceUrl', e.target.value)} id="source-manual" placeholder="https://www.amazon.com/... (where supporters can buy this)" error={fieldErrors.sourceUrl} />
               <Select label="Category" value={formData.category} onChange={(e) => handleFormChange('category', e.target.value as ItemCategory)} options={ALL_CATEGORIES.map((c) => ({ value: c.value, label: c.label }))} id="category-manual" />
