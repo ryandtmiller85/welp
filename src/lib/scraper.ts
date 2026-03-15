@@ -152,8 +152,7 @@ function extractFallbackData(html: string, sourceUrl: string): Partial<ScrapedPr
 
 /**
  * Amazon-specific: Amazon blocks most scraping. We detect Amazon URLs
- * so the UI can show helpful messaging about entering data manually.
- * The old images/P/ASIN URL format is no longer reliable.
+ * and extract what we can from the URL structure itself (ASIN, title).
  */
 function isAmazonUrl(url: string): boolean {
   try {
@@ -162,6 +161,60 @@ function isAmazonUrl(url: string): boolean {
   } catch {
     return false
   }
+}
+
+/**
+ * Extract Amazon ASIN from various URL formats:
+ *  /dp/B0XXXXX, /gp/product/B0XXXXX, /gp/aw/d/B0XXXXX
+ */
+function extractAmazonAsin(url: string): string | null {
+  const patterns = [
+    /\/dp\/([A-Z0-9]{10})/i,
+    /\/gp\/product\/([A-Z0-9]{10})/i,
+    /\/gp\/aw\/d\/([A-Z0-9]{10})/i,
+    /\/product\/([A-Z0-9]{10})/i,
+  ]
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match) return match[1]
+  }
+  return null
+}
+
+/**
+ * Extract a human-readable product title from Amazon URL slug.
+ * e.g. /Chemex-Classic-Pour-Over-Coffeemaker/dp/B000I1WP7W
+ *   → "Chemex Classic Pour Over Coffeemaker"
+ */
+function extractAmazonTitleFromUrl(url: string): string | null {
+  try {
+    const pathname = new URL(url).pathname
+    // Match the slug before /dp/ or /gp/
+    const slugMatch = pathname.match(/^\/([A-Za-z0-9][A-Za-z0-9-]+)\/(?:dp|gp)/)
+    if (slugMatch && slugMatch[1]) {
+      const slug = slugMatch[1]
+      // Skip if it's just an ASIN or too short
+      if (/^[A-Z0-9]{10}$/i.test(slug) || slug.length < 4) return null
+      // Convert hyphens to spaces and title-case
+      return slug
+        .split('-')
+        .filter(Boolean)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ')
+    }
+  } catch {
+    // ignore
+  }
+  return null
+}
+
+/**
+ * Construct Amazon product image URL from ASIN.
+ * Uses the media CDN pattern that works for most products.
+ */
+function constructAmazonImageUrl(asin: string): string {
+  return `https://m.media-amazon.com/images/P/${asin}.01._SCLZZZZZZZ_SX300_.jpg`
 }
 
 async function fetchWithTimeout(url: string, timeoutMs: number = 10000): Promise<string> {
@@ -233,8 +286,32 @@ export async function scrapeProductMetadata(url: string): Promise<ScrapedProduct
     const retailer = detectRetailer(url)
     const amazon = isAmazonUrl(url)
 
+    // For Amazon: extract what we can from the URL itself first
+    // Amazon aggressively blocks server-side scraping, so URL-derived
+    // data is our most reliable source
+    const amazonAsin = amazon ? extractAmazonAsin(url) : null
+    const amazonTitle = amazon ? extractAmazonTitleFromUrl(url) : null
+    const amazonImageUrl = amazonAsin ? constructAmazonImageUrl(amazonAsin) : null
+
     // Fetch HTML with timeout
-    const html = await fetchWithTimeout(url, 10000)
+    let html = ''
+    try {
+      html = await fetchWithTimeout(url, 10000)
+    } catch {
+      // If fetch fails entirely (Amazon blocks, timeout, etc.)
+      // return what we extracted from the URL
+      if (amazon && (amazonTitle || amazonAsin)) {
+        return {
+          title: amazonTitle || (amazonAsin ? `Amazon Product ${amazonAsin}` : null),
+          description: null,
+          imageUrl: amazonImageUrl,
+          priceCents: null,
+          retailer: retailer || 'Amazon',
+          sourceUrl: url,
+        }
+      }
+      throw new Error('Failed to fetch URL')
+    }
 
     // Extract data in priority order
     const schemaData = extractSchemaOrgData(html, url)
@@ -253,26 +330,38 @@ export async function scrapeProductMetadata(url: string): Promise<ScrapedProduct
       !scrapedImage.includes('/images/I/')
     )
 
+    // For Amazon: prefer URL-extracted title over generic scraped titles like "Amazon.com"
+    const scrapedTitle = schemaData.title || ogData.title || fallbackData.title || null
+    const isGenericAmazonTitle = amazon && scrapedTitle && (
+      scrapedTitle === 'Amazon.com' ||
+      scrapedTitle.startsWith('Amazon.com:') && scrapedTitle.length < 15 ||
+      scrapedTitle === 'Page Not Found'
+    )
+
     const merged = {
-      title: schemaData.title || ogData.title || fallbackData.title || null,
+      title: (isGenericAmazonTitle && amazonTitle) ? amazonTitle : (scrapedTitle || amazonTitle || null),
       description: schemaData.description || ogData.description || fallbackData.description || null,
-      imageUrl: isGenericAmazonImage ? null : scrapedImage,
+      imageUrl: isGenericAmazonImage ? amazonImageUrl : (scrapedImage || amazonImageUrl || null),
       priceCents: (amazon && (!scrapedPrice || scrapedPrice === 0)) ? null : scrapedPrice,
-      retailer: retailer,
+      retailer: retailer || (amazon ? 'Amazon' : null),
       sourceUrl: url,
     }
 
     return merged
   } catch (error) {
-    // Return partial data on error
+    // Return partial data on error — try URL extraction as fallback
     try {
       const urlObj = new URL(url)
+      const amazon = isAmazonUrl(url)
+      const asin = amazon ? extractAmazonAsin(url) : null
+      const amazonTitle = amazon ? extractAmazonTitleFromUrl(url) : null
+
       return {
-        title: null,
+        title: amazonTitle || null,
         description: null,
-        imageUrl: null,
+        imageUrl: asin ? constructAmazonImageUrl(asin) : null,
         priceCents: null,
-        retailer: detectRetailer(url),
+        retailer: detectRetailer(url) || (amazon ? 'Amazon' : null),
         sourceUrl: url,
       }
     } catch {
