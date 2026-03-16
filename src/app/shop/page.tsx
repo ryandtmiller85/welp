@@ -13,6 +13,7 @@ import {
   Flame,
   Sparkles,
   PawPrint,
+  Baby,
 } from 'lucide-react'
 
 const CATEGORY_ICONS: Partial<Record<ItemCategory, React.ReactNode>> = {
@@ -24,6 +25,7 @@ const CATEGORY_ICONS: Partial<Record<ItemCategory, React.ReactNode>> = {
   petty_fund: <Flame className="w-6 h-6" />,
   treat_yoself: <Sparkles className="w-6 h-6" />,
   pets: <PawPrint className="w-6 h-6" />,
+  for_the_kids: <Baby className="w-6 h-6" />,
 }
 
 // Only show categories that have curated items
