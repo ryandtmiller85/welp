@@ -831,9 +831,11 @@ export default function AddItemPage() {
                         />
                       </div>
                     )}
-                    {!marketplaceFormData.imageUrl && marketplaceScrapedData.retailer === 'Amazon' && (
+                    {!marketplaceFormData.imageUrl && (
                       <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
-                        Amazon blocks image scraping. You can paste an image URL manually below, or skip it — your supporters will still see the product title and link.
+                        {marketplaceScrapedData.retailer === 'Amazon'
+                          ? "We couldn't fetch the product image from Amazon. You can paste an image URL below, or skip it — your supporters will still see the product title and link."
+                          : "We couldn't fetch the product image. You can paste an image URL below, or skip it."}
                       </div>
                     )}
 
@@ -847,6 +849,11 @@ export default function AddItemPage() {
                     <Textarea label="Description" value={marketplaceFormData.description} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, description: e.target.value }))} id="mp-desc" placeholder="Product description (optional)" />
                     <Input label="Image URL" value={marketplaceFormData.imageUrl} onChange={(e) => setMarketplaceFormData(prev => ({ ...prev, imageUrl: e.target.value }))} id="mp-image" placeholder="https://... (paste product image URL)" />
                     <Input label="Price (USD)" type="number" step="0.01" value={marketplaceFormData.price} onChange={(e) => { setMarketplaceFormData(prev => ({ ...prev, price: e.target.value })); setMpFieldErrors(prev => { const { price: _, ...rest } = prev; return rest }) }} id="mp-price" placeholder={marketplaceScrapedData?.retailer === 'Amazon' ? 'Amazon blocks price scraping — enter manually' : '0.00'} error={mpFieldErrors.price} />
+                    {!marketplaceFormData.price && (
+                      <p className="text-xs text-amber-600 -mt-2">
+                        We couldn&apos;t detect a price. Enter it manually so your supporters know the cost.
+                      </p>
+                    )}
 
                     {marketplaceScrapedData.retailer && (
                       <div className="p-3 bg-slate-100 rounded-lg text-sm text-slate-700">
@@ -929,9 +936,11 @@ export default function AddItemPage() {
                       />
                     </div>
                   )}
-                  {!formData.imageUrl && scrapedData?.retailer === 'Amazon' && (
+                  {!formData.imageUrl && (
                     <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
-                      Amazon blocks image scraping. You can paste an image URL in the Image URL field below.
+                      {scrapedData?.retailer === 'Amazon'
+                        ? "We couldn't fetch the product image from Amazon. You can paste an image URL in the field below, or skip it — your supporters will still see the product title and link."
+                        : "We couldn't fetch the product image. You can paste an image URL in the field below, or skip it."}
                     </div>
                   )}
 
@@ -945,6 +954,11 @@ export default function AddItemPage() {
                   <Textarea label="Description" value={formData.description} onChange={(e) => handleFormChange('description', e.target.value)} id="description-url" placeholder="Product description (optional)" />
                   <Input label="Image URL" value={formData.imageUrl} onChange={(e) => handleFormChange('imageUrl', e.target.value)} id="image-url" placeholder="https://..." error={fieldErrors.imageUrl} />
                   <Input label="Price (USD)" type="number" step="0.01" value={formData.price} onChange={(e) => handleFormChange('price', e.target.value)} id="price-url" placeholder="0.00" error={fieldErrors.price} />
+                  {scrapedData && !formData.price && (
+                    <p className="text-xs text-amber-600 -mt-2">
+                      We couldn&apos;t detect a price. Enter it manually so your supporters know the cost.
+                    </p>
+                  )}
 
                   {scrapedData.retailer && (
                     <div className="p-3 bg-slate-100 rounded-lg text-sm text-slate-700">

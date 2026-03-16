@@ -275,6 +275,32 @@ async function fetchWithTimeout(url: string, timeoutMs: number = 10000): Promise
   }
 }
 
+/**
+ * Clean up SEO-stuffed product titles.
+ * Strips common suffixes like " - Amazon.com", " | Walmart", etc.
+ */
+function cleanProductTitle(title: string | null): string | null {
+  if (!title) return null
+
+  let cleaned = title
+    // Strip common retailer suffixes
+    .replace(/\s*[-–—|:]\s*(Amazon\.com|Amazon|Walmart\.com|Walmart|Target|Best Buy|Wayfair|IKEA|Etsy|Chewy).*$/i, '')
+    // Strip "Buy ... at ..." patterns
+    .replace(/\s*-\s*Buy\s+.*$/i, '')
+    // Strip trailing " - Shop ..." or " | Shop ..."
+    .replace(/\s*[-|]\s*Shop\s+.*$/i, '')
+    // Strip ".com" from end
+    .replace(/\.com\s*$/i, '')
+    // Trim excessive whitespace
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  // If we over-stripped and have nothing useful, fall back to original
+  if (cleaned.length < 5) return title.trim()
+
+  return cleaned
+}
+
 export async function scrapeProductMetadata(url: string): Promise<ScrapedProduct> {
   try {
     // Validate URL
@@ -338,8 +364,10 @@ export async function scrapeProductMetadata(url: string): Promise<ScrapedProduct
       scrapedTitle === 'Page Not Found'
     )
 
+    const rawTitle = (isGenericAmazonTitle && amazonTitle) ? amazonTitle : (scrapedTitle || amazonTitle || null)
+
     const merged = {
-      title: (isGenericAmazonTitle && amazonTitle) ? amazonTitle : (scrapedTitle || amazonTitle || null),
+      title: cleanProductTitle(rawTitle),
       description: schemaData.description || ogData.description || fallbackData.description || null,
       imageUrl: isGenericAmazonImage ? amazonImageUrl : (scrapedImage || amazonImageUrl || null),
       priceCents: (amazon && (!scrapedPrice || scrapedPrice === 0)) ? null : scrapedPrice,
