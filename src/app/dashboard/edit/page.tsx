@@ -335,15 +335,28 @@ export default function EditProfilePage() {
             </CardHeader>
 
             <CardContent className="space-y-6">
-              {/* Privacy Level */}
-              <Select
-                id="privacy_level"
-                name="privacy_level"
-                label="Who can see your registry?"
-                value={formData.privacy_level || 'link_only'}
-                onChange={handleChange}
-                options={PRIVACY_OPTIONS}
-              />
+              {/* Privacy & Visibility */}
+              <div className="space-y-3">
+                <Select
+                  id="privacy_level"
+                  name="privacy_level"
+                  label="Who can see your registry?"
+                  value={formData.privacy_level || 'link_only'}
+                  onChange={handleChange}
+                  options={PRIVACY_OPTIONS}
+                />
+                <div className="p-3 bg-slate-50 rounded-lg text-sm text-slate-600 space-y-1.5">
+                  {formData.privacy_level === 'public' && (
+                    <p>Your registry will appear on <strong>Browse Registries</strong> and may be indexed by search engines. Anyone can find and view it.</p>
+                  )}
+                  {formData.privacy_level === 'link_only' && (
+                    <p>Only people you share the link with can see your registry. It won&apos;t appear in search engines or on Browse Registries.</p>
+                  )}
+                  {formData.privacy_level === 'private' && (
+                    <p>Only you can see your registry. Useful while you&apos;re still setting things up.</p>
+                  )}
+                </div>
+              </div>
 
               {/* Profile Photo Upload */}
               <ImageUpload

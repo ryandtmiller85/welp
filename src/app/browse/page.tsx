@@ -81,13 +81,16 @@ export default async function BrowsePage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 max-w-lg mx-auto">
+        <div className="text-center py-16 max-w-lg mx-auto">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 mb-6">
             <Search className="w-8 h-8" />
           </div>
           <h3 className="text-xl font-semibold text-slate-900">No public registries yet</h3>
           <p className="mt-2 text-slate-600">
-            Public registries will appear here when users opt in. Most registries are shared privately via link — if someone sent you a link to their registry, follow that link directly.
+            Most Welp registries are shared privately — if someone sent you a link, follow that link directly.
+          </p>
+          <p className="mt-2 text-sm text-slate-500">
+            Public registries will appear here as users opt in. Registry owners can go public anytime in their privacy settings.
           </p>
           <div className="flex gap-3 justify-center mt-6">
             <Link
@@ -97,10 +100,10 @@ export default async function BrowsePage() {
               Create Your Registry
             </Link>
             <Link
-              href="/about"
+              href="/shop"
               className="inline-block px-6 py-2.5 border-2 border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-colors"
             >
-              Learn More
+              Browse Gift Ideas
             </Link>
           </div>
         </div>
