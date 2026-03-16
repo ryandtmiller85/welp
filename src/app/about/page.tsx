@@ -21,11 +21,11 @@ export default function AboutPage() {
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Who Built This</h2>
           <p>
-            Welp was created by Ryan Miller &mdash; a developer who saw firsthand how
-            disorienting it is to start over. After going through a major life transition,
-            he noticed something: when people get married or have a baby, there&apos;s an
-            entire industry built around helping them. When people go through a breakup,
-            divorce, job loss, or any other kind of fresh start? Nothing.
+            Welp was built by Ryan and his sister after watching someone they care about
+            go through the hardest kind of fresh start. They noticed something: when people
+            get married or have a baby, there&apos;s an entire industry built around helping
+            them. When people go through a breakup, divorce, job loss, or any other kind of
+            fresh start? Nothing.
           </p>
           <p className="mt-4">
             Welp exists to change that. It&apos;s the registry for the stuff nobody talks
