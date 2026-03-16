@@ -13,6 +13,7 @@ import { formatCents, progressPercent } from '@/lib/utils'
 import type { Profile, RegistryItem, CashFund, Encouragement } from '@/lib/types/database'
 import { Plus, DollarSign, Edit, ExternalLink, Package, ShoppingBag, Heart, MessageCircleHeart, Users, Banknote, Eye } from 'lucide-react'
 import { ProxyRegistryCard } from '@/components/proxy/proxy-registry-card'
+import { OnboardingChecklist } from '@/components/dashboard/onboarding-checklist'
 
 async function getDashboardData() {
   const supabase = await createClient()
@@ -221,6 +222,15 @@ export default async function DashboardPage() {
             accentColor="amber"
           />
         </div>
+
+        {/* Onboarding Checklist */}
+        <OnboardingChecklist
+          slug={profile.slug}
+          hasDisplayName={!!profile.display_name}
+          hasStory={!!profile.story_text}
+          hasItems={totalItems > 0}
+          userId={user.id}
+        />
 
         {/* Profile Completeness Alerts */}
         <div className="space-y-3">
