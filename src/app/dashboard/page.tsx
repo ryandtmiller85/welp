@@ -222,32 +222,6 @@ export default async function DashboardPage() {
           />
         </div>
 
-        {/* Share Registry Section */}
-        <ShareRegistry slug={profile.slug} />
-
-        {/* Proxy Registries */}
-        {proxyRegistries.length > 0 && (
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                <Users className="w-5 h-5 text-rose-600" />
-                Registries You&apos;re Managing
-              </h2>
-              <Link href="/create-for">
-                <Button variant="ghost" size="sm">
-                  <Plus className="w-4 h-4 mr-1" />
-                  Create Another
-                </Button>
-              </Link>
-            </div>
-            <div className="space-y-3">
-              {proxyRegistries.map((proxy: any) => (
-                <ProxyRegistryCard key={proxy.id} profile={proxy} />
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Profile Completeness Alerts */}
         <div className="space-y-3">
           {!profile.story_text && (
@@ -286,63 +260,6 @@ export default async function DashboardPage() {
             </Card>
           )}
         </div>
-
-        {/* Messages of Support */}
-        {messages.length > 0 && (
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-              <MessageCircleHeart className="w-5 h-5 text-amber-600" />
-              Messages of Support
-            </h2>
-            <div className="space-y-3">
-              {messages.slice(0, 5).map((msg: Encouragement) => (
-                <Card key={msg.id}>
-                  <CardContent className="py-4">
-                    <p className="text-slate-800 font-light text-base leading-relaxed mb-2">
-                      &ldquo;{msg.message}&rdquo;
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-rose-600">— {msg.author_name}</p>
-                      <p className="text-xs text-slate-400">
-                        {new Date(msg.created_at).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-              {messages.length > 5 && (
-                <p className="text-sm text-slate-500 text-center pt-2">
-                  + {messages.length - 5} more messages on your{' '}
-                  <Link href={`/${profile.slug}`} className="text-rose-600 hover:underline">
-                    public page
-                  </Link>
-                </p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Payout Setup Alert */}
-        {!profile.stripe_onboarding_complete && safeFunds.length > 0 && (
-          <Card className="border-l-4 border-l-rose-500 bg-rose-50/50">
-            <CardContent className="py-4 flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-rose-900 mb-1">Set up payouts to receive contributions</h3>
-                <p className="text-sm text-rose-800">
-                  Connect your bank account so people can contribute to your funds.
-                </p>
-              </div>
-              <Link href="/dashboard/payouts" className="ml-4 flex-shrink-0">
-                <Button variant="primary" size="sm">
-                  Set Up Payouts
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        )}
 
         {/* Quick Actions */}
         <div>
@@ -390,6 +307,32 @@ export default async function DashboardPage() {
             </Link>
           </div>
         </div>
+
+        {/* Share Registry Section */}
+        <ShareRegistry slug={profile.slug} />
+
+        {/* Proxy Registries */}
+        {proxyRegistries.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                <Users className="w-5 h-5 text-rose-600" />
+                Registries You&apos;re Managing
+              </h2>
+              <Link href="/create-for">
+                <Button variant="ghost" size="sm">
+                  <Plus className="w-4 h-4 mr-1" />
+                  Create Another
+                </Button>
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {proxyRegistries.map((proxy: any) => (
+                <ProxyRegistryCard key={proxy.id} profile={proxy} />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Recent Items Section */}
         {recentItems.length > 0 && (
@@ -478,6 +421,63 @@ export default async function DashboardPage() {
               })}
             </div>
           </div>
+        )}
+
+        {/* Messages of Support */}
+        {messages.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <MessageCircleHeart className="w-5 h-5 text-amber-600" />
+              Messages of Support
+            </h2>
+            <div className="space-y-3">
+              {messages.slice(0, 5).map((msg: Encouragement) => (
+                <Card key={msg.id}>
+                  <CardContent className="py-4">
+                    <p className="text-slate-800 font-light text-base leading-relaxed mb-2">
+                      &ldquo;{msg.message}&rdquo;
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-rose-600">— {msg.author_name}</p>
+                      <p className="text-xs text-slate-400">
+                        {new Date(msg.created_at).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              {messages.length > 5 && (
+                <p className="text-sm text-slate-500 text-center pt-2">
+                  + {messages.length - 5} more messages on your{' '}
+                  <Link href={`/${profile.slug}`} className="text-rose-600 hover:underline">
+                    public page
+                  </Link>
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Payout Setup Alert */}
+        {!profile.stripe_onboarding_complete && safeFunds.length > 0 && (
+          <Card className="border-l-4 border-l-rose-500 bg-rose-50/50">
+            <CardContent className="py-4 flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-rose-900 mb-1">Set up payouts to receive contributions</h3>
+                <p className="text-sm text-rose-800">
+                  Connect your bank account so people can contribute to your funds.
+                </p>
+              </div>
+              <Link href="/dashboard/payouts" className="ml-4 flex-shrink-0">
+                <Button variant="primary" size="sm">
+                  Set Up Payouts
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         )}
 
         {/* Empty State */}

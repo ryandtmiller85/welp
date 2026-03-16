@@ -837,7 +837,7 @@ export default function AddItemPage() {
 
                     {constructAffiliateUrl(marketplaceFormData.sourceUrl) && (
                       <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-700">
-                        Affiliate link will be included — you&apos;ll earn commission on this item!
+                        Affiliate link detected — Welp earns a small commission at no extra cost to you or your supporters.
                       </div>
                     )}
 
@@ -935,7 +935,7 @@ export default function AddItemPage() {
 
                   {constructAffiliateUrl(formData.sourceUrl) && (
                     <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-700">
-                      Affiliate link detected — you&apos;ll earn commission on this item!
+                      Affiliate link detected — Welp earns a small commission at no extra cost to you or your supporters.
                     </div>
                   )}
 

@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const description = profile.story_text?.slice(0, 160) || `${displayName}'s fresh start registry on Welp.`
 
   return {
-    title: `${displayName} - Welp`,
+    title: `${displayName}'s Registry`,
     description,
     openGraph: {
       title: `${displayName} - ${eventLabel}`,

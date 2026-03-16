@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 export function ShareButton({ displayName }: { displayName: string }) {
   const [copied, setCopied] = useState(false)
+  const [showToast, setShowToast] = useState(false)
 
   const copyToClipboard = async (url: string) => {
     try {
@@ -17,7 +18,9 @@ export function ShareButton({ displayName }: { displayName: string }) {
       document.body.removeChild(textArea)
     }
     setCopied(true)
+    setShowToast(true)
     setTimeout(() => setCopied(false), 2000)
+    setTimeout(() => setShowToast(false), 3000)
   }
 
   const handleShare = async () => {
@@ -40,7 +43,7 @@ export function ShareButton({ displayName }: { displayName: string }) {
   }
 
   return (
-    <div className="flex-shrink-0">
+    <div className="flex-shrink-0 relative">
       <button
         onClick={handleShare}
         className={`inline-flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-lg transition-all duration-200 whitespace-nowrap ${
@@ -52,6 +55,15 @@ export function ShareButton({ displayName }: { displayName: string }) {
         <span>{copied ? '✓ Link Copied!' : 'Share'}</span>
         {!copied && <span>🔗</span>}
       </button>
+
+      {/* Toast notification — appears below button for extra visibility */}
+      {showToast && (
+        <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="bg-slate-900 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-lg whitespace-nowrap">
+            ✓ Link copied to clipboard
+          </div>
+        </div>
+      )}
     </div>
   )
 }
