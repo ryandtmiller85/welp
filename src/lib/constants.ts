@@ -35,6 +35,7 @@ export const CATEGORY_LABELS: Record<ItemCategory, string> = {
   pets: 'Fur Baby Needs',
   tech: 'Tech & Gadgets',
   for_the_kids: 'For the Kids',
+  career_comeback: 'Career Comeback',
   other: 'Other',
 }
 
@@ -51,6 +52,7 @@ export const CATEGORY_DESCRIPTIONS: Record<ItemCategory, string> = {
   pets: 'Because the dog still loves you unconditionally.',
   tech: 'The Netflix account was theirs. Time for your own everything.',
   for_the_kids: "They didn't ask for any of this. Make sure they have what they need.",
+  career_comeback: "Between interviews and the job search, the basics pile up. Get back on your feet.",
   other: "Stuff that doesn't fit neatly into a box. Kind of like your life right now.",
 }
 

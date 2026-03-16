@@ -27,6 +27,7 @@ export type ItemCategory =
   | 'pets'
   | 'tech'
   | 'for_the_kids'
+  | 'career_comeback'
   | 'other'
 
 export type FundType =

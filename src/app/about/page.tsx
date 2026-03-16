@@ -1,80 +1,85 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Heart, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'About',
-  description: 'Welp is a registry for fresh starts. Because starting over shouldn\'t mean starting from scratch.',
+  description: 'The story behind Welp — who built it, why, and how it works.',
 }
 
 export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
       <h1 className="text-4xl sm:text-5xl font-black text-slate-900">
-        About welp.
+        About Welp
       </h1>
+      <p className="mt-4 text-lg text-slate-600">
+        A registry for the life events nobody plans for.
+      </p>
 
-      <div className="mt-8 space-y-6 text-lg text-slate-700 leading-relaxed">
-        <p className="text-xl text-slate-900 font-medium">
-          It&apos;s time to start over.
-        </p>
-
-        <p>
-          When someone gets engaged, there&apos;s a registry. When someone has a baby, there&apos;s a registry.
-          But when someone&apos;s life falls apart? Nothing. You get nothing.
-        </p>
-
-        <p>
-          <strong className="text-slate-900">Welp exists because starting over requires stuff.</strong>{' '}
-          A new apartment needs dishes. A solo life needs its own Netflix password.
-          Moving costs money. Therapy costs money.
-        </p>
-
-        <p>
-          Your friends and family are already asking &ldquo;what can I do?&rdquo; &mdash;
-          now you can give them an actual answer.
-        </p>
-
-        <p>
-          We&apos;re not here to be sad about it. We&apos;re here to be{' '}
-          <em>real</em> about it. Yeah, this sucks. But you&apos;ll get through it.
-          And the people who love you want to help you get there.
-        </p>
-
-        <p>
-          <strong className="text-slate-900">That&apos;s Welp. A registry for fresh starts.</strong>
-        </p>
-      </div>
-
-      <div className="mt-12 p-8 bg-rose-50 rounded-2xl border border-rose-100">
-        <div className="flex items-center gap-3 mb-4">
-          <Heart className="w-6 h-6 text-rose-500 fill-rose-500" />
-          <h2 className="text-xl font-bold text-slate-900">Welp is for</h2>
-        </div>
-        <div className="space-y-3 text-slate-700">
+      <div className="mt-10 space-y-10 text-slate-700 leading-relaxed">
+        {/* Who Built This */}
+        <section>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Who Built This</h2>
           <p>
-            <strong>Fresh starts.</strong> Breakups, divorce, canceled weddings &mdash;
-            whatever the reason, you deserve support while you rebuild.
+            Welp was created by Ryan Miller &mdash; a developer who saw firsthand how
+            disorienting it is to start over. After going through a major life transition,
+            he noticed something: when people get married or have a baby, there&apos;s an
+            entire industry built around helping them. When people go through a breakup,
+            divorce, job loss, or any other kind of fresh start? Nothing.
           </p>
-          <p>
-            <strong>Big transitions.</strong> Job loss, medical setbacks, housing changes.
-            Life doesn&apos;t come with a safety net, but your community can be one.
+          <p className="mt-4">
+            Welp exists to change that. It&apos;s the registry for the stuff nobody talks
+            about needing &mdash; the towels, the pots, the security deposit, the therapy
+            fund. The things that make starting over actually possible.
           </p>
-          <p>
-            <strong>Anyone starting from scratch.</strong> If you need things and the people
-            around you want to help, this is for you.
-          </p>
-        </div>
-      </div>
+        </section>
 
-      <div className="mt-12 text-center">
-        <Link href="/auth/signup">
-          <Button size="lg" className="text-base">
-            Create Your Registry
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
-        </Link>
+        {/* How Welp Works */}
+        <section>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">How Welp Works</h2>
+          <p>
+            You create a registry. Add items you need (from our curated catalog or any
+            retailer), set up cash funds for bigger expenses, and share your link with the
+            people who want to help. They buy items directly from retailers or contribute
+            to your funds. That&apos;s it.
+          </p>
+          <p className="mt-4">
+            Welp is <strong className="text-slate-900">free to use</strong>. We earn a small
+            commission when supporters buy items through affiliate links &mdash; at no extra
+            cost to anyone. We also sell{' '}
+            <Link href="/merch" className="text-rose-600 hover:underline font-medium">
+              merch
+            </Link>
+            . Your data isn&apos;t sold. Your story isn&apos;t monetized. That&apos;s it.
+          </p>
+        </section>
+
+        {/* Why It Matters */}
+        <section>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Why It Matters</h2>
+          <p>
+            When someone goes through a tough transition, their friends and family usually
+            want to help but don&apos;t know how. Welp gives them a way. Instead of awkward
+            &ldquo;let me know if you need anything&rdquo; texts, people can actually show
+            up &mdash; whether that&apos;s buying a set of towels, chipping in for a
+            security deposit, or just leaving a message of support.
+          </p>
+        </section>
+
+        {/* Get in Touch */}
+        <section className="border-t border-slate-200 pt-10">
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Get in Touch</h2>
+          <p>
+            Questions, feedback, partnership ideas, or just want to say hey? Reach out at{' '}
+            <a
+              href="mailto:hello@alliswelp.com"
+              className="text-rose-600 hover:underline font-medium"
+            >
+              hello@alliswelp.com
+            </a>
+            .
+          </p>
+        </section>
       </div>
     </div>
   )

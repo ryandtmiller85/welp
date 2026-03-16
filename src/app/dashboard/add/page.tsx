@@ -28,6 +28,7 @@ import {
   ExternalLink,
   Loader2,
   Baby,
+  Briefcase,
 } from 'lucide-react'
 
 // Categories that have curated items
@@ -38,6 +39,7 @@ const CATALOG_CATEGORIES: { key: ItemCategory; icon: React.ReactNode }[] = [
   { key: 'living_solo', icon: <Sofa className="w-6 h-6" /> },
   { key: 'self_care', icon: <Coffee className="w-6 h-6" /> },
   { key: 'for_the_kids', icon: <Baby className="w-6 h-6" /> },
+  { key: 'career_comeback', icon: <Briefcase className="w-6 h-6" /> },
   { key: 'petty_fund', icon: <Flame className="w-6 h-6" /> },
   { key: 'treat_yoself', icon: <Sparkles className="w-6 h-6" /> },
   { key: 'pets', icon: <PawPrint className="w-6 h-6" /> },
