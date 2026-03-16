@@ -58,12 +58,11 @@ export default function LandingPage() {
               welp.
             </h1>
             <p className="mt-4 text-xl sm:text-2xl text-rose-200 font-medium">
-              Time to start over.
+              A fresh start registry.
             </p>
             <p className="mt-6 text-lg text-slate-300 leading-relaxed max-w-2xl">
-              Because starting over shouldn&apos;t mean starting from scratch.
-              A registry for breakups, fresh starts, and everything in between.
-              Your friends want to help &mdash; let them.
+              For breakups, job changes, fresh starts, and everything in between.
+              Your people want to help &mdash; make it easy for them.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
